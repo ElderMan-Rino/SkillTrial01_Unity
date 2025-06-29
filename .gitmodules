@@ -1,0 +1,3 @@
+[submodule "Tools/DataForge"]
+	path = Tools/DataForge
+	url = https://github.com/ElderMan-Rino/DataForge

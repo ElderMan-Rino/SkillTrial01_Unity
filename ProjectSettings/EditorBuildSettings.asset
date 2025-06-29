@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/AddressableAssets/Remote/Scenes/Initialize.unity
+    guid: 1e73450926bc03641960d14980170c54
+  - enabled: 0
+    path: Assets/AddressableAssets/Remote/Scenes/Empty.unity
+    guid: 3d42bef950d38b341b855bc84dc3d6d4
+  - enabled: 0
+    path: Assets/AddressableAssets/Remote/Scenes/Loading.unity
+    guid: fc212d74f7069d74dbacd0b9c5661d5a
+  - enabled: 0
+    path: Assets/AddressableAssets/Remote/Scenes/Main.unity
+    guid: c9e36da181df2f24d9d439ef1f69d228
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: f09e92a068d90ea439e1e2c228b2d944, type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 58c021c74a6e32047899f0932fe038a6, type: 3}
+  m_UseUCBPForAssetBundles: 0

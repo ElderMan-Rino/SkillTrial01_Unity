@@ -1,0 +1,1141 @@
+로컬 디스크 볼륨에 대한 폴더 경로의 목록입니다.
+볼륨 일련 번호가 00000225 04A3:95E6입니다.
+D:\PROGRAMMING\SKILLTRIAL01_UNITY\ASSETS\SCRIPTS\FRAMEWORK
+|   Actor.meta
+|   Animation.meta
+|   Application.meta
+|   AssemblyInfo.cs
+|   AssemblyInfo.cs.meta
+|   Asset.meta
+|   Audio.meta
+|   Blob.meta
+|   Boot.meta
+|   Camera.meta
+|   Combat.meta
+|   Common.meta
+|   Core.meta
+|   Crypto.meta
+|   Data.meta
+|   Domain.meta
+|   Effect.meta
+|   GameFlow.meta
+|   GameSystem.meta
+|   Input.meta
+|   Localize.meta
+|   Log.meta
+|   MainFrame.meta
+|   MonoEvent.meta
+|   Physics.meta
+|   Scene.meta
+|   Settings.meta
+|   Signal.meta
+|   Time.meta
+|   Timer.meta
+|   UI.meta
+|   Video.meta
+|   World.meta
+|   
++---Actor
+|   |   App.meta
+|   |   Authoring.meta
+|   |   Components.meta
+|   |   Definitions.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Systems.meta
+|   |   
+|   +---App
+|   |       ActorSpawnContextFactory.cs
+|   |       ActorSpawnContextFactory.cs.meta
+|   |       ActorSystem.cs
+|   |       ActorSystem.cs.meta
+|   |       ActorTraitApplicatorRegistry.cs
+|   |       ActorTraitApplicatorRegistry.cs.meta
+|   |       
+|   +---Authoring
+|   |       .gitkeep
+|   |       
+|   +---Components
+|   |       .gitkeep
+|   |       ActorDeathRequest.cs
+|   |       ActorDeathRequest.cs.meta
+|   |       ActorId.cs
+|   |       ActorId.cs.meta
+|   |       ActorMoveCommand.cs
+|   |       ActorMoveCommand.cs.meta
+|   |       ActorMoveState.cs
+|   |       ActorMoveState.cs.meta
+|   |       ActorTeam.cs
+|   |       ActorTeam.cs.meta
+|   |       ActorVitals.cs
+|   |       ActorVitals.cs.meta
+|   |       
+|   +---Definitions
+|   |   |   .gitkeep
+|   |   |   ActorDefinitionRoot.cs
+|   |   |   ActorDefinitionRoot.cs.meta
+|   |   |   ActorDefinitionRow.cs
+|   |   |   ActorDefinitionRow.cs.meta
+|   |   |   ActorPropertyKeys.cs
+|   |   |   ActorPropertyKeys.cs.meta
+|   |   |   ActorPropertyRow.cs
+|   |   |   ActorPropertyRow.cs.meta
+|   |   |   ActorSpawnContext.cs
+|   |   |   ActorSpawnContext.cs.meta
+|   |   |   ActorTraitIds.cs
+|   |   |   ActorTraitIds.cs.meta
+|   |   |   ActorTraitRoot.cs
+|   |   |   ActorTraitRoot.cs.meta
+|   |   |   ActorTraitRow.cs
+|   |   |   ActorTraitRow.cs.meta
+|   |   |   Traits.meta
+|   |   |   
+|   |   \---Traits
+|   +---Infra
+|   |   |   ActorBindingRegistry.cs
+|   |   |   ActorBindingRegistry.cs.meta
+|   |   |   ActorBridge.cs
+|   |   |   ActorBridge.cs.meta
+|   |   |   ActorView.cs
+|   |   |   ActorView.cs.meta
+|   |   |   Applicators.meta
+|   |   |   BlobIndexHelper.cs
+|   |   |   BlobIndexHelper.cs.meta
+|   |   |   
+|   |   \---Applicators
+|   |           ActorPropertyReader.cs
+|   |           ActorPropertyReader.cs.meta
+|   |           CombatTraitApplicator.cs
+|   |           CombatTraitApplicator.cs.meta
+|   |           MoveTraitApplicator.cs
+|   |           MoveTraitApplicator.cs.meta
+|   |           VitalsTraitApplicator.cs
+|   |           VitalsTraitApplicator.cs.meta
+|   |           
+|   +---Installer
+|   |       .gitkeep
+|   |       ActorInstaller.cs
+|   |       ActorInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       .gitkeep
+|   |       IActorSystem.cs
+|   |       IActorSystem.cs.meta
+|   |       IActorTraitApplicator.cs
+|   |       IActorTraitApplicator.cs.meta
+|   |       
+|   \---Systems
+|           .gitkeep
+|           ActorDeathSystem.cs
+|           ActorDeathSystem.cs.meta
+|           ActorMoveSystem.cs
+|           ActorMoveSystem.cs.meta
+|           
++---Animation
+|   |   App.meta
+|   |   Authoring.meta
+|   |   Components.meta
+|   |   Definitions.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Jobs.meta
+|   |   Systems.meta
+|   |   
+|   +---App
+|   |       AnimationController.cs
+|   |       AnimationController.cs.meta
+|   |       
+|   +---Authoring
+|   |       .gitkeep
+|   |       AnimationAuthoring.cs
+|   |       AnimationAuthoring.cs.meta
+|   |       
+|   +---Components
+|   |       .gitkeep
+|   |       AnimationComponents.cs
+|   |       AnimationComponents.cs.meta
+|   |       
+|   +---Definitions
+|   |       .gitkeep
+|   |       AnimationDefinitions.cs
+|   |       AnimationDefinitions.cs.meta
+|   |       
+|   +---Infra
+|   |   |   .gitkeep
+|   |   |   Baking.meta
+|   |   |   VatAnimationRenderer.cs
+|   |   |   VatAnimationRenderer.cs.meta
+|   |   |   
+|   |   \---Baking
+|   |           .gitkeep
+|   |           
+|   +---Installer
+|   |       .gitkeep
+|   |       AnimationInstaller.cs
+|   |       AnimationInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       .gitkeep
+|   |       IAnimationController.cs
+|   |       IAnimationController.cs.meta
+|   |       
+|   +---Jobs
+|   |       .gitkeep
+|   |       SampleFrameJob.cs
+|   |       SampleFrameJob.cs.meta
+|   |       
+|   \---Systems
+|           .gitkeep
+|           AnimationTransitionSystem.cs
+|           AnimationTransitionSystem.cs.meta
+|           AnimationUpdateSystem.cs
+|           AnimationUpdateSystem.cs.meta
+|           
++---Application
+|   |   Services.meta
+|   |   
+|   \---Services
+|           ApplicationServiceBase.cs
+|           ApplicationServiceBase.cs.meta
+|           
++---Asset
+|   |   App.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       AssetBatchHandle.cs
+|   |       AssetBatchHandle.cs.meta
+|   |       AssetHandle.cs
+|   |       AssetHandle.cs.meta
+|   |       AssetKey.cs
+|   |       AssetKey.cs.meta
+|   |       AssetRegistry.cs
+|   |       AssetRegistry.cs.meta
+|   |       AssetSystem.cs
+|   |       AssetSystem.cs.meta
+|   |       LabelEntry.cs
+|   |       LabelEntry.cs.meta
+|   |       ProviderEntry.cs
+|   |       ProviderEntry.cs.meta
+|   |       
+|   +---Infra
+|   |       AddressableAssetLoader.cs
+|   |       AddressableAssetLoader.cs.meta
+|   |       
+|   +---Installer
+|   |       AssetSystemInstaller.cs
+|   |       AssetSystemInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           IAssetBatchHandle.cs
+|           IAssetBatchHandle.cs.meta
+|           IAssetHandler.cs
+|           IAssetHandler.cs.meta
+|           IAssetProvider.cs
+|           IAssetProvider.cs.meta
+|           IAssetRegistry.cs
+|           IAssetRegistry.cs.meta
+|           IEngineAssetLoader.cs
+|           IEngineAssetLoader.cs.meta
+|           IEngineAssetReleaser.cs
+|           IEngineAssetReleaser.cs.meta
+|           
++---Audio
+|   |   App.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       AudioSystem.cs
+|   |       AudioSystem.cs.meta
+|   |       
+|   +---Installer
+|   |       AudioInstaller.cs
+|   |       AudioInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           IAudioSystem.cs
+|           IAudioSystem.cs.meta
+|           
++---Blob
+|   |   App.meta
+|   |   Infra.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       BlobIndexRegistry.cs
+|   |       BlobIndexRegistry.cs.meta
+|   |       BlobList.cs
+|   |       BlobList.cs.meta
+|   |       
+|   +---Infra
+|   |   |   BlobDataDeserializer.cs
+|   |   |   BlobDataDeserializer.cs.meta
+|   |   |   BlobDataHandle.cs
+|   |   |   BlobDataHandle.cs.meta
+|   |   |   EncryptedBlobDataDeserializer.cs
+|   |   |   EncryptedBlobDataDeserializer.cs.meta
+|   |   |   Extensions.meta
+|   |   |   
+|   |   \---Extensions
+|   |           DataProviderBlobExtensions.cs
+|   |           DataProviderBlobExtensions.cs.meta
+|   |           
+|   \---Interfaces
+|           IBlobDataHandle.cs
+|           IBlobDataHandle.cs.meta
+|           IBlobIndexProvider.cs
+|           IBlobIndexProvider.cs.meta
+|           IBlobList.cs
+|           IBlobList.cs.meta
+|           
++---Boot
+|   |   App.meta
+|   |   Definitions.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Messages.meta
+|   |   
+|   +---App
+|   |       GameBootEntry.cs
+|   |       GameBootEntry.cs.meta
+|   |       GameBootstrapper.cs
+|   |       GameBootstrapper.cs.meta
+|   |       GameStartService.cs
+|   |       GameStartService.cs.meta
+|   |       
+|   +---Definitions
+|   |   |   Constants.meta
+|   |   |   
+|   |   \---Constants
+|   +---Infra
+|   |       UnityStartupEnvironment.cs
+|   |       UnityStartupEnvironment.cs.meta
+|   |       
+|   +---Installer
+|   |       BootStrapperInstaller.cs
+|   |       BootStrapperInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       IBootConfig.cs
+|   |       IBootConfig.cs.meta
+|   |       IStartupEnvironment.cs
+|   |       IStartupEnvironment.cs.meta
+|   |       
+|   \---Messages
+|           PreSystemReadySignal.cs
+|           PreSystemReadySignal.cs.meta
+|           SystemInitializeEndSignal.cs
+|           SystemInitializeEndSignal.cs.meta
+|           SystemReadySignal.cs
+|           SystemReadySignal.cs.meta
+|           
++---Camera
+|   |   Components.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Systems.meta
+|   |   
+|   +---Components
+|   |       .gitkeep
+|   |       
+|   +---Infra
+|   |       .gitkeep
+|   |       
+|   +---Installer
+|   |       .gitkeep
+|   |       
+|   +---Interfaces
+|   |       .gitkeep
+|   |       
+|   \---Systems
+|           .gitkeep
+|           
++---Combat
+|   |   App.meta
+|   |   Components.meta
+|   |   Definitions.meta
+|   |   Domain.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Messages.meta
+|   |   Systems.meta
+|   |   
+|   +---App
+|   |       CombatSystemService.cs
+|   |       CombatSystemService.cs.meta
+|   |       
+|   +---Components
+|   |       .gitkeep
+|   |       CombatComponents.cs
+|   |       CombatComponents.cs.meta
+|   |       
+|   +---Definitions
+|   |       .gitkeep
+|   |       DamageContext.cs
+|   |       DamageContext.cs.meta
+|   |       
+|   +---Domain
+|   |       .gitkeep
+|   |       
+|   +---Installer
+|   |       .gitkeep
+|   |       CombatInstaller.cs
+|   |       CombatInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       .gitkeep
+|   |       ICombatSystem.cs
+|   |       ICombatSystem.cs.meta
+|   |       
+|   +---Messages
+|   |       .gitkeep
+|   |       
+|   \---Systems
+|           .gitkeep
+|           AttackCooldownSystem.cs
+|           AttackCooldownSystem.cs.meta
+|           DamageResolveSystem.cs
+|           DamageResolveSystem.cs.meta
+|           
++---Common
+|   |   App.meta
+|   |   Base.meta
+|   |   Definitions.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Messages.meta
+|   |   Utils.meta
+|   |   
+|   +---App
+|   |       ScopeDisposeSystem.cs
+|   |       ScopeDisposeSystem.cs.meta
+|   |       
+|   +---Base
+|   |       BehaviourBase.cs
+|   |       BehaviourBase.cs.meta
+|   |       DisposableBase.cs
+|   |       DisposableBase.cs.meta
+|   |       
+|   +---Definitions
+|   |   |   Enums.meta
+|   |   |   
+|   |   \---Enums
+|   |           ButtonStates.cs
+|   |           ButtonStates.cs.meta
+|   |           
+|   +---Installer
+|   |       CommonInstaller.cs
+|   |       CommonInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       IScopeDisposeSystem.cs
+|   |       IScopeDisposeSystem.cs.meta
+|   |       IScopedSystem.cs
+|   |       IScopedSystem.cs.meta
+|   |       
+|   +---Messages
+|   |       SystemDisposeSignal.cs
+|   |       SystemDisposeSignal.cs.meta
+|   |       SystemInitializeSignal.cs
+|   |       SystemInitializeSignal.cs.meta
+|   |       SystemPostInitializeSignal.cs
+|   |       SystemPostInitializeSignal.cs.meta
+|   |       
+|   \---Utils
+|           ManagedObjectPool.cs
+|           ManagedObjectPool.cs.meta
+|           NativeArrayPool.cs
+|           NativeArrayPool.cs.meta
+|           StringHashHelper.cs
+|           StringHashHelper.cs.meta
+|           
++---Core
+|   |   BaseSystem.cs
+|   |   BaseSystem.cs.meta
+|   |   Interfaces.meta
+|   |   
+|   \---Interfaces
+|           IGameSystem.cs
+|           IGameSystem.cs.meta
+|           IGameSystemProvider.cs
+|           IGameSystemProvider.cs.meta
+|           ISharedRegistration.cs
+|           ISharedRegistration.cs.meta
+|           ISystemComponent.cs
+|           ISystemComponent.cs.meta
+|           ISystemRegistrar.cs
+|           ISystemRegistrar.cs.meta
+|           ISystemRegistry.cs
+|           ISystemRegistry.cs.meta
+|           
++---Crypto
+|   |   EncryptionProviderFactory.cs
+|   |   EncryptionProviderFactory.cs.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---Infra
+|   |   |   AesEncryptionProvider.cs
+|   |   |   AesEncryptionProvider.cs.meta
+|   |   |   KeyDerivation.meta
+|   |   |   
+|   |   \---KeyDerivation
+|   |           CryptoKeyAssembler.cs
+|   |           CryptoKeyAssembler.cs.meta
+|   |           
+|   +---Installer
+|   |       CryptoInstaller.cs
+|   |       CryptoInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           IEncryptionProvider.cs
+|           IEncryptionProvider.cs.meta
+|           
++---Data
+|   |   App.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Messages.meta
+|   |   
+|   +---App
+|   |       DataInitializer.cs
+|   |       DataInitializer.cs.meta
+|   |       DataProvider.cs
+|   |       DataProvider.cs.meta
+|   |       
+|   +---Infra
+|   |       DataHandleList.cs
+|   |       DataHandleList.cs.meta
+|   |       
+|   +---Installer
+|   |       DataInstaller.cs
+|   |       DataInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       IDataDeserializer.cs
+|   |       IDataDeserializer.cs.meta
+|   |       IDataHandle.cs
+|   |       IDataHandle.cs.meta
+|   |       IDataHandleList.cs
+|   |       IDataHandleList.cs.meta
+|   |       IDataProvider.cs
+|   |       IDataProvider.cs.meta
+|   |       IDataSheetLoader.cs
+|   |       IDataSheetLoader.cs.meta
+|   |       IGameDataLoader.cs
+|   |       IGameDataLoader.cs.meta
+|   |       
+|   \---Messages
+|           BaseDataInitializedSignal.cs
+|           BaseDataInitializedSignal.cs.meta
+|           
++---Domain
+|   |   Abstractions.meta
+|   |   Events.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Repositories.meta
+|   |   Services.meta
+|   |   
+|   +---Abstractions
+|   |       AggregateRoot.cs
+|   |       AggregateRoot.cs.meta
+|   |       Entity.cs
+|   |       Entity.cs.meta
+|   |       IEntity.cs
+|   |       IEntity.cs.meta
+|   |       ValueObject.cs
+|   |       ValueObject.cs.meta
+|   |       
+|   +---Events
+|   |       DomainEventBase.cs
+|   |       DomainEventBase.cs.meta
+|   |       IDomainEvent.cs
+|   |       IDomainEvent.cs.meta
+|   |       IDomainEventDispatcher.cs
+|   |       IDomainEventDispatcher.cs.meta
+|   |       SignalDomainEvent.cs
+|   |       SignalDomainEvent.cs.meta
+|   |       
+|   +---Infra
+|   |       SignalDomainEventDispatcher.cs
+|   |       SignalDomainEventDispatcher.cs.meta
+|   |       
+|   +---Installer
+|   |       DomainInstaller.cs
+|   |       DomainInstaller.cs.meta
+|   |       
+|   +---Repositories
+|   |       IRepository.cs
+|   |       IRepository.cs.meta
+|   |       
+|   \---Services
+|           IDomainService.cs
+|           IDomainService.cs.meta
+|           
++---Effect
+|   |   App.meta
+|   |   Components.meta
+|   |   Definitions.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Systems.meta
+|   |   
+|   +---App
+|   |       EffectSystemService.cs
+|   |       EffectSystemService.cs.meta
+|   |       
+|   +---Components
+|   |       .gitkeep
+|   |       EffectComponents.cs
+|   |       EffectComponents.cs.meta
+|   |       
+|   +---Definitions
+|   |       .gitkeep
+|   |       EffectDefinitions.cs
+|   |       EffectDefinitions.cs.meta
+|   |       EffectSpawnContext.cs
+|   |       EffectSpawnContext.cs.meta
+|   |       
+|   +---Infra
+|   |       .gitkeep
+|   |       EffectPool.cs
+|   |       EffectPool.cs.meta
+|   |       EffectSpawnHandler.cs
+|   |       EffectSpawnHandler.cs.meta
+|   |       
+|   +---Installer
+|   |       .gitkeep
+|   |       EffectInstaller.cs
+|   |       EffectInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       .gitkeep
+|   |       IEffectSystem.cs
+|   |       IEffectSystem.cs.meta
+|   |       
+|   \---Systems
+|           .gitkeep
+|           EffectLifetimeSystem.cs
+|           EffectLifetimeSystem.cs.meta
+|           
++---GameFlow
+|   |   App.meta
+|   |   Definitions.meta
+|   |   Domain.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Messages.meta
+|   |   
+|   +---App
+|   |       .gitkeep
+|   |       
+|   +---Definitions
+|   |       .gitkeep
+|   |       
+|   +---Domain
+|   |       .gitkeep
+|   |       
+|   +---Installer
+|   |       .gitkeep
+|   |       
+|   +---Interfaces
+|   |       .gitkeep
+|   |       
+|   \---Messages
+|           .gitkeep
+|           
++---GameSystem
+|   |   App.meta
+|   |   Domain.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       GameSystemProvider.cs
+|   |       GameSystemProvider.cs.meta
+|   |       SystemRegistry.cs
+|   |       SystemRegistry.cs.meta
+|   |       
+|   +---Domain
+|   |       RegistryEntry.cs
+|   |       RegistryEntry.cs.meta
+|   |       RegistryEntryBase.cs
+|   |       RegistryEntryBase.cs.meta
+|   |       SharedEntry.cs
+|   |       SharedEntry.cs.meta
+|   |       
+|   +---Installer
+|   \---Interfaces
++---Input
+|   |   AssemblyInfo.cs
+|   |   AssemblyInfo.cs.meta
+|   |   Domain.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---Domain
+|   |   |   Values.meta
+|   |   |   
+|   |   \---Values
+|   |           AxisInputData.cs
+|   |           AxisInputData.cs.meta
+|   |           InputVector2.cs
+|   |           InputVector2.cs.meta
+|   |           
+|   +---Infra
+|   |   |   Generated.meta
+|   |   |   InputControlCenter.cs
+|   |   |   InputControlCenter.cs.meta
+|   |   |   UnityInputService.cs
+|   |   |   UnityInputService.cs.meta
+|   |   |   
+|   |   \---Generated
+|   |           GameInputActions.cs
+|   |           GameInputActions.cs.meta
+|   |           
+|   +---Installer
+|   |       InputInstaller.cs
+|   |       InputInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           IInputControlCenter.cs
+|           IInputControlCenter.cs.meta
+|           IInputService.cs
+|           IInputService.cs.meta
+|           
++---Localize
+|   |   App.meta
+|   |   Data.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       LocaleSystem.cs
+|   |       LocaleSystem.cs.meta
+|   |       
+|   +---Data
+|   |       LocalizeData.cs
+|   |       LocalizeData.cs.meta
+|   |       LocalizeRow.cs
+|   |       LocalizeRow.cs.meta
+|   |       
+|   +---Installer
+|   |       LocaleInstaller.cs
+|   |       LocaleInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           ILocaleSystem.cs
+|           ILocaleSystem.cs.meta
+|           
++---Log
+|   |   Definitions.meta
+|   |   Helper.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---Definitions
+|   |   |   Enums.meta
+|   |   |   LogEvent.cs
+|   |   |   LogEvent.cs.meta
+|   |   |   LogHandler.cs
+|   |   |   LogHandler.cs.meta
+|   |   |   
+|   |   \---Enums
+|   |           LogLevel.cs
+|   |           LogLevel.cs.meta
+|   |           
+|   +---Helper
+|   |       LogFacade.cs
+|   |       LogFacade.cs.meta
+|   |       
+|   +---Infra
+|   |       LoggerEX.cs
+|   |       LoggerEX.cs.meta
+|   |       LogPublisher.cs
+|   |       LogPublisher.cs.meta
+|   |       NullLoggerEx.cs
+|   |       NullLoggerEx.cs.meta
+|   |       UnityLogAdapter.cs
+|   |       UnityLogAdapter.cs.meta
+|   |       
+|   +---Installer
+|   |       LoggerInstaller.cs
+|   |       LoggerInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           ILogAdapter.cs
+|           ILogAdapter.cs.meta
+|           ILoggerEX.cs
+|           ILoggerEX.cs.meta
+|           ILoggerPublisher.cs
+|           ILoggerPublisher.cs.meta
+|           
++---MainFrame
+|   |   FrameworkRoot.cs
+|   |   FrameworkRoot.cs.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   
+|   +---Infra
+|   |   |   Configs.meta
+|   |   |   
+|   |   \---Configs
+|   |           FrameworkSettings.cs
+|   |           FrameworkSettings.cs.meta
+|   |           
+|   \---Installer
+|           FrameworkInstaller.cs
+|           FrameworkInstaller.cs.meta
+|           
++---MonoEvent
+|   |   App.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       MonoEventSystem.cs
+|   |       MonoEventSystem.cs.meta
+|   |       
+|   +---Infra
+|   |       MonoEventSource.cs
+|   |       MonoEventSource.cs.meta
+|   |       
+|   +---Installer
+|   |       MonoEventInstaller.cs
+|   |       MonoEventInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           IMonoEventBus.cs
+|           IMonoEventBus.cs.meta
+|           
++---Physics
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Jobs.meta
+|   |   Systems.meta
+|   |   
+|   +---Installer
+|   |       .gitkeep
+|   |       PhysicsInstaller.cs
+|   |       PhysicsInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       .gitkeep
+|   |       IPhysicsQuerySystem.cs
+|   |       IPhysicsQuerySystem.cs.meta
+|   |       
+|   +---Jobs
+|   |       .gitkeep
+|   |       BatchSpherecastJob.cs
+|   |       BatchSpherecastJob.cs.meta
+|   |       
+|   \---Systems
+|           .gitkeep
+|           PhysicsQuerySystem.cs
+|           PhysicsQuerySystem.cs.meta
+|           
++---Scene
+|   |   App.meta
+|   |   AssemblyInfo.cs
+|   |   AssemblyInfo.cs.meta
+|   |   Definitions.meta
+|   |   Domain.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Messages.meta
+|   |   Scene.nuspec
+|   |   Scene.nuspec.meta
+|   |   
+|   +---App
+|   |       LoadingFlowOrchestrator.cs
+|   |       LoadingFlowOrchestrator.cs.meta
+|   |       SceneTransitionCoordinator.cs
+|   |       SceneTransitionCoordinator.cs.meta
+|   |       SceneTransitionExecutor.cs
+|   |       SceneTransitionExecutor.cs.meta
+|   |       
+|   +---Definitions
+|   |       SceneTransitionMode.cs
+|   |       SceneTransitionMode.cs.meta
+|   |       SceneTransitionModeDescriptor.cs
+|   |       SceneTransitionModeDescriptor.cs.meta
+|   |       
+|   +---Domain
+|   |   |   Models.meta
+|   |   |   
+|   |   \---Models
+|   |           SceneLoadContext.cs
+|   |           SceneLoadContext.cs.meta
+|   |           SceneTransitionState.cs
+|   |           SceneTransitionState.cs.meta
+|   |           
+|   +---Infra
+|   |       AddressableSceneLoader.cs
+|   |       AddressableSceneLoader.cs.meta
+|   |       SceneContextFactory.cs
+|   |       SceneContextFactory.cs.meta
+|   |       
+|   +---Installer
+|   |       SceneSystemInstaller.cs
+|   |       SceneSystemInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       ILoadingFlowOrchestrator.cs
+|   |       ILoadingFlowOrchestrator.cs.meta
+|   |       ILoadingPhase.cs
+|   |       ILoadingPhase.cs.meta
+|   |       ISceneContextFactory.cs
+|   |       ISceneContextFactory.cs.meta
+|   |       ISceneLoader.cs
+|   |       ISceneLoader.cs.meta
+|   |       ISceneTransitionCoordinator.cs
+|   |       ISceneTransitionCoordinator.cs.meta
+|   |       ISceneTransitionExecutor.cs
+|   |       ISceneTransitionExecutor.cs.meta
+|   |       
+|   \---Messages
+|           SceneTransitionCompletedSignal.cs
+|           SceneTransitionCompletedSignal.cs.meta
+|           SceneTransitionSignal.cs
+|           SceneTransitionSignal.cs.meta
+|           SceneTransitionStartedSignal.cs
+|           SceneTransitionStartedSignal.cs.meta
+|           
++---Settings
+|   |   App.meta
+|   |   Definitions.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       SettingsApplyService.cs
+|   |       SettingsApplyService.cs.meta
+|   |       
+|   +---Definitions
+|   |       SettingsKeys.cs
+|   |       SettingsKeys.cs.meta
+|   |       
+|   +---Infra
+|   |       PlayerPrefsSettingsStore.cs
+|   |       PlayerPrefsSettingsStore.cs.meta
+|   |       
+|   +---Installer
+|   |       SettingsInstaller.cs
+|   |       SettingsInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           IAppSettingsStore.cs
+|           IAppSettingsStore.cs.meta
+|           ISettingsApplicable.cs
+|           ISettingsApplicable.cs.meta
+|           
++---Signal
+|   |   Definitions.meta
+|   |   Helpers.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---Definitions
+|   |       SignalHandler.cs
+|   |       SignalHandler.cs.meta
+|   |       
+|   +---Helpers
+|   |       SignalHandlerContainer.cs
+|   |       SignalHandlerContainer.cs.meta
+|   |       SignalToken.cs
+|   |       SignalToken.cs.meta
+|   |       
+|   +---Infra
+|   |       SignalRouter.cs
+|   |       SignalRouter.cs.meta
+|   |       
+|   +---Installer
+|   |       SignalInstaller.cs
+|   |       SignalInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           ISignal.cs
+|           ISignal.cs.meta
+|           ISignalCancellable.cs
+|           ISignalCancellable.cs.meta
+|           ISignalHandler.cs
+|           ISignalHandler.cs.meta
+|           ISignalRouter.cs
+|           ISignalRouter.cs.meta
+|           
++---Time
+|   |   App.meta
+|   |   Definitions.meta
+|   |   Domain.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       TimerService.cs
+|   |       TimerService.cs.meta
+|   |       TimeService.cs
+|   |       TimeService.cs.meta
+|   |       
+|   +---Definitions
+|   |       TimerHandle.cs
+|   |       TimerHandle.cs.meta
+|   |       TimerMode.cs
+|   |       TimerMode.cs.meta
+|   |       
+|   +---Domain
+|   |       GameClock.cs
+|   |       GameClock.cs.meta
+|   |       TimerEntry.cs
+|   |       TimerEntry.cs.meta
+|   |       
+|   +---Installer
+|   |       TimeInstaller.cs
+|   |       TimeInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           IGameClock.cs
+|           IGameClock.cs.meta
+|           ITimerService.cs
+|           ITimerService.cs.meta
+|           ITimeService.cs
+|           ITimeService.cs.meta
+|           
++---Timer
+|   |   Components.meta
+|   |   Definitions.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Systems.meta
+|   |   TimerService.cs
+|   |   TimerService.cs.meta
+|   |   
+|   +---Components
+|   |       .gitkeep
+|   |       TimerCallbackTag.cs
+|   |       TimerCallbackTag.cs.meta
+|   |       TimerComponent.cs
+|   |       TimerComponent.cs.meta
+|   |       
+|   +---Definitions
+|   |       .gitkeep
+|   |       TimerDefinitions.cs
+|   |       TimerDefinitions.cs.meta
+|   |       
+|   +---Installer
+|   |       .gitkeep
+|   |       TimerInstaller.cs
+|   |       TimerInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       .gitkeep
+|   |       ITimerService.cs
+|   |       ITimerService.cs.meta
+|   |       
+|   \---Systems
+|           .gitkeep
+|           TimerTickSystem.cs
+|           TimerTickSystem.cs.meta
+|           
++---UI
+|   |   App.meta
+|   |   Infra.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   Loading.meta
+|   |   
+|   +---App
+|   |       UISystem.cs
+|   |       UISystem.cs.meta
+|   |       
+|   +---Infra
+|   +---Installer
+|   |       UIInstaller.cs
+|   |       UIInstaller.cs.meta
+|   |       
+|   +---Interfaces
+|   |       IUISystem.cs
+|   |       IUISystem.cs.meta
+|   |       
+|   \---Loading
+|       |   App.meta
+|       |   Definitions.meta
+|       |   Domain.meta
+|       |   Infra.meta
+|       |   Interfaces.meta
+|       |   
+|       +---App
+|       |       LoadingPresenter.cs
+|       |       LoadingPresenter.cs.meta
+|       |       LoadingViewModel.cs
+|       |       LoadingViewModel.cs.meta
+|       |       SceneTransitionLoadingModel.cs
+|       |       SceneTransitionLoadingModel.cs.meta
+|       |       
+|       +---Definitions
+|       |       LoadingVisualConfig.cs
+|       |       LoadingVisualConfig.cs.meta
+|       |       
+|       +---Domain
+|       +---Infra
+|       |       LoadingView.cs
+|       |       LoadingView.cs.meta
+|       |       
+|       \---Interfaces
+|               ILoadingModel.cs
+|               ILoadingModel.cs.meta
+|               ILoadingReporter.cs
+|               ILoadingReporter.cs.meta
+|               ILoadingView.cs
+|               ILoadingView.cs.meta
+|               IVideoPlayer.cs
+|               IVideoPlayer.cs.meta
+|               
++---Video
+|   |   App.meta
+|   |   Installer.meta
+|   |   Interfaces.meta
+|   |   
+|   +---App
+|   |       VideoSystem.cs
+|   |       VideoSystem.cs.meta
+|   |       
+|   +---Installer
+|   |       VideoInstaller.cs
+|   |       VideoInstaller.cs.meta
+|   |       
+|   \---Interfaces
+|           IVideoSystem.cs
+|           IVideoSystem.cs.meta
+|           
+\---World
+    |   Infra.meta
+    |   Installer.meta
+    |   Interfaces.meta
+    |   
+    +---Infra
+    |       .gitkeep
+    |       
+    +---Installer
+    |       .gitkeep
+    |       
+    \---Interfaces
+            .gitkeep
+            
+

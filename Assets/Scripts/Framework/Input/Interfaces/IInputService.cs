@@ -1,0 +1,13 @@
+using Elder.Framework.Core.Interfaces;
+using Elder.Framework.Input.Domain.Values;
+
+namespace Elder.Framework.Input.Interfaces
+{
+    public interface IInputService : IGameSystem
+    {
+        public AxisInputData GetAxisData();
+        public bool GetButtonDown(string action);
+        public bool GetButton(string action);
+        public bool GetButtonUp(string action);
+    }
+}

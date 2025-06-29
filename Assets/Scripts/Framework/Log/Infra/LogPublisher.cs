@@ -1,0 +1,63 @@
+using Elder.Framework.Common.Base;
+using Elder.Framework.Core.Interfaces;
+using Elder.Framework.Log.Definitions;
+using Elder.Framework.Log.Interfaces;
+using System;
+using System.Collections.Generic;
+
+namespace Elder.Framework.Log.Infra
+{
+    internal sealed class LogPublisher : DisposableBase, ILoggerPublisher, IGameSystem
+    {
+        public bool TryInjectDependency(IGameSystemProvider provider) => true;
+        public bool TryInitialize() => true;
+        public bool TryPostInitialize() => true;
+        public void TryDispose() => Dispose();
+        private readonly Dictionary<Type, LoggerEX> _loggerContainer = new();
+        private readonly List<ILogAdapter> _logAdapters;
+
+        public LogPublisher(IEnumerable<ILogAdapter> logAdapters)
+        {
+            _logAdapters = new(logAdapters);  // [HEAP] List<T> 생성자 호출
+        }
+
+        public ILoggerEx GetLogger<T>() where T : class
+        {
+            return GetLogger(typeof(T));
+        }
+
+        public ILoggerEx GetLogger(Type type)
+        {
+            if (!_loggerContainer.TryGetValue(type, out var targetLogger))
+            {
+                targetLogger = new LoggerEX(type, PublishLogEvent); // [HEAP] 타입당 1회
+                _loggerContainer[type] = targetLogger;
+            }
+            return targetLogger;
+        }
+
+        private void PublishLogEvent(in LogEvent logEvent)
+        {
+            foreach (var adapater in _logAdapters)
+                adapater.DispatchLogEvent(logEvent);
+        }
+
+        protected override void DisposeManagedResources()
+        {
+            DisposeLoggerEXContainer();
+            DisposeLogAdapters();
+        }
+
+        private void DisposeLogAdapters()
+        {
+            _logAdapters.Clear();
+        }
+
+        private void DisposeLoggerEXContainer()
+        {
+            foreach (var loggerEX in _loggerContainer.Values)  // [HEAP] Dictionary.Values 열거자 할당
+                loggerEX.Dispose();
+            _loggerContainer.Clear();
+        }
+    }
+}

@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/StaticAssets/UI/Loading/LoadingScreen.uss?fileID=7433441132597879392&amp;guid=9edebf7cddd67e446a5930b71102b092&amp;type=3#LoadingScreen"/>
+    <ui:VisualElement name="loading-root" class="loading-root" style="right: 0; bottom: 0; left: 0; top: 0; position: absolute; width: 1920px; height: 1080px;">
+        <ui:VisualElement name="loading-image" class="loading-image"/>
+        <ui:VisualElement name="loading-bottom" class="loading-bottom">
+            <ui:ProgressBar name="loading-progress-bar" value="0" high-value="1" class="loading-progress-bar">
+                <ui:Label name="loading-progress-text" text="0%" triple-click-selects-line="false" double-click-selects-word="false" display-tooltip-when-elided="false" emoji-fallback-support="false" enable-rich-text="false" picking-mode="Ignore" enabled="true" class="loading-progress-text" style="position: relative; top: auto; right: 0; left: auto; bottom: 55px; -unity-text-align: middle-right; height: 8px; width: 890px; text-overflow: ellipsis; -unity-text-outline-width: 1px; text-shadow: 1px 1px 0 rgba(0, 0, 0, 0); font-size: 38px; -unity-text-auto-size: none; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=a563884dd71a92a45a8ae01062a49bcd&amp;type=3#NotInter-Regular&quot;); -unity-font-style: bold;"/>
+            </ui:ProgressBar>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
