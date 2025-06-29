@@ -1,3 +1,4 @@
+using Elder.Unity.CoreFrame.Infrastructure;
 using UnityEngine;
 
 namespace Elder.Unity.Bootstrappers.Application
@@ -17,7 +18,7 @@ namespace Elder.Unity.Bootstrappers.Application
                 return;
 
             var go = new GameObject(GameObjectName);
-           
+            go.AddComponent<CoreFrameInfrastructure>();
         }
     }
 }
