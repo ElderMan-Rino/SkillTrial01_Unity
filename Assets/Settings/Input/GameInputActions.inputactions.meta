@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 58c021c74a6e32047899f0932fe038a6
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 8404be70184654265930450def6a9037, type: 3}
+  generateWrapperCode: 1
+  wrapperCodePath: Scripts/Framework/Input/Infra/Generated/GameInputActions.cs
+  wrapperClassName: 
+  wrapperCodeNamespace: Elder.Framework.Input.Infra.Generated
