@@ -7,11 +7,11 @@ namespace Elder.Core.Logging.Application
     public class Logger : DisposableBase, ILoggerEx
     {
         private Type _ownerType;
-        private IObserver<LogEvent> _logObserver;
-        public Logger(Type ownerType, IObserver<LogEvent> logObserver) 
+        private Action<LogEvent> _logAction;
+        public Logger(Type ownerType, Action<LogEvent> logAction) 
         {
             _ownerType = ownerType;
-            _logObserver = logObserver;
+            _logAction = logAction;
         }
         public void Error(string message)
         {
@@ -32,11 +32,11 @@ namespace Elder.Core.Logging.Application
 
         protected override void DisposeManagedResources()
         {
-            DisposeEmitLogAction();
+            ClearLogAction();
         }
-        private void DisposeEmitLogAction()
+        private void ClearLogAction()
         {
-            _logObserver = null;
+            _logAction = null;
         }
         protected override void DisposeUnmanagedResources()
         {
@@ -45,7 +45,7 @@ namespace Elder.Core.Logging.Application
         [System.Diagnostics.Conditional("LOGGER")]
         private void PublishLog(in LogEvent logEvent)
         {
-            _logObserver.OnNext(logEvent);
+            _logAction?.Invoke(logEvent);
         }
     }
 }

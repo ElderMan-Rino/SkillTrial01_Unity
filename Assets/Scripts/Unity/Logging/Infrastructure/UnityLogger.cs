@@ -1,21 +1,15 @@
 using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Enums;
 using Elder.Core.Logging.Application;
+using Elder.Core.Logging.Interfaces;
 using System;
 using UnityEngine;
 
 namespace Elder.Unity.Logging.Infrastructure
 {
-    public class UnityLogger : SingletonBase<UnityLogger>
+    public class UnityLogger : DisposableBase, ILogEventHandler
     {
-        private IDisposable _logSubscription;
-
-        [System.Diagnostics.Conditional("UNITY_LOGGER")]
-        public void SubscribeToLogAppplication()
-        {
-            _logSubscription = LogApplication.In.LogEvents.Subscribe(HandleLogEvent);
-        }
-        private void HandleLogEvent(LogEvent logEvent)
+        public void HandleLogEvent(LogEvent logEvent)
         {
             switch (logEvent.Level)
             {
@@ -60,14 +54,8 @@ namespace Elder.Unity.Logging.Infrastructure
         }
         protected override void DisposeManagedResources()
         {
-            DisposeLogSubscription();
-        }
-        private void DisposeLogSubscription()
-        {
-            _logSubscription.Dispose();
-            _logSubscription = null;
-        }
 
+        }
         protected override void DisposeUnmanagedResources()
         {
 

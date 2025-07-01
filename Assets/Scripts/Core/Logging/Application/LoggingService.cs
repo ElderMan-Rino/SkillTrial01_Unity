@@ -2,43 +2,42 @@ using Elder.Core.Common.BaseClasses;
 using Elder.Core.Logging.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Reactive.Subjects;
 
 namespace Elder.Core.Logging.Application
 {
-    public class LogApplication : SingletonBase<LogApplication>
+    public class LoggingService : DisposableBase, ILoggerPublisher
     {
+        private ILogEventHandler _logEventHandler;
         private Dictionary<Type, Logger> _loggerContainer;
-        private Subject<LogEvent> _logPublisher;
 
-        public IObservable<LogEvent> LogEvents => _logPublisher;
-
-        public LogApplication()
+        public void Initialize()
         {
             InitializeLoggerContainer();
-            InitializeLogPublisher();
-        }
-        private void InitializeLogPublisher()
-        {
-            _logPublisher = new();
         }
         private void InitializeLoggerContainer()
         {
             _loggerContainer = new();
         }
-        public ILoggerEx CreateLogger<T>() where T : class
+        public void PostInitialize()
+        {
+
+        }
+        public ILoggerEx GetLogger<T>() where T : class
         {
             var type = typeof(T);
             if (!_loggerContainer.TryGetValue(type, out var targetLogger))
             {
-                targetLogger = new Logger(type, _logPublisher);
+                targetLogger = new Logger(type, PublishLogEvent);
                 _loggerContainer[type] = targetLogger;
             }
             return targetLogger;
         }
+        private void PublishLogEvent(LogEvent logEvent)
+        {
+
+        }
         protected override void DisposeManagedResources()
         {
-            DisposeLogPublisher();
             DisposeLoggerContainer();
         }
         private void DisposeLoggerContainer()
@@ -47,14 +46,11 @@ namespace Elder.Core.Logging.Application
                 logger.Dispose();
             _loggerContainer = null;
         }
-        private void DisposeLogPublisher()
-        {
-            _logPublisher.Dispose();
-            _logPublisher = null;
-        }
         protected override void DisposeUnmanagedResources()
         {
 
         }
+
+       
     }
 }
