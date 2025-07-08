@@ -1,0 +1,10 @@
+using System;
+
+namespace Elder.Core.CoreFrame.Interfaces
+{
+    public interface IInfrastructureDisposer : IDisposable
+    {
+        public void DiposeSceneInfras();
+        public void DisposePersistentInfras();
+    }
+}

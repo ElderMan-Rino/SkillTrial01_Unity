@@ -8,8 +8,9 @@ namespace Elder.Core.Common.BaseClasses
         // 인프라스트럭트 프로바이더
         // 인프라스트럭트 생성 요청
         // 이벤트 버스 받는거
-        // 
-     
+        private IApplicationProvider _applicationProvider;
+        private IInfrastructureProvider _infrastructureProvider;
+
         protected override void DisposeManagedResources()
         {
 

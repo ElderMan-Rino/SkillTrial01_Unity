@@ -1,4 +1,4 @@
-using Elder.Unity.CoreFrame.Infrastructure;
+using Elder.Unity.CoreFrame.Presentation;
 using UnityEngine;
 
 namespace Elder.Unity.Bootstrappers.Application
@@ -10,15 +10,15 @@ namespace Elder.Unity.Bootstrappers.Application
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         public static void Entry()
         {
-            CreateMainFramework();
+            CreateCoreFrameRunner();
         }
-        private static void CreateMainFramework()
+        private static void CreateCoreFrameRunner()
         {
             if (GameObject.Find(GameObjectName))
                 return;
 
             var go = new GameObject(GameObjectName);
-            go.AddComponent<CoreFrameInfrastructure>();
+            go.AddComponent<CoreFrameRunner>();
         }
     }
 }

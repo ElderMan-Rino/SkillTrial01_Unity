@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Elder.Core.Logging.Application
 {
-    public class LoggingService : DisposableBase, ILoggerPublisher
+    public class LoggingService : ApplicationBase, ILoggerPublisher
     {
         private ILogEventHandler _logEventHandler;
         private Dictionary<Type, Logger> _loggerContainer;
@@ -19,6 +19,10 @@ namespace Elder.Core.Logging.Application
             _loggerContainer = new();
         }
         public void PostInitialize()
+        {
+
+        }
+        private void BindLogEventHandler()
         {
 
         }
