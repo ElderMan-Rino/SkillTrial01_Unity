@@ -1,11 +1,11 @@
 using Elder.Core.CoreFrame.Application;
 using Elder.Core.CoreFrame.Interfaces;
-using Elder.Unity.CoreFrame.Infrastructure;
-using Elder.Unity.CoreFrame.Infrastructure.Factories;
+using Elder.Platform.CoreFrame.Infrastructure;
+using Elder.Platform.CoreFrame.Infrastructure.Factories;
 using System;
 using UnityEngine;
 
-namespace Elder.Unity.CoreFrame.Presentation
+namespace Elder.Platform.CoreFrame.Presentation
 {
     public class CoreFrameRunner : MonoBehaviour
     {
@@ -15,8 +15,9 @@ namespace Elder.Unity.CoreFrame.Presentation
         {
             RegisterDontDestroyOnLoad();
 
-            var infrastructrueFactory = CreateInfrastructureFactory();
-            var coreFrameInfra = CreateCoreFrameInfra(infrastructrueFactory);
+            var infraFactory = CreateInfrastructureFactory();
+            var subInfraeFactory = CreateSubInfrastructureFactory();
+            var coreFrameInfra = CreateCoreFrameInfra(infraFactory, subInfraeFactory);
             var applicationFactory = CreateApplicaionFactory();
             CreateCoreFrameApplication(coreFrameInfra, applicationFactory);
         }
@@ -26,12 +27,15 @@ namespace Elder.Unity.CoreFrame.Presentation
         }
         private InfrastructureFactory CreateInfrastructureFactory()
         {
-            var infraFactory = new InfrastructureFactory();
-            return infraFactory;
+            return new InfrastructureFactory();
         }
-        private CoreFrameInfrastructure CreateCoreFrameInfra(IInfrastructureFactory infrastructureFactory)
+        private SubInfrastructureFactory CreateSubInfrastructureFactory()
         {
-            return new(infrastructureFactory);
+            return new SubInfrastructureFactory();
+        }
+        private CoreFrameInfrastructure CreateCoreFrameInfra(IInfrastructureFactory infraFactory, ISubInfrastructureFactory subInfraFactory)
+        {
+            return new(infraFactory, subInfraFactory);
         }
         private void CreateCoreFrameApplication(CoreFrameInfrastructure coreFrameInfra, ApplicationFactory applycationFactory)
         {

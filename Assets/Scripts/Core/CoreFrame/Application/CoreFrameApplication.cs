@@ -1,10 +1,11 @@
 using Elder.Core.Common.BaseClasses;
+using Elder.Core.Common.Enums;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
-using System.Collections.Generic;
-using System;
-using Elder.Unity.Logging.Infrastructure;
+using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace Elder.Core.CoreFrame.Application
 {
@@ -13,9 +14,14 @@ namespace Elder.Core.CoreFrame.Application
         private IInfrastructureProvider _infraProvider;
         private IInfrastructureRegister _infraRegister;
         private IInfrastructureDisposer _infraDisposer;
+
         private IApplicationFactory _appFactory;
 
-        private Dictionary<Type, IApplication> _persistentApp;
+        private IApplication _logApp;
+        private Dictionary<Type, IApplication> _persistentApps;
+        private Dictionary<Type, IApplication> _sceneApps;
+
+        private ILoggerEx _logger;
 
         public CoreFrameApplication(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, IInfrastructureDisposer infraDisposer, IApplicationFactory applicationFactory)
         {
@@ -25,24 +31,88 @@ namespace Elder.Core.CoreFrame.Application
 
             InjectApplicationFactory(applicationFactory);
 
-            InitializeInfraPersistence();
-            InitializeAppPersistence();
+            InitializePersistentAppsContainer();
+            InitializeaSceneAppsContainer();
+
+            if (!TryInitializeLogSystem())
+                throw new InvalidOperationException("Log Provider not initialized.");
+
+
+        }
+        private void InitializePersistentAppsContainer()
+        {
+            _persistentApps = new();
+        }
+        private void InitializeaSceneAppsContainer()
+        {
+            _sceneApps = new();
+        }
+        private bool TryInitializeLogSystem()
+        {
+            if (!TryInitializeLogApp())
+                return false;
+
+            if (!TryBindLogServiceToFacade())
+                return false;
+
+            if (!TryPostInitializeLogApp())
+                return false;
+
+            if (!TryBindLogger())
+                return false;
+
+            return true;
+        }
+        private bool TryBindLogger()
+        {
+            _logger = LogFacade.GetLoggerFor<CoreFrameApplication>();
+            return _logger != null;
+        }
+        private bool TryPostInitializeLogApp()
+        {
+            return _logApp.TryPostInitialize();
+        }
+        private bool TryBindLogServiceToFacade()
+        {
+            if (_logApp is not ILoggerPublisher loggerPublisher)
+                return false;
+
+            LogFacade.InjectProvider(loggerPublisher);
+            return true;
+        }
+        private bool TryInitializeLogApp()
+        {
+            if (!TryCreateApplication<ILoggerPublisher>(out var logApp))
+                return false;
+
+            _logApp = logApp;
+            return true;
         }
         private void InjectApplicationFactory(IApplicationFactory appFactory)
         {
             _appFactory = appFactory;
         }
-        private void InitializeAppPersistence()
+        public void RegisterApplication<T>() where T : IApplication
         {
+            var type = typeof(T);
+            if (_persistentApps.ContainsKey(type) || _sceneApps.ContainsKey(type))
+                return;
 
+            if (!TryCreateApplication<T>(out var app))
+                return;
+
+            var container = app.AppType switch
+            {
+                ApplicationType.Persistent => _persistentApps,
+                ApplicationType.Scene => _sceneApps,
+                _ => null
+            };
+            container[type] = app;
         }
-        private void InitializeInfraPersistence()
+        private bool TryCreateApplication<T>(out IApplication app) where T : IApplication
         {
-            RequestRegisterLogger();
-        }
-        private void RequestRegisterLogger()
-        {
-            _infraRegister.RegisterInfrastructure<ILogEventHandler>();
+            var type = typeof(T);
+            return _appFactory.TryCreateApplication(type, this, _infraProvider, _infraRegister, out app);
         }
         private void InjectInfrastructureDisposer(IInfrastructureDisposer infraDisposer)
         {
@@ -59,28 +129,60 @@ namespace Elder.Core.CoreFrame.Application
         public bool TryGetApplication<T>(out T targetApplication) where T : class, IApplication
         {
             var type = typeof(T);
-            if (_persistentApp.TryGetValue(type, out var persistent))
+            if (_persistentApps.TryGetValue(type, out var persistent))
             {
                 targetApplication = persistent as T;
                 return targetApplication != null;
             }
-            targetApplication = null;
-            return true;
-        }
-        /*
-         * DisposeÀÇ ¼ø¼­ 
-         * [ Unity EntryPoint (MonoBehaviour or bootstrap) ]
-                ¡é
-        [ GameMainFrameApplication ]  ¡ç Owns
-                ¡é
-        [ UnityMainInfrastructure ]   ¡ç Owns
-                ¡é
-        [ UnityInputAdapter, FirebaseLoggerAdapter, etc. ]
-         */
 
+            if (_sceneApps.TryGetValue(type, out var scene))
+            {
+                targetApplication = scene as T;
+                return targetApplication != null;
+            }
+            
+            targetApplication = null;
+            return false;
+        }
         protected override void DisposeManagedResources()
         {
+            DisposeSceneApps();
+            DisposeSceneInfras();
+
+            DisposePersistentApps();
+            DisposePersistentInfras();
+
+            ClearInfraRegister();
             ClearInfraProvider();
+        }
+       
+        private void DisposePersistentInfras()
+        {
+            _infraDisposer.DisposePersistentInfras();
+        }
+        private void DisposeSceneInfras()
+        {
+            _infraDisposer.DiposeSceneInfras();
+        }
+        private void DisposeSceneApps()
+        {
+            foreach (var app in _sceneApps.Values)
+                app.Dispose();
+
+            _sceneApps.Clear();
+            _sceneApps = null;
+        }
+        private void DisposePersistentApps()
+        {
+            foreach (var app in _persistentApps.Values)
+                app.Dispose();
+
+            _persistentApps.Clear();
+            _persistentApps = null;
+        }
+        private void ClearInfraRegister()
+        {
+            _infraRegister = null;
         }
         private void ClearInfraProvider()
         {
@@ -89,6 +191,42 @@ namespace Elder.Core.CoreFrame.Application
         protected override void DisposeUnmanagedResources()
         {
 
+        }
+        protected override void CompleteDispose()
+        {
+            DisposeApplicationFactory();
+            ClearLogger();
+            CleanUpLogFacade();
+            DisposeLogApps();
+            DisposeLogInfra();
+            DisposeInfra();
+        }
+        private void ClearLogger()
+        {
+            _logger = null;
+        }
+        private void CleanUpLogFacade()
+        {
+            LogFacade.CleanUp();
+        }
+        private void DisposeLogApps()
+        {
+            _logApp.Dispose();
+            _logApp = null;
+        }
+        private void DisposeLogInfra()
+        {
+            _infraDisposer.DisposeLogInfras();
+        }
+        private void DisposeInfra()
+        {
+            _infraDisposer.Dispose();
+            _infraDisposer = null;
+        }
+        private void DisposeApplicationFactory()
+        {
+            _appFactory.Dispose();
+            _appFactory = null;
         }
     }
 }

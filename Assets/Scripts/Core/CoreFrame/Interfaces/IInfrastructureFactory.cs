@@ -5,6 +5,6 @@ namespace Elder.Core.CoreFrame.Interfaces
 {
     public interface IInfrastructureFactory : IDisposable
     {
-          public bool TryCreateInfrastructure(Type type, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, out IInfrastructure infrastructure);
+        public bool TryCreateInfrastructure(Type type, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator, out IInfrastructure infrastructure);
     }
 }

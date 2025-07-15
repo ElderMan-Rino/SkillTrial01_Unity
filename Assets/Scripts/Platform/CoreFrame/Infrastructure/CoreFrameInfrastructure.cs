@@ -1,0 +1,137 @@
+using Elder.Core.Common.Enums;
+using Elder.Core.Common.Interfaces;
+using Elder.Core.CoreFrame.Interfaces;
+using System;
+using System.Collections.Generic;
+
+namespace Elder.Platform.CoreFrame.Infrastructure
+{
+    public class CoreFrameInfrastructure : IInfrastructureDisposer, IInfrastructureProvider, IInfrastructureRegister, ISubInfrastructureCreator
+    {
+        private IInfrastructureFactory _infraFactory;
+        private ISubInfrastructureFactory _subInfraFactory;
+
+        private Dictionary<Type, IInfrastructure> _persistentInfras;
+        private Dictionary<Type, IInfrastructure> _sceneInfras;
+        private Dictionary<Type, IInfrastructure> _logInfras;
+
+        public CoreFrameInfrastructure(IInfrastructureFactory infrastructureFactory, ISubInfrastructureFactory subInfraFactory)
+        {
+            InjectInfrastructureFactory(infrastructureFactory);
+            InjectSubInfrastructureFactory(subInfraFactory);
+
+            InitializeLogInfrasContainer();
+            InitializePersistenceInfrasContainer();
+            InitializeSceneInfraContainer();
+        }
+        private void InjectSubInfrastructureFactory(ISubInfrastructureFactory subInfraFactory)
+        {
+            _subInfraFactory = subInfraFactory;
+        }
+        private void InjectInfrastructureFactory(IInfrastructureFactory infrastructureFactory)
+        {
+            _infraFactory = infrastructureFactory;
+        }
+        private void InitializeSceneInfraContainer()
+        {
+            _sceneInfras = new();
+        }
+        private void InitializePersistenceInfrasContainer()
+        {
+            _persistentInfras = new();
+        }
+        private void InitializeLogInfrasContainer()
+        {
+            _logInfras = new();
+        }
+        public bool TryGetInfrastructure<T>(out T targetInfrastructure) where T : class, IInfrastructure
+        {
+            targetInfrastructure = null;
+            var type = typeof(T);
+            if (_persistentInfras.TryGetValue(type, out var persistentInfra))
+            {
+                targetInfrastructure = persistentInfra as T;
+                return targetInfrastructure != null;
+            }
+
+            if (_sceneInfras.TryGetValue(type, out var sceneInfra))
+            {
+                targetInfrastructure = sceneInfra as T;
+                return targetInfrastructure != null;
+            }
+
+            if (_logInfras.TryGetValue(type, out var logInfra))
+            {
+                targetInfrastructure = logInfra as T;
+                return targetInfrastructure != null;
+            }
+            return false;
+        }
+        public void RegisterInfrastructure<T>() where T : IInfrastructure
+        {
+            var type = typeof(T);
+            if (_persistentInfras.ContainsKey(type) || _sceneInfras.ContainsKey(type))
+                return;
+
+            if (!TryCreateInfrastructure(type, out var infrastructure))
+                return;
+
+            var infraContainer = infrastructure.InfraType switch
+            {
+                InfrastructureType.Persistent => _persistentInfras,
+                InfrastructureType.Scene => _sceneInfras,
+                InfrastructureType.Log => _logInfras,
+                _ => null
+            };
+            if (infraContainer == null)
+                return;
+
+            infraContainer[type] = infrastructure;
+        }
+        private bool TryCreateInfrastructure(Type type, out IInfrastructure infra)
+        {
+            return _infraFactory.TryCreateInfrastructure(type, this, this, this, out infra);
+        }
+        public bool TryCreateSubInfra<T>(out ISubInfrastructure subInfra) where T : ISubInfrastructure
+        {
+            return _subInfraFactory.TryCreateSubInfra(typeof(T), out subInfra);
+        }
+        public void DisposeLogInfras()
+        {
+            ClearUpInfras(_logInfras);
+            _logInfras = null;
+        }
+        private void ClearUpInfras(Dictionary<Type, IInfrastructure> infras)
+        {
+            foreach (var infra in infras.Values)
+                infra.Dispose();
+            infras.Clear();
+        }
+        public void DiposeSceneInfras()
+        {
+            ClearUpInfras(_sceneInfras);
+            _sceneInfras = null;
+        }
+        public void DisposePersistentInfras()
+        {
+            ClearUpInfras(_persistentInfras);
+            _persistentInfras = null;
+        }
+
+        public void Dispose()
+        {
+            DiposeSubInfrastructureFactory();
+            DisposeInfrastructureFactory();
+        }
+        private void DisposeInfrastructureFactory()
+        {
+            _infraFactory.Dispose();
+            _infraFactory = null;
+        }
+        private void DiposeSubInfrastructureFactory()
+        {
+            _subInfraFactory.Dispose();
+            _subInfraFactory = null;
+        }
+    }
+}

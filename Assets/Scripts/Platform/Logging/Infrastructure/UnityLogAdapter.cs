@@ -1,15 +1,23 @@
 using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Enums;
+using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.Logging.Application;
 using Elder.Core.Logging.Interfaces;
+using Elder.Platform.Logging.Interfaces;
 using System;
 using UnityEngine;
 
-namespace Elder.Unity.Logging.Infrastructure
+namespace Elder.Platform.Logging.Infrastructure
 {
-    public class UnityLogger : DisposableBase, ILogEventHandler
+    public class UnityLogAdapter : DisposableBase, ILogAdapter, IUnityLogAdapter
     {
-        public void HandleLogEvent(LogEvent logEvent)
+        public InfrastructureType InfraType => InfrastructureType.Persistent;
+
+        public void Initialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator)
+        {
+            throw new NotImplementedException();
+        }
+        public void DispatchLogEvent(LogEvent logEvent)
         {
             switch (logEvent.Level)
             {
@@ -60,5 +68,6 @@ namespace Elder.Unity.Logging.Infrastructure
         {
 
         }
+      
     }
 }

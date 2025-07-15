@@ -1,9 +1,8 @@
 namespace Elder.Core.Common.Enums
 {
-    public enum InfrastructureType
+    public enum ApplicationType
     {
         Persistent,
         Scene,
-        Log,
     }
 }

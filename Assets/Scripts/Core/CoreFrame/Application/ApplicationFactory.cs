@@ -1,15 +1,53 @@
+using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
+using Elder.Core.Logging.Application;
+using Elder.Core.Logging.Interfaces;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Elder.Core.CoreFrame.Application
 {
-    public class ApplicationFactory : DictionaryBase, IApplicationFactory
+    public class ApplicationFactory : DisposableBase, IApplicationFactory
     {
-        public bool TryCreateApplication(Type type, out IApplication application)
+        private Dictionary<Type, Func<IApplication>> _constructers;
+        
+        public ApplicationFactory()
         {
-            throw new NotImplementedException();
+            InitializeConstructers();
+        }
+        private void InitializeConstructers()
+        {
+            _constructers = new()
+            {
+                { typeof(ILoggerPublisher), () => new LogService() },
+            };
+        }
+        public bool TryCreateApplication(Type type, IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, out IApplication application)
+        {
+            if (!_constructers.TryGetValue(type, out var constructer))
+            {
+                 application = null;
+                return false;
+            }
+            application = constructer.Invoke();
+            application.TryInitialize(appProvider, infraProvider, infraRegister);
+            return true;
+        }
+
+        protected override void DisposeManagedResources()
+        {
+            DisposeConstructers();
+        }
+        private void DisposeConstructers()
+        {
+            _constructers.Clear();
+            _constructers = null;
+        }
+
+        protected override void DisposeUnmanagedResources()
+        {
+
         }
     }
 }

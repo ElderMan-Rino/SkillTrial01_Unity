@@ -6,5 +6,6 @@ namespace Elder.Core.CoreFrame.Interfaces
     {
         public void DiposeSceneInfras();
         public void DisposePersistentInfras();
+        public void DisposeLogInfras();
     }
 }

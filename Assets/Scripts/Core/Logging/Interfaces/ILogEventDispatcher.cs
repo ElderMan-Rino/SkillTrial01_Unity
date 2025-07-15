@@ -3,8 +3,8 @@ using Elder.Core.Logging.Application;
 
 namespace Elder.Core.Logging.Interfaces
 {
-    public interface ILogEventHandler : IInfrastructure
+    public interface ILogEventDispatcher : IInfrastructure
     {
-        public void HandleLogEvent(LogEvent logEvent);
+        public void DispatchLogEvent(in LogEvent logEvent);
     }
 }

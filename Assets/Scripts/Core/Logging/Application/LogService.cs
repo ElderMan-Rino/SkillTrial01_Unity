@@ -1,30 +1,45 @@
 using Elder.Core.Common.BaseClasses;
+using Elder.Core.Common.Enums;
+using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.Logging.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace Elder.Core.Logging.Application
 {
-    public class LoggingService : ApplicationBase, ILoggerPublisher
+    public class LogService : ApplicationBase, ILoggerPublisher
     {
-        private ILogEventHandler _logEventHandler;
+        private ILogEventDispatcher _logEventDispatcher;
         private Dictionary<Type, Logger> _loggerContainer;
 
-        public void Initialize()
+        public override ApplicationType AppType => ApplicationType.Persistent;
+
+        public override bool TryInitialize(IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister)
         {
+            base.TryInitialize(appProvider, infraProvider, infraRegister);
             InitializeLoggerContainer();
+            RequireLoggingInfra();
+            return true;
+        }
+        private void RequireLoggingInfra()
+        {
+            RequireInfrastructure<ILogEventDispatcher>();
         }
         private void InitializeLoggerContainer()
         {
             _loggerContainer = new();
         }
-        public void PostInitialize()
+        public override bool TryPostInitialize()
         {
-
+            return TryBindLogEventHandler();
         }
-        private void BindLogEventHandler()
+        private bool TryBindLogEventHandler()
         {
+            if (!TryGetInfrastructure<ILogEventDispatcher>(out var logEventDispatcher))
+                return false;
 
+            _logEventDispatcher = logEventDispatcher;
+            return true;
         }
         public ILoggerEx GetLogger<T>() where T : class
         {
@@ -38,11 +53,12 @@ namespace Elder.Core.Logging.Application
         }
         private void PublishLogEvent(LogEvent logEvent)
         {
-
+            _logEventDispatcher.DispatchLogEvent(logEvent);
         }
         protected override void DisposeManagedResources()
         {
             DisposeLoggerContainer();
+            DisposeLogEventDispatcher();
         }
         private void DisposeLoggerContainer()
         {
@@ -50,11 +66,14 @@ namespace Elder.Core.Logging.Application
                 logger.Dispose();
             _loggerContainer = null;
         }
+        private void DisposeLogEventDispatcher()
+        {
+            _logEventDispatcher.Dispose();
+            _logEventDispatcher = null;
+        }
         protected override void DisposeUnmanagedResources()
         {
 
         }
-
-       
     }
 }

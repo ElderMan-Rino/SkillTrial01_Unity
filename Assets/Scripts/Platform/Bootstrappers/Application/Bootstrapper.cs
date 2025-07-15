@@ -1,7 +1,7 @@
-using Elder.Unity.CoreFrame.Presentation;
+using Elder.Platform.CoreFrame.Presentation;
 using UnityEngine;
 
-namespace Elder.Unity.Bootstrappers.Application
+namespace Elder.Platform.Bootstrappers.Application
 {
     public static class Bootstrapper
     {
