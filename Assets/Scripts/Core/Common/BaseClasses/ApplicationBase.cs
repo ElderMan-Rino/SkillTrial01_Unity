@@ -6,10 +6,6 @@ namespace Elder.Core.Common.BaseClasses
 {
     public class ApplicationBase : DisposableBase
     {
-        // 필요한 것
-        // 인프라스트럭트 프로바이더
-        // 인프라스트럭트 생성 요청
-
         private IApplicationProvider _appProvider;
         
         private IInfrastructureProvider _infraProvider;
@@ -40,9 +36,13 @@ namespace Elder.Core.Common.BaseClasses
         {
             return true;
         }
-        protected bool TryGetApplication<T>(out T application) where T : class, IApplication
+        protected bool TryGetApplication<T>(out T targetApp) where T : class, IApplication
         {
-            return _appProvider.TryGetApplication<T>(out application);
+            return _appProvider.TryGetApplication<T>(out targetApp);
+        }
+        protected bool TryGetApplications<T>(out T[] targetApps) where T : class, IApplication
+        {
+            return _appProvider.TryGetApplications<T>(out targetApps);
         }
         protected bool TryGetInfrastructure<T>(out T targetInfra) where T : class, IInfrastructure
         {

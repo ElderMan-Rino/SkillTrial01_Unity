@@ -4,6 +4,7 @@ using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.Logging.Application;
 using Elder.Core.Logging.Interfaces;
+using Elder.Platform.Logging.Interfaces;
 using System.Collections.Generic;
 
 namespace Elder.Platform.Logging.Infrastructure
@@ -20,7 +21,7 @@ namespace Elder.Platform.Logging.Infrastructure
 
             InitializeLogAdapterContainer();
 
-            RegistLogAdapter<UnityLogAdapter>();
+            RegistLogAdapter<IUnityLogAdapter>();
         }
         private void InitializeLogAdapterContainer()
         {

@@ -4,7 +4,8 @@ namespace Elder.Core.CoreFrame.Interfaces
 {
     public interface IApplicationProvider 
     {
-        public bool TryGetApplication<T>(out T targetApplication) where T : class, IApplication;
+        public bool TryGetApplication<T>(out T targetApp) where T : class, IApplication;
+        public bool TryGetApplications<T>(out T[] targetApps) where T : class, IApplication;
 
         /*
          * 현실적인 Best Practice

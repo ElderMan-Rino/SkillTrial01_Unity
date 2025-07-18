@@ -2,10 +2,13 @@ using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Enums;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
+using Elder.Core.GameStep.Application;
+using Elder.Core.GameStep.Interfaces;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Elder.Core.CoreFrame.Application
 {
@@ -37,7 +40,18 @@ namespace Elder.Core.CoreFrame.Application
             if (!TryInitializeLogSystem())
                 throw new InvalidOperationException("Log Provider not initialized.");
 
-
+            if (!TryInitializePersistentApps())
+            {
+                _logger.Error("Failed to initialize persistent applications.");
+                return;
+            }
+        }
+        private bool TryInitializePersistentApps()
+        {
+            // 나중에 xml등으로 데이터 처리 필요
+            // 메제지? 플럭스 시스템도 추가 필요
+            RegisterApplication<IGameStepApplication>();
+            return true;
         }
         private void InitializePersistentAppsContainer()
         {
@@ -126,22 +140,33 @@ namespace Elder.Core.CoreFrame.Application
         {
             _infraProvider = infraProvider;
         }
-        public bool TryGetApplication<T>(out T targetApplication) where T : class, IApplication
+        public bool TryGetApplication<T>(out T targetApp) where T : class, IApplication
         {
             var type = typeof(T);
             if (_persistentApps.TryGetValue(type, out var persistent))
             {
-                targetApplication = persistent as T;
-                return targetApplication != null;
+                targetApp = persistent as T;
+                return targetApp != null;
             }
 
             if (_sceneApps.TryGetValue(type, out var scene))
             {
-                targetApplication = scene as T;
-                return targetApplication != null;
+                targetApp = scene as T;
+                return targetApp != null;
             }
             
-            targetApplication = null;
+            targetApp = null;
+            return false;
+        }
+        public bool TryGetApplications<T>(out T[] targetApps) where T : class, IApplication
+        {
+            var matches = _persistentApps.Values.Concat(_sceneApps.Values).OfType<T>().ToArray();
+            if (matches.Length > 0)
+            {
+                targetApps = matches;
+                return true;
+            }
+            targetApps = null;
             return false;
         }
         protected override void DisposeManagedResources()
@@ -228,5 +253,7 @@ namespace Elder.Core.CoreFrame.Application
             _appFactory.Dispose();
             _appFactory = null;
         }
+
+     
     }
 }

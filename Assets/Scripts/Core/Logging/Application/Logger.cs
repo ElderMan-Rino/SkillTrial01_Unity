@@ -42,7 +42,7 @@ namespace Elder.Core.Logging.Application
         {
 
         }
-        [System.Diagnostics.Conditional("LOGGER")]
+        [System.Diagnostics.Conditional("ENABLE_LOGGING")]
         private void PublishLog(in LogEvent logEvent)
         {
             _logAction?.Invoke(logEvent);

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Elder.Core.Logging.Application
 {
-    public class LogService : ApplicationBase, ILoggerPublisher
+    public class LogApplication : ApplicationBase, ILoggerPublisher
     {
         private ILogEventDispatcher _logEventDispatcher;
         private Dictionary<Type, Logger> _loggerContainer;

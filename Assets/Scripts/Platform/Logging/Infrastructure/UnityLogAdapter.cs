@@ -15,7 +15,7 @@ namespace Elder.Platform.Logging.Infrastructure
 
         public void Initialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator)
         {
-            throw new NotImplementedException();
+
         }
         public void DispatchLogEvent(LogEvent logEvent)
         {
