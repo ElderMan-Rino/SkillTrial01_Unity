@@ -19,5 +19,15 @@ namespace Elder.Core.GameStep.Application
         {
             return base.TryPostInitialize();
         }
+        protected override void DisposeManagedResources()
+        {
+            DisposeGameStepExecutor();
+            base.DisposeManagedResources();
+        }
+        private void DisposeGameStepExecutor()
+        {
+            
+            _gameStepExecutor = null;
+        }
     }
 }

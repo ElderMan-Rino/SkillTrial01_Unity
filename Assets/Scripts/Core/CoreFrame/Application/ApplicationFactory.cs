@@ -1,8 +1,8 @@
 using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
-using Elder.Core.GameStep.Application;
-using Elder.Core.GameStep.Interfaces;
+using Elder.Core.Loading.Applictaion.Status;
+using Elder.Core.Loading.Interfaces.Status;
 using Elder.Core.Logging.Application;
 using Elder.Core.Logging.Interfaces;
 using System;
@@ -23,7 +23,7 @@ namespace Elder.Core.CoreFrame.Application
             _constructers = new()
             {
                 { typeof(ILoggerPublisher), () => new LogApplication () },
-                { typeof(IGameStepApplication), () => new GameStepApplication() },
+                { typeof(ILoadingStatusApplication), () => new LoadingStatusApplication() },
             };
         }
         public bool TryCreateApplication(Type type, IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, out IApplication application)
