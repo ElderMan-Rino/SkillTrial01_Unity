@@ -58,7 +58,7 @@ namespace Elder.Core.Logging.Application
         protected override void DisposeManagedResources()
         {
             DisposeLoggerContainer();
-            DisposeLogEventDispatcher();
+            ClearLogEventDispatcher();
         }
         private void DisposeLoggerContainer()
         {
@@ -66,9 +66,8 @@ namespace Elder.Core.Logging.Application
                 logger.Dispose();
             _loggerContainer = null;
         }
-        private void DisposeLogEventDispatcher()
+        private void ClearLogEventDispatcher()
         {
-            _logEventDispatcher.Dispose();
             _logEventDispatcher = null;
         }
         protected override void DisposeUnmanagedResources()

@@ -1,4 +1,5 @@
 using Elder.Core.Common.BaseClasses;
+using Elder.Core.Common.Enums;
 using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.Loading.Interfaces.Status;
 using Elder.Core.Logging.Helpers;
@@ -13,6 +14,8 @@ namespace Elder.Core.Loading.Applictaion.Status
         private ILoggerEx _logger;
 
         private Dictionary<Type, ILoadingStatusReporter> _statusReporters;
+
+        public override ApplicationType AppType => ApplicationType.Persistent; 
 
         public override bool TryInitialize(IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister)
         {

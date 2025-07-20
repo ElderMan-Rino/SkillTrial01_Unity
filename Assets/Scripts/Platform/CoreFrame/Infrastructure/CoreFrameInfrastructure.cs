@@ -117,7 +117,6 @@ namespace Elder.Platform.CoreFrame.Infrastructure
             ClearUpInfras(_persistentInfras);
             _persistentInfras = null;
         }
-
         public void Dispose()
         {
             DiposeSubInfrastructureFactory();
