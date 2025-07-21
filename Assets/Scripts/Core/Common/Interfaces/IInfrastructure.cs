@@ -7,6 +7,6 @@ namespace Elder.Core.Common.Interfaces
     public interface IInfrastructure : IDisposable
     {
         public InfrastructureType InfraType { get; }
-        public void Initialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator);
+        public bool TryInitialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator);
     }
 }

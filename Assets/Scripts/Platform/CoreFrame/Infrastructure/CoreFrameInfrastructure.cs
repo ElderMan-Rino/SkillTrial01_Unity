@@ -6,10 +6,11 @@ using System.Collections.Generic;
 
 namespace Elder.Platform.CoreFrame.Infrastructure
 {
-    public class CoreFrameInfrastructure : IInfrastructureDisposer, IInfrastructureProvider, IInfrastructureRegister, ISubInfrastructureCreator
+    public class CoreFrameInfrastructure : IInfrastructureDisposer, IInfrastructureProvider, IInfrastructureRegister, ISubInfrastructureCreator, IApplicationProvider
     {
         private IInfrastructureFactory _infraFactory;
         private ISubInfrastructureFactory _subInfraFactory;
+        private IApplicationProvider _appProvider;
 
         private Dictionary<Type, IInfrastructure> _persistentInfras;
         private Dictionary<Type, IInfrastructure> _sceneInfras;
@@ -31,6 +32,10 @@ namespace Elder.Platform.CoreFrame.Infrastructure
         private void InjectInfrastructureFactory(IInfrastructureFactory infrastructureFactory)
         {
             _infraFactory = infrastructureFactory;
+        }
+        public void InjectAppProvider(IApplicationProvider appProvider)
+        {
+            _appProvider = appProvider;
         }
         private void InitializeSceneInfraContainer()
         {
@@ -88,6 +93,14 @@ namespace Elder.Platform.CoreFrame.Infrastructure
 
             infraContainer[type] = infrastructure;
         }
+        public bool TryGetApplication<T>(out T targetApp) where T : class, IApplication
+        {
+            return _appProvider.TryGetApplication<T>(out targetApp);
+        }
+        public bool TryGetApplications<T>(out T[] targetApps) where T : class, IApplication
+        {
+            return _appProvider.TryGetApplications<T>(out targetApps);
+        }
         private bool TryCreateInfrastructure(Type type, out IInfrastructure infra)
         {
             return _infraFactory.TryCreateInfrastructure(type, this, this, this, out infra);
@@ -96,6 +109,7 @@ namespace Elder.Platform.CoreFrame.Infrastructure
         {
             return _subInfraFactory.TryCreateSubInfra(typeof(T), out subInfra);
         }
+        
         public void DisposeLogInfras()
         {
             ClearUpInfras(_logInfras);
@@ -119,8 +133,13 @@ namespace Elder.Platform.CoreFrame.Infrastructure
         }
         public void Dispose()
         {
+            ClearAppProvider();
             DiposeSubInfrastructureFactory();
             DisposeInfrastructureFactory();
+        }
+        private void ClearAppProvider()
+        {
+            _appProvider = null;
         }
         private void DisposeInfrastructureFactory()
         {
@@ -132,5 +151,7 @@ namespace Elder.Platform.CoreFrame.Infrastructure
             _subInfraFactory.Dispose();
             _subInfraFactory = null;
         }
+
+      
     }
 }

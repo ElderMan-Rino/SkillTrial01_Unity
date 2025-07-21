@@ -1,7 +1,6 @@
 using Elder.Core.Common.Interfaces;
-using System;
 
-namespace Elder.Core.Loading.Interfaces.Status
+namespace Elder.Core.LoadingStatus.Interfaces
 {
     public interface ILoadingStatusApplication : IApplication
     {

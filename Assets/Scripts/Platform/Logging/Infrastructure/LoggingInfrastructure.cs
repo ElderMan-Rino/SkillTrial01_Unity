@@ -15,13 +15,14 @@ namespace Elder.Platform.Logging.Infrastructure
 
         public override InfrastructureType InfraType => InfrastructureType.Persistent;
 
-        public override void Initialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator)
+        public override bool TryInitialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator)
         {
-            base.Initialize(infraProvider, infraRegister, subInfraCreator);
+            base.TryInitialize(infraProvider, infraRegister, subInfraCreator);
 
             InitializeLogAdapterContainer();
 
             RegistLogAdapter<IUnityLogAdapter>();
+            return true;
         }
         private void InitializeLogAdapterContainer()
         {

@@ -12,11 +12,12 @@ namespace Elder.Core.Common.BaseClasses
 
         public virtual InfrastructureType InfraType { get; }
 
-        public virtual void Initialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator)
+        public virtual bool TryInitialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator)
         {
             InjectInfraProvider(infraProvider);
             InjectInfraRegister(infraRegister);
             InjectSubInfraCreator(subInfraCreator);
+            return true;
         }
         private void InjectSubInfraCreator(ISubInfrastructureCreator subInfraCreator)
         {

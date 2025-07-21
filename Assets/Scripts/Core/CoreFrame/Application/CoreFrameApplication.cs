@@ -2,9 +2,8 @@ using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Enums;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
-using Elder.Core.GameStep.Application;
 using Elder.Core.GameStep.Interfaces;
-using Elder.Core.Loading.Interfaces.Status;
+using Elder.Core.LoadingStatus.Interfaces;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
 using System;
@@ -32,9 +31,10 @@ namespace Elder.Core.CoreFrame.Application
             InjectInfrastructureProvider(infraProvider);
             InjectInfrastructureRegister(infraRegister);
             InjectInfrastructureDisposer(infraDisposer);
-
             InjectApplicationFactory(applicationFactory);
-
+        }
+        public bool TryInitialize()
+        {
             InitializePersistentAppsContainer();
             InitializeaSceneAppsContainer();
 
@@ -44,8 +44,9 @@ namespace Elder.Core.CoreFrame.Application
             if (!TryInitializePersistentApps())
             {
                 _logger.Error("Failed to initialize persistent applications.");
-                return;
+                return false;
             }
+            return true;
         }
         private bool TryInitializePersistentApps()
         {

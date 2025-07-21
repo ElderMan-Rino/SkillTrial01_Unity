@@ -1,30 +1,30 @@
 using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Enums;
 using Elder.Core.CoreFrame.Interfaces;
-using Elder.Core.Loading.Interfaces.Status;
+using Elder.Core.LoadingStatus.Interfaces;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace Elder.Core.Loading.Applictaion.Status
+namespace Elder.Core.LoadingStatus.Applictaion
 {
     public class LoadingStatusApplication : ApplicationBase, ILoadingStatusApplication
     {
         private ILoggerEx _logger;
-
+        private ILoadingStatusProvider _loadingStatusProvider;
         private Dictionary<Type, ILoadingStatusReporter> _statusReporters;
 
         public override ApplicationType AppType => ApplicationType.Persistent; 
 
         public override bool TryInitialize(IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister)
         {
+            if (!TryBindLogger())
+                return false;
+
             if (!base.TryInitialize(appProvider, infraProvider, infraRegister))
                 return false;
 
-            if (!TryBindLogger())
-                return false;
-            
             InitializeReportersContainer();
             return true;
         }

@@ -19,7 +19,17 @@ namespace Elder.Platform.CoreFrame.Presentation
             var subInfraeFactory = CreateSubInfrastructureFactory();
             var coreFrameInfra = CreateCoreFrameInfra(infraFactory, subInfraeFactory);
             var applicationFactory = CreateApplicaionFactory();
-            CreateCoreFrameApplication(coreFrameInfra, applicationFactory);
+            _applicationDisposable = CreateAndInitializeApplication(coreFrameInfra, applicationFactory); ;
+        }
+        private CoreFrameApplication CreateAndInitializeApplication(CoreFrameInfrastructure coreFrameInfra, ApplicationFactory appFactory)
+        {
+            var app = new CoreFrameApplication(coreFrameInfra, coreFrameInfra, coreFrameInfra, appFactory);
+            coreFrameInfra.InjectAppProvider(app); // 후속 주입
+
+            if (!app.TryInitialize())
+                return null;
+
+            return app;
         }
         private ApplicationFactory CreateApplicaionFactory()
         {
@@ -36,10 +46,6 @@ namespace Elder.Platform.CoreFrame.Presentation
         private CoreFrameInfrastructure CreateCoreFrameInfra(IInfrastructureFactory infraFactory, ISubInfrastructureFactory subInfraFactory)
         {
             return new(infraFactory, subInfraFactory);
-        }
-        private void CreateCoreFrameApplication(CoreFrameInfrastructure coreFrameInfra, ApplicationFactory applycationFactory)
-        {
-            _applicationDisposable = new CoreFrameApplication(coreFrameInfra, coreFrameInfra, coreFrameInfra, applycationFactory);
         }
         private void RegisterDontDestroyOnLoad()
         {

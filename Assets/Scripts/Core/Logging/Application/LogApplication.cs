@@ -36,7 +36,7 @@ namespace Elder.Core.Logging.Application
         private bool TryBindLogEventHandler()
         {
             if (!TryGetInfrastructure<ILogEventDispatcher>(out var logEventDispatcher))
-                return false;
+                throw new InvalidOperationException("ILogEventDispatcher infrastructure is not initialized or not registered.");
 
             _logEventDispatcher = logEventDispatcher;
             return true;
