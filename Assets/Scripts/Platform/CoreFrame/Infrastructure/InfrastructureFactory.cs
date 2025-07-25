@@ -30,14 +30,14 @@ namespace Elder.Platform.CoreFrame.Infrastructure.Factories
                 { typeof(IGameStepExecutor), () => new SceneLoader() },
             };
         }
-        public bool TryCreateInfrastructure(Type type, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator, out IInfrastructure infrastructure)
+        public bool TryCreateInfrastructure(Type type, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator, IApplicationProvider appProvider, out IInfrastructure infrastructure)
         {
             infrastructure = null;
             if (!_constructers.TryGetValue(type, out var constructer))
                 return false;
 
             infrastructure = constructer.Invoke();
-            return infrastructure.TryInitialize(infraProvider, infraRegister, subInfraCreator);
+            return infrastructure.TryInitialize(infraProvider, infraRegister, subInfraCreator, appProvider);
         }
 
         protected override void DisposeManagedResources()

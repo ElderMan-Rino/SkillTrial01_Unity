@@ -1,6 +1,8 @@
 using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
+using Elder.Core.FluxMessage.Application;
+using Elder.Core.FluxMessage.Interfaces;
 using Elder.Core.GameStep.Application;
 using Elder.Core.GameStep.Interfaces;
 using Elder.Core.LoadingStatus.Applictaion;
@@ -27,6 +29,7 @@ namespace Elder.Core.CoreFrame.Application
                 { typeof(ILoggerPublisher), () => new LogApplication () },
                 { typeof(ILoadingStatusApplication), () => new LoadingStatusApplication() },
                 { typeof(IGameStepApplication), () => new GameStepApplication() },
+                { typeof(IFluxRouter), () => new FluxRouter() },
             };
         }
         public bool TryCreateApplication(Type type, IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, out IApplication application)

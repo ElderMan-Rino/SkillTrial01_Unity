@@ -103,7 +103,7 @@ namespace Elder.Platform.CoreFrame.Infrastructure
         }
         private bool TryCreateInfrastructure(Type type, out IInfrastructure infra)
         {
-            return _infraFactory.TryCreateInfrastructure(type, this, this, this, out infra);
+            return _infraFactory.TryCreateInfrastructure(type, this, this, this, _appProvider, out infra);
         }
         public bool TryCreateSubInfra<T>(out ISubInfrastructure subInfra) where T : ISubInfrastructure
         {

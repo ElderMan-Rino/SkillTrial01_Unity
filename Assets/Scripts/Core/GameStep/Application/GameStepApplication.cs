@@ -56,7 +56,12 @@ namespace Elder.Core.GameStep.Application
         protected override void DisposeManagedResources()
         {
             ClearGameStepExecutor();
+            ClearLogger();
             base.DisposeManagedResources();
+        }
+        private void ClearLogger()
+        {
+            _logger = null;
         }
         private void ClearGameStepExecutor()
         {

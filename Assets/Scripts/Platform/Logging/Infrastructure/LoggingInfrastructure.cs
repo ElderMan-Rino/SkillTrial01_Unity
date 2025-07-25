@@ -15,9 +15,9 @@ namespace Elder.Platform.Logging.Infrastructure
 
         public override InfrastructureType InfraType => InfrastructureType.Persistent;
 
-        public override bool TryInitialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator)
+        public override bool TryInitialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator, IApplicationProvider appProvider)
         {
-            base.TryInitialize(infraProvider, infraRegister, subInfraCreator);
+            base.TryInitialize(infraProvider, infraRegister, subInfraCreator, appProvider);
 
             InitializeLogAdapterContainer();
 

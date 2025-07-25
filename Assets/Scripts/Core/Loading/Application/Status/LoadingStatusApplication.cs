@@ -49,7 +49,7 @@ namespace Elder.Core.LoadingStatus.Applictaion
         }
         protected override void DisposeManagedResources()
         {
-            DisposeStatusReporters();
+            ClearStatusReporters();
             ClearLogger();
             base.DisposeManagedResources();
         }
@@ -57,7 +57,7 @@ namespace Elder.Core.LoadingStatus.Applictaion
         {
             _logger = null;
         }
-        private void DisposeStatusReporters()
+        private void ClearStatusReporters()
         {
             _statusReporters.Clear();
             _statusReporters = null;
