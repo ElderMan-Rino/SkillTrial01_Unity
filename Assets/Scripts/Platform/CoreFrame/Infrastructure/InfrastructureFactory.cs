@@ -1,11 +1,9 @@
 using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
-using Elder.Core.GameStep.Interfaces;
-using Elder.Core.LoadingStatus.Interfaces;
+using Elder.Core.GameLevel.Interfaces;
 using Elder.Core.Logging.Interfaces;
-using Elder.Platform.GameStep.Infrastructure;
-using Elder.Platform.LoadingStatus.Infrastructure;
+using Elder.Platform.GameLevel.Infrastructure;
 using Elder.Platform.Logging.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -26,8 +24,7 @@ namespace Elder.Platform.CoreFrame.Infrastructure.Factories
             _constructers = new()
             {
                 { typeof(ILogEventDispatcher), () => new LoggingInfrastructure() },
-                { typeof(ILoadingStatusProvider), () => new LoadingStatusInfrastructure() },
-                { typeof(IGameStepExecutor), () => new SceneLoader() },
+                { typeof(IGameLevelExecutor), () => new SceneLoader() },
             };
         }
         public bool TryCreateInfrastructure(Type type, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator, IApplicationProvider appProvider, out IInfrastructure infrastructure)
@@ -55,6 +52,6 @@ namespace Elder.Platform.CoreFrame.Infrastructure.Factories
 
         }
 
-       
+
     }
 }

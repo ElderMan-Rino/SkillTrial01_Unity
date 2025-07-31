@@ -1,12 +1,12 @@
 using Cysharp.Threading.Tasks;
 using Elder.Core.Common.BaseClasses;
-using Elder.Core.GameStep.Interfaces;
+using Elder.Core.GameLevel.Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Elder.Platform.GameStep.Infrastructure
+namespace Elder.Platform.GameLevel.Infrastructure
 {
-    public class SceneLoader : InfrastructureBase, IGameStepExecutor
+    public class SceneLoader : InfrastructureBase, IGameLevelExecutor
     {
         private const string LOADING_SCENE = "LoadingScene";
 
@@ -253,7 +253,7 @@ public class RxProgressReporter : IProgressReporter
             }
         }
 
-        public void RequestGameStepChange()
+        public void RequestGameLevelChange()
         {
 
         }

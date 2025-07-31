@@ -2,8 +2,7 @@ using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Enums;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
-using Elder.Core.GameStep.Interfaces;
-using Elder.Core.LoadingStatus.Interfaces;
+using Elder.Core.FluxMessage.Interfaces;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
 using System;
@@ -50,10 +49,8 @@ namespace Elder.Core.CoreFrame.Application
         }
         private bool TryInitializePersistentApps()
         {
-            // 나중에 xml등으로 데이터 처리 필요
-            // 메제지? 플럭스 시스템도 추가 필요
-            RegisterApplication<IGameStepApplication>();
-            RegisterApplication<ILoadingStatusApplication>();
+            // 나중에 xml등으로 데이터 처리하는게 편할듯
+            RegisterApplication<IFluxRouter>();
             return true;
         }
         private void InitializePersistentAppsContainer()

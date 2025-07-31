@@ -3,10 +3,6 @@ using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.FluxMessage.Application;
 using Elder.Core.FluxMessage.Interfaces;
-using Elder.Core.GameStep.Application;
-using Elder.Core.GameStep.Interfaces;
-using Elder.Core.LoadingStatus.Applictaion;
-using Elder.Core.LoadingStatus.Interfaces;
 using Elder.Core.Logging.Application;
 using Elder.Core.Logging.Interfaces;
 using System;
@@ -27,8 +23,6 @@ namespace Elder.Core.CoreFrame.Application
             _constructers = new()
             {
                 { typeof(ILoggerPublisher), () => new LogApplication () },
-                { typeof(ILoadingStatusApplication), () => new LoadingStatusApplication() },
-                { typeof(IGameStepApplication), () => new GameStepApplication() },
                 { typeof(IFluxRouter), () => new FluxRouter() },
             };
         }
