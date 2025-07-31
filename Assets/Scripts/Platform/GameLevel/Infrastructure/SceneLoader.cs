@@ -213,19 +213,7 @@ public class RxProgressReporter : IProgressReporter
          * 
          */
 
-        //private async UniTask TryChangeScene(string targetScene)
-        //{
-        //    var currentScene = SceneManager.GetActiveScene();
-        //    await LoadSceneAsync(LOADING_SCENE, LoadSceneMode.Additive);
-        //    await UnloadSceneAsync(currentScene);
-
-        //    // 플럭스 컴포넌트 필요 -> Component를
-        //    // 중간에 리소스 시스템 가져와서 정리하는 것 추가 필요 
-        //    // 여기서 플럭스를 날려주면 됨
-
-        //    await LoadSceneWithProgressAsync(targetScene);
-        //    await UnloadSceneAsync(LOADING_SCENE);
-        //}
+        
         private async UniTask LoadSceneAsync(string sceneName, LoadSceneMode loadType)
         {
             await SceneManager.LoadSceneAsync(sceneName, loadType);
@@ -255,23 +243,41 @@ public class RxProgressReporter : IProgressReporter
 
         public void RequestGameLevelChange()
         {
-
+            var test = "testScene";
+            ChangeSceneAsync(test).Forget();
         }
+        private async UniTask ChangeSceneAsync(string targetScene)
+        {
+            var currentScene = SceneManager.GetActiveScene();
+            await LoadSceneAsync(LOADING_SCENE, LoadSceneMode.Additive);
+            await UnloadSceneAsync(currentScene);
+
+            await LoadSceneWithProgressAsync(targetScene);
+
+            // 여기서 리소스 로드 추가 
+
+            /*
+             * 리소스 로더 인터페이스 관련 처리
+             * 제가 제안한 요지는 ISceneResourceLoader와 IRuntimeLoader(또는 IGlobalResourceLoader 등)를 분리하자는 것입니다.
+             * 이는 책임 분리(SRP) 와 계층 간 결합도 최소화를 위한 설계입니다.
+            */
+
+            await UnloadSceneAsync(LOADING_SCENE);
+            
+            // 여기서 프로그래스 어플리케이션 해제 요청
+            // 
+        }
+
 
 
         //// 이름 고민해야함 
         //// 데이터로 빼야함 
-
+        // 이것도 인터페이스로 바꾸고 
         //private ReactiveCommand<float> _reportProgress;
         //private ReactiveCommand<Unit> _changeComplete;
-
         //public IObservable<float> OnChangeProgressed => _reportProgress;
         //public IObservable<Unit> OnChangeCompleted => _changeComplete;
-
-
-
-
-
+       
         //public override bool Initialize()
         //{
         //    _reportProgress = new();
@@ -282,12 +288,12 @@ public class RxProgressReporter : IProgressReporter
         //{
         //    _reportProgress.Execute(value);
         //}
-
+       
         //protected override void DisposeManagedResources()
         //{
         //    _reportProgress.Dispose();
         //    _reportProgress = null;
-
+        
         //    _changeComplete.Dispose();
         //    _changeComplete = null;
         //}
