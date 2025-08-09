@@ -15,7 +15,7 @@ namespace Elder.Core.UI.Application
         {
             if (!TryBindLogger())
                 return false;
-
+            
             base.TryInitialize(appProvider, infraProvider, infraRegister);
             RequireUIViewInfra();
             return true;
@@ -33,7 +33,6 @@ namespace Elder.Core.UI.Application
         {
             if (!TryBindUIViewInfra())
                 return false;
-
             return true;
         }
         private bool TryBindUIViewInfra()
