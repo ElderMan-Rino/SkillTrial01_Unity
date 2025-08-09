@@ -80,5 +80,10 @@ namespace Elder.Core.Common.BaseClasses
         {
 
         }
+
+        public virtual void PreDispose()
+        {
+
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Elder.Core.CoreFrame.Interfaces
          * 행위/로직 전달은 메시지 또는 Mediator/EventBus 사
          * → 예: "A가 끝나면 B가 실행돼야 한다" 같은 흐름은 느슨하게 연결
 
-         * Application 간 참조는 하위 계층에만 위
+         * Application 간 참조는 하위 계층에만 위임
          * → 예: 상위 Application이 여러 하위 Application을 조합/조정
          */
     }

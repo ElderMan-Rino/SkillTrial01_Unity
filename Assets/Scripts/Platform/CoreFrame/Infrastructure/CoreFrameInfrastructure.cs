@@ -109,7 +109,7 @@ namespace Elder.Platform.CoreFrame.Infrastructure
         {
             return _subInfraFactory.TryCreateSubInfra(typeof(T), out subInfra);
         }
-        
+
         public void DisposeLogInfras()
         {
             ClearUpInfras(_logInfras);
@@ -152,6 +152,15 @@ namespace Elder.Platform.CoreFrame.Infrastructure
             _subInfraFactory = null;
         }
 
-      
+        public void PreDiposeSceneInfras()
+        {
+            foreach (var infra in _sceneInfras.Values)
+                infra.PreDispose();
+        }
+        public void PreDisposePersistentInfras()
+        {
+            foreach (var infra in _persistentInfras.Values)
+                infra.PreDispose();
+        }
     }
 }

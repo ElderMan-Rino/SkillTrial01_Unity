@@ -171,8 +171,14 @@ namespace Elder.Core.CoreFrame.Application
         }
         protected override void DisposeManagedResources()
         {
+            PreDisposeSceneApps();
+            PreDisposeSceneInfras();
+
             DisposeSceneApps();
             DisposeSceneInfras();
+
+            PreDisposePersistentApps();
+            PreDisposePersistentInfras();
 
             DisposePersistentApps();
             DisposePersistentInfras();
@@ -180,7 +186,24 @@ namespace Elder.Core.CoreFrame.Application
             ClearInfraRegister();
             ClearInfraProvider();
         }
-       
+        private void PreDisposeSceneApps()
+        {
+            foreach (var app in _sceneApps.Values)
+                app.PreDispose();
+        }
+        private void PreDisposeSceneInfras()
+        {
+            _infraDisposer.PreDiposeSceneInfras();
+        }
+        private void PreDisposePersistentApps()
+        {
+            foreach (var app in _persistentApps.Values)
+                app.PreDispose();
+        }
+        private void PreDisposePersistentInfras()
+        {
+            _infraDisposer.PreDisposePersistentInfras();
+        }
         private void DisposePersistentInfras()
         {
             _infraDisposer.DisposePersistentInfras();

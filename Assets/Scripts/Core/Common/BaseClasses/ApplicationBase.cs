@@ -4,7 +4,7 @@ using Elder.Core.CoreFrame.Interfaces;
 
 namespace Elder.Core.Common.BaseClasses
 {
-    public class ApplicationBase : DisposableBase
+    public class ApplicationBase : DisposableBase, IApplication
     {
         private IApplicationProvider _appProvider;
         
@@ -71,6 +71,11 @@ namespace Elder.Core.Common.BaseClasses
             _appProvider = null;
         }
         protected override void DisposeUnmanagedResources()
+        {
+
+        }
+
+        public virtual void PreDispose()
         {
 
         }

@@ -24,12 +24,10 @@ namespace Elder.Platform.CoreFrame.Presentation
         {
             DontDestroyOnLoad(this);
         }
-
-        private void OnDestroy()
+        private void OnApplicationQuit()
         {
             DisposeApplication();
         }
-
         private void DisposeApplication()
         {
             _coreFrameAppDisposable?.Dispose();

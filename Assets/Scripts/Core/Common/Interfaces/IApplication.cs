@@ -9,5 +9,6 @@ namespace Elder.Core.Common.Interfaces
         public ApplicationType AppType { get; }
         public bool TryInitialize(IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister);
         public bool TryPostInitialize();
+        public void PreDispose();
     }
 }

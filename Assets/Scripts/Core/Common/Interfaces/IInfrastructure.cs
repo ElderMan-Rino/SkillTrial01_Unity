@@ -8,5 +8,6 @@ namespace Elder.Core.Common.Interfaces
     {
         public InfrastructureType InfraType { get; }
         public bool TryInitialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator, IApplicationProvider appProvider);
+        public void PreDispose();
     }
 }
