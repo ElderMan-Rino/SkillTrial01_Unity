@@ -38,9 +38,6 @@ namespace Elder.Core.GameLevel.Application
         }
         public override bool TryPostInitialize()
         {
-            if (!base.TryPostInitialize())
-                return false;
-
             if (!TryBindFluxRouter())
                 return false;
 
