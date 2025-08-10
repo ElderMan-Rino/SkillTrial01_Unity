@@ -3,6 +3,8 @@ using Elder.Core.Common.Enums;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.FluxMessage.Interfaces;
+using Elder.Core.GameLevel.Constants;
+using Elder.Core.GameLevel.Messages;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
 using System;
@@ -169,6 +171,16 @@ namespace Elder.Core.CoreFrame.Application
             targetApps = null;
             return false;
         }
+        public void RequestRunInitialScene()
+        {
+            if (!TryGetApplication<IFluxRouter>(out var fluxRouter))
+            {
+                _logger.Error("Failed to run initial scene: IFluxRouter is not registered in the application. Please ensure the messaging infrastructure is initialized before requesting scene changes.");
+                return;
+            }
+            // 이것도 XML로 가져와야함
+            fluxRouter.Publish<FxRequestGameLevelChange>(new FxRequestGameLevelChange(GameLevelConstants.INITIAL_SCENE_KEY));
+        }
         protected override void DisposeManagedResources()
         {
             PreDisposeSceneApps();
@@ -276,7 +288,5 @@ namespace Elder.Core.CoreFrame.Application
             _appFactory.Dispose();
             _appFactory = null;
         }
-
-     
     }
 }

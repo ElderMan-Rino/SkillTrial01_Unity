@@ -61,11 +61,11 @@ namespace Elder.Core.GameLevel.Application
         }
         private void HandleFxRequestGameLevelChange(in FxRequestGameLevelChange message)
         {
-            RequestGameLevelChange();
+            RequestGameLevelChange(message.GameLevelKey);
         }
-        private void RequestGameLevelChange()
+        private void RequestGameLevelChange(string gameLevelKey)
         {
-            _gameLevelExecutor.RequestGameLevelChange();
+            _gameLevelExecutor.RequestGameLevelChange(gameLevelKey);
         }
         private bool TryBindGameLevelExecutor()
         {

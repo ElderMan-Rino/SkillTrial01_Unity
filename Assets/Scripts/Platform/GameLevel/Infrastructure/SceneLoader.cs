@@ -12,13 +12,10 @@ namespace Elder.Platform.GameLevel.Infrastructure
 
         /*
          * DDD 구조에서 위의 씬 전환 로직을 반영하려면 **도메인 중심 설계** 원칙을 따르되, 유니티의 기술적 요구사항(씬 전환, 리소스 로드, UI 업데이트 등)을 반영한 구조가 필요합니다. 아래에 제안하는 구조는 \*\*"유스케이스 중심의 Application 레이어 + 책임 분리된 도메인/인프라 구현 + 메시지 기반 흐름"\*\*을 기반으로 구성됩니다.
-
----
-
-## ? 전제: 유비쿼터스 언어 및 주요 컨셉
-
-| 개념                                 | 설명                              |
-| ---------------------------------- | ------------------------------- |
+         * ---
+         * ## ? 전제: 유비쿼터스 언어 및 주요 컨셉
+         * | 개념                                 | 설명                              |
+         * | ---------------------------------- | ------------------------------- |
 | **SceneChangeRequested**           | 메시지: 씬 변경 요청을 나타냄               |
 | **SceneLoadService**               | 도메인: 씬을 로드하는 도메인 서비스            |
 | **ResourceLoadService**            | 도메인: 리소스를 로드하는 도메인 서비스          |
@@ -241,10 +238,20 @@ public class RxProgressReporter : IProgressReporter
             }
         }
 
-        public void RequestGameLevelChange()
+        public void RequestGameLevelChange(string gameLevelKey)
         {
-            var test = "testScene";
-            ChangeSceneAsync(test).Forget();
+            /*
+             * 네, **SceneLoader (인프라 계층)**가 GameLevelKey를 받아서
+
+데이터(테이블, DB, ScriptableObject 등)에서 씬 정보 조회
+
+씬이 Builtin인지 Addressable인지 판단
+
+해당 타입에 맞는 로드 함수(SceneManager.LoadSceneAsync 또는 Addressables.LoadSceneAsync) 호출
+
+을 하는 것은 역할과 책임 분리에 매우 적절하고 권장되는 설계입니다.
+             */
+            ChangeSceneAsync(gameLevelKey).Forget();
         }
         private async UniTask ChangeSceneAsync(string targetScene)
         {
@@ -260,12 +267,18 @@ public class RxProgressReporter : IProgressReporter
              * 리소스 로더 인터페이스 관련 처리
              * 제가 제안한 요지는 ISceneResourceLoader와 IRuntimeLoader(또는 IGlobalResourceLoader 등)를 분리하자는 것입니다.
              * 이는 책임 분리(SRP) 와 계층 간 결합도 최소화를 위한 설계입니다.
+             * 
+             * 
+             * 
+씬 종류	로드 API	비고
+Builtin 씬	SceneManager.LoadSceneAsync	Build Settings에 등록 필요
+Addressable 씬	Addressables.LoadSceneAsync	별도 패키징, Addressable 관리
+AssetBundle 씬	AssetBundle + 씬 활성화	커스텀 로드 프로세스 필요
             */
 
             await UnloadSceneAsync(LOADING_SCENE);
             
             // 여기서 프로그래스 어플리케이션 해제 요청
-            // 
         }
 
 

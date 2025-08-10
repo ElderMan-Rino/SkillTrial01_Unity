@@ -4,6 +4,6 @@ namespace Elder.Core.GameLevel.Interfaces
 {
     public interface IGameLevelExecutor : IInfrastructure
     {
-        public void RequestGameLevelChange();
+        public void RequestGameLevelChange(string gameLevelKey);
     }
 }
