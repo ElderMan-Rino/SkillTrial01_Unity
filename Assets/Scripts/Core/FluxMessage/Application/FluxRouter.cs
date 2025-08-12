@@ -22,7 +22,12 @@ namespace Elder.Core.FluxMessage.Application
             if (!base.TryInitialize(appProvider, infraProvider, infraRegister))
                 return false;
 
+            InitializeMessageHandlersContainer();
             return true;
+        }
+        private void InitializeMessageHandlersContainer()
+        {
+            _messageHandlers = new();
         }
         private bool TryBindLogger()
         {

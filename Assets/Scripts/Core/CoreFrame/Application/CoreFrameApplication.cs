@@ -4,6 +4,7 @@ using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.FluxMessage.Interfaces;
 using Elder.Core.GameLevel.Constants;
+using Elder.Core.GameLevel.Interfaces;
 using Elder.Core.GameLevel.Messages;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
@@ -47,12 +48,27 @@ namespace Elder.Core.CoreFrame.Application
                 _logger.Error("Failed to initialize persistent applications.");
                 return false;
             }
+            if (!TryPostInitializePersistentApps())
+            {
+                _logger.Error("Failed to postInitialize persistent applications.");
+                return false;
+            }
             return true;
         }
         private bool TryInitializePersistentApps()
         {
             // 나중에 xml등으로 데이터 처리하는게 편할듯
             RegisterApplication<IFluxRouter>();
+            RegisterApplication<IGameLevelApplication>();
+            return true;
+        }
+        private bool TryPostInitializePersistentApps()
+        {
+            foreach (var app in _persistentApps.Values)
+            {
+                if (!app.TryPostInitialize())
+                    return false;
+            }
             return true;
         }
         private void InitializePersistentAppsContainer()
@@ -112,10 +128,17 @@ namespace Elder.Core.CoreFrame.Application
         {
             var type = typeof(T);
             if (_persistentApps.ContainsKey(type) || _sceneApps.ContainsKey(type))
+            {
+                _logger.Error($"[Application Registration] Application '{type.FullName}' is already registered.");
                 return;
+            }
 
             if (!TryCreateApplication<T>(out var app))
+            {
+                _logger.Error($"[Application Registration] Failed to create application '{type.FullName}'.");
                 return;
+            }
+             
 
             var container = app.AppType switch
             {

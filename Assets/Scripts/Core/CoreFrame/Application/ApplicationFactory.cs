@@ -3,6 +3,8 @@ using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.FluxMessage.Application;
 using Elder.Core.FluxMessage.Interfaces;
+using Elder.Core.GameLevel.Application;
+using Elder.Core.GameLevel.Interfaces;
 using Elder.Core.Logging.Application;
 using Elder.Core.Logging.Interfaces;
 using System;
@@ -13,7 +15,7 @@ namespace Elder.Core.CoreFrame.Application
     public class ApplicationFactory : DisposableBase, IApplicationFactory
     {
         private Dictionary<Type, Func<IApplication>> _constructers;
-        
+
         public ApplicationFactory()
         {
             InitializeConstructers();
@@ -24,17 +26,19 @@ namespace Elder.Core.CoreFrame.Application
             {
                 { typeof(ILoggerPublisher), () => new LogApplication () },
                 { typeof(IFluxRouter), () => new FluxRouter() },
+                { typeof(IGameLevelApplication), () => new GameLevelApplication() },
             };
         }
         public bool TryCreateApplication(Type type, IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, out IApplication application)
         {
             if (!_constructers.TryGetValue(type, out var constructer))
             {
-                 application = null;
+                application = null;
                 return false;
             }
             application = constructer.Invoke();
-            application.TryInitialize(appProvider, infraProvider, infraRegister);
+            if (!application.TryInitialize(appProvider, infraProvider, infraRegister))
+                return false;
             return true;
         }
 

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Elder.Core.Common.BaseClasses;
+using Elder.Core.GameLevel.Constants;
 using Elder.Core.GameLevel.Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,8 +9,6 @@ namespace Elder.Platform.GameLevel.Infrastructure
 {
     public class SceneLoader : InfrastructureBase, IGameLevelExecutor
     {
-        private const string LOADING_SCENE = "LoadingScene";
-
         /*
          * DDD 구조에서 위의 씬 전환 로직을 반영하려면 **도메인 중심 설계** 원칙을 따르되, 유니티의 기술적 요구사항(씬 전환, 리소스 로드, UI 업데이트 등)을 반영한 구조가 필요합니다. 아래에 제안하는 구조는 \*\*"유스케이스 중심의 Application 레이어 + 책임 분리된 도메인/인프라 구현 + 메시지 기반 흐름"\*\*을 기반으로 구성됩니다.
          * ---
@@ -256,7 +255,7 @@ public class RxProgressReporter : IProgressReporter
         private async UniTask ChangeSceneAsync(string targetScene)
         {
             var currentScene = SceneManager.GetActiveScene();
-            await LoadSceneAsync(LOADING_SCENE, LoadSceneMode.Additive);
+            await LoadSceneAsync(GameLevelConstants.LOADING_SCENE_KEY, LoadSceneMode.Additive);
             await UnloadSceneAsync(currentScene);
 
             await LoadSceneWithProgressAsync(targetScene);
@@ -276,7 +275,7 @@ Addressable 씬	Addressables.LoadSceneAsync	별도 패키징, Addressable 관리
 AssetBundle 씬	AssetBundle + 씬 활성화	커스텀 로드 프로세스 필요
             */
 
-            await UnloadSceneAsync(LOADING_SCENE);
+            await UnloadSceneAsync(GameLevelConstants.LOADING_SCENE_KEY);
             
             // 여기서 프로그래스 어플리케이션 해제 요청
         }

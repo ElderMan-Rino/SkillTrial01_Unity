@@ -17,6 +17,7 @@ namespace Elder.Platform.CoreFrame.Presentation
         {
             var initializer = new CoreFrameInitializer();
             var app = initializer.Initialize();
+            app.RequestRunInitialScene();
             _coreFrameAppDisposable = app;
         }
 
