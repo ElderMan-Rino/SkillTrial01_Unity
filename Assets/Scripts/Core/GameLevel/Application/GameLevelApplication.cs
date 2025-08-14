@@ -7,6 +7,7 @@ using Elder.Core.GameLevel.Messages;
 using Elder.Core.LoadingStatus.Applictaion;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
+using System;
 
 namespace Elder.Core.GameLevel.Application
 {
@@ -14,7 +15,7 @@ namespace Elder.Core.GameLevel.Application
     {
         private ILoggerEx _logger;
         private IGameLevelExecutor _gameLevelExecutor;
-        private IFluxRouter _fluxRouter;
+        private IDisposable _gameLevelChangeSubToken;
 
         public override ApplicationType AppType => ApplicationType.Persistent;
 
@@ -38,26 +39,21 @@ namespace Elder.Core.GameLevel.Application
         }
         public override bool TryPostInitialize()
         {
-            if (!TryBindFluxRouter())
+            if (!TrySubscribeToGameLevelChange())
                 return false;
 
             if (!TryBindGameLevelExecutor())
                 return false;
 
-            SubscribeToFluxRouter();
             return true;
         }
-        private bool TryBindFluxRouter()
+        private bool TrySubscribeToGameLevelChange()
         {
             if (!TryGetApplication<IFluxRouter>(out var fluxRouter))
                 return false;
 
-            _fluxRouter = fluxRouter;
+            _gameLevelChangeSubToken = fluxRouter.Subscribe<FxRequestGameLevelChange>(HandleFxRequestGameLevelChange);
             return true;
-        }
-        private void SubscribeToFluxRouter()
-        {
-            _fluxRouter.Subscribe<FxRequestGameLevelChange>(HandleFxRequestGameLevelChange);
         }
         private void HandleFxRequestGameLevelChange(in FxRequestGameLevelChange message)
         {
@@ -79,9 +75,15 @@ namespace Elder.Core.GameLevel.Application
         }
         protected override void DisposeManagedResources()
         {
+            DisposeGameLevelChangeSubToken();
             ClearGameLevelExecutor();
             ClearLogger();
             base.DisposeManagedResources();
+        }
+        private void DisposeGameLevelChangeSubToken()
+        {
+            _gameLevelChangeSubToken.Dispose();
+            _gameLevelChangeSubToken = null;
         }
         private void ClearLogger()
         {

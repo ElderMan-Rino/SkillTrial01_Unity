@@ -7,6 +7,8 @@ using Elder.Core.GameLevel.Application;
 using Elder.Core.GameLevel.Interfaces;
 using Elder.Core.Logging.Application;
 using Elder.Core.Logging.Interfaces;
+using Elder.Core.UI.Application;
+using Elder.Core.UI.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -27,6 +29,7 @@ namespace Elder.Core.CoreFrame.Application
                 { typeof(ILoggerPublisher), () => new LogApplication () },
                 { typeof(IFluxRouter), () => new FluxRouter() },
                 { typeof(IGameLevelApplication), () => new GameLevelApplication() },
+                { typeof(IUIAppService), () => new UIAppService() },
             };
         }
         public bool TryCreateApplication(Type type, IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, out IApplication application)

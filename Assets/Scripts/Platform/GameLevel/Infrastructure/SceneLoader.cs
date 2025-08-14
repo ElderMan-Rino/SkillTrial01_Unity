@@ -1,7 +1,10 @@
 using Cysharp.Threading.Tasks;
 using Elder.Core.Common.BaseClasses;
+using Elder.Core.Common.Enums;
+using Elder.Core.FluxMessage.Interfaces;
 using Elder.Core.GameLevel.Constants;
 using Elder.Core.GameLevel.Interfaces;
+using Elder.Core.GameLevel.Messages;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -254,10 +257,11 @@ public class RxProgressReporter : IProgressReporter
         }
         private async UniTask ChangeSceneAsync(string targetScene)
         {
-            var currentScene = SceneManager.GetActiveScene();
+            PublishCurrentGameLevelState(GameLevelLoadState.LoadLoading);
             await LoadSceneAsync(GameLevelConstants.LOADING_SCENE_KEY, LoadSceneMode.Additive);
-            await UnloadSceneAsync(currentScene);
 
+            var currentScene = SceneManager.GetActiveScene();
+            await UnloadSceneAsync(currentScene);
             await LoadSceneWithProgressAsync(targetScene);
 
             // 여기서 리소스 로드 추가 
@@ -275,13 +279,17 @@ Addressable 씬	Addressables.LoadSceneAsync	별도 패키징, Addressable 관리
 AssetBundle 씬	AssetBundle + 씬 활성화	커스텀 로드 프로세스 필요
             */
 
+            PublishCurrentGameLevelState(GameLevelLoadState.UnloadLoading);
             await UnloadSceneAsync(GameLevelConstants.LOADING_SCENE_KEY);
-            
-            // 여기서 프로그래스 어플리케이션 해제 요청
+
+            PublishCurrentGameLevelState(GameLevelLoadState.ChangeComplete);
         }
-
-
-
+        private void PublishCurrentGameLevelState(GameLevelLoadState state)
+        {
+            if (!TryGetApplication<IFluxRouter>(out var fluxRouter))
+                return;
+            fluxRouter.Publish<FxLoadGameLevelState>(new FxLoadGameLevelState(state));
+        }
         //// 이름 고민해야함 
         //// 데이터로 빼야함 
         // 이것도 인터페이스로 바꾸고 
@@ -289,7 +297,7 @@ AssetBundle 씬	AssetBundle + 씬 활성화	커스텀 로드 프로세스 필요
         //private ReactiveCommand<Unit> _changeComplete;
         //public IObservable<float> OnChangeProgressed => _reportProgress;
         //public IObservable<Unit> OnChangeCompleted => _changeComplete;
-       
+
         //public override bool Initialize()
         //{
         //    _reportProgress = new();
@@ -300,12 +308,12 @@ AssetBundle 씬	AssetBundle + 씬 활성화	커스텀 로드 프로세스 필요
         //{
         //    _reportProgress.Execute(value);
         //}
-       
+
         //protected override void DisposeManagedResources()
         //{
         //    _reportProgress.Dispose();
         //    _reportProgress = null;
-        
+
         //    _changeComplete.Dispose();
         //    _changeComplete = null;
         //}

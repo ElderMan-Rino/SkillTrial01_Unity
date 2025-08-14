@@ -1,6 +1,7 @@
 using Elder.Core.Common.BaseClasses;
 using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.FluxMessage.Delegates;
+using Elder.Core.FluxMessage.Helpers;
 using Elder.Core.FluxMessage.Interfaces;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
@@ -12,7 +13,7 @@ namespace Elder.Core.FluxMessage.Application
     public class FluxRouter : ApplicationBase, IFluxRouter
     {
         private ILoggerEx _logger;
-        private Dictionary<Type, object> _messageHandlers;
+        private Dictionary<Type, List<Delegate>> _messageHandlers;
 
         public override bool TryInitialize(IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister)
         {
@@ -22,83 +23,63 @@ namespace Elder.Core.FluxMessage.Application
             if (!base.TryInitialize(appProvider, infraProvider, infraRegister))
                 return false;
 
-            InitializeMessageHandlersContainer();
+            _messageHandlers = new Dictionary<Type, List<Delegate>>();
             return true;
         }
-        private void InitializeMessageHandlersContainer()
-        {
-            _messageHandlers = new();
-        }
+
         private bool TryBindLogger()
         {
             _logger = LogFacade.GetLoggerFor<FluxRouter>();
             return _logger != null;
         }
-        public void Subscribe<T>(MessageHandler<T> handler) where T : struct, IFluxMessage
+
+        public IDisposable Subscribe<T>(MessageHandler<T> handler) where T : struct, IFluxMessage
         {
             var messageType = typeof(T);
-            if (!_messageHandlers.TryGetValue(messageType, out var handlersObj))
+            if (!_messageHandlers.TryGetValue(messageType, out var list))
             {
-                handlersObj = new Dictionary<int, MessageHandler<T>>();
-                _messageHandlers[messageType] = handlersObj;
+                list = new List<Delegate>();
+                _messageHandlers[messageType] = list;
             }
-            var handlers = (Dictionary<int, MessageHandler<T>>)handlersObj;
 
-            var target = handler.Target;
-            int key = target != null ? target.GetHashCode() : handler.Method.GetHashCode();
-            handlers[key] = handler; 
+            list.Add(handler);
+
+            return new SubscriptionToken<T>(this, handler);
         }
+
         public void Unsubscribe<T>(MessageHandler<T> handler) where T : struct, IFluxMessage
         {
             var messageType = typeof(T);
-            if (!_messageHandlers.TryGetValue(messageType, out var handlersObj))
+            if (!_messageHandlers.TryGetValue(messageType, out var list))
                 return;
 
-            var handlers = (Dictionary<int, MessageHandler<T>>)handlersObj;
-            var target = handler.Target;
-            int key = target != null ? target.GetHashCode() : handler.Method.GetHashCode();
-
-            handlers.Remove(key);
-
-            if (handlers.Count > 0)
+            list.Remove(handler);
+            if (list.Count > 0)
                 return;
 
             _messageHandlers.Remove(messageType);
         }
+
         public void Publish<T>(in T message) where T : struct, IFluxMessage
         {
             var messageType = typeof(T);
-            if (!_messageHandlers.TryGetValue(messageType, out var handlersObj))
+            if (!_messageHandlers.TryGetValue(messageType, out var list))
                 return;
 
-            var handlers = (Dictionary<int, MessageHandler<T>>)handlersObj;
-            foreach (var handler in handlers.Values)
-                handler(in message);
+            var handlers = list as List<MessageHandler<T>>;
+            for (int i = 0; i < handlers.Count; i++)
+                handlers[i](in message);
         }
 
         protected override void DisposeManagedResources()
         {
-            DisposeMessageHandlers();
-            ClearLogger();
-            base.DisposeManagedResources();
-        }
-        private void ClearLogger()
-        {
-            _logger = null;
-        }
-        private void DisposeMessageHandlers()
-        {
-            foreach (var handlerObj in _messageHandlers.Values)
-            {
-                if (handlerObj is not System.Collections.IDictionary dic)
-                {
-                    _logger.Error($"Invalid handler object found during disposal. Expected IDictionary but got: {handlerObj?.GetType().FullName ?? "null"}");
-                    continue;
-                }
-                dic.Clear();
-            }
             _messageHandlers.Clear();
             _messageHandlers = null;
+
+            _logger = null;
+
+            base.DisposeManagedResources();
         }
+
     }
 }
