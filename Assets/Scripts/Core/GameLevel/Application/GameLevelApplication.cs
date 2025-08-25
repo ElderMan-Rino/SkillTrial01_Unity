@@ -73,9 +73,13 @@ namespace Elder.Core.GameLevel.Application
             _gameLevelExecutor = gameLevelExecutor;
             return true;
         }
-        protected override void DisposeManagedResources()
+        public override void PreDispose()
         {
             DisposeGameLevelChangeSubToken();
+            base.PreDispose();
+        }
+        protected override void DisposeManagedResources()
+        {
             ClearGameLevelExecutor();
             ClearLogger();
             base.DisposeManagedResources();

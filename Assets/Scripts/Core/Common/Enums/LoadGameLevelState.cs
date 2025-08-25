@@ -1,6 +1,6 @@
 namespace Elder.Core.Common.Enums
 {
-    public enum GameLevelLoadState 
+    public enum LoadGameLevelState 
     {
         LoadLoading,     // 로딩 씬 로드
         UnloadLoading,   // 로딩 씬 언로드

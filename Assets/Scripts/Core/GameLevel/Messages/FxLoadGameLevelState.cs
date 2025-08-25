@@ -5,9 +5,9 @@ namespace Elder.Core.GameLevel.Messages
 {
     public readonly struct FxLoadGameLevelState : IFluxMessage
     {
-        public readonly GameLevelLoadState CurrentLoadState;
+        public readonly LoadGameLevelState CurrentLoadState;
 
-        public FxLoadGameLevelState(GameLevelLoadState currentLoadState)
+        public FxLoadGameLevelState(LoadGameLevelState currentLoadState)
         {
             CurrentLoadState = currentLoadState;
         }

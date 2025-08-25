@@ -257,7 +257,7 @@ public class RxProgressReporter : IProgressReporter
         }
         private async UniTask ChangeSceneAsync(string targetScene)
         {
-            PublishCurrentGameLevelState(GameLevelLoadState.LoadLoading);
+            PublishCurrentLoadGameLevelState(LoadGameLevelState.LoadLoading);
             await LoadSceneAsync(GameLevelConstants.LOADING_SCENE_KEY, LoadSceneMode.Additive);
 
             var currentScene = SceneManager.GetActiveScene();
@@ -279,12 +279,12 @@ Addressable ¾À	Addressables.LoadSceneAsync	º°µµ ÆÐÅ°Â¡, Addressable °ü¸®
 AssetBundle ¾À	AssetBundle + ¾À È°¼ºÈ­	Ä¿½ºÅÒ ·Îµå ÇÁ·Î¼¼½º ÇÊ¿ä
             */
 
-            PublishCurrentGameLevelState(GameLevelLoadState.UnloadLoading);
+            PublishCurrentLoadGameLevelState(LoadGameLevelState.UnloadLoading);
             await UnloadSceneAsync(GameLevelConstants.LOADING_SCENE_KEY);
 
-            PublishCurrentGameLevelState(GameLevelLoadState.ChangeComplete);
+            PublishCurrentLoadGameLevelState(LoadGameLevelState.ChangeComplete);
         }
-        private void PublishCurrentGameLevelState(GameLevelLoadState state)
+        private void PublishCurrentLoadGameLevelState(LoadGameLevelState state)
         {
             if (!TryGetApplication<IFluxRouter>(out var fluxRouter))
                 return;

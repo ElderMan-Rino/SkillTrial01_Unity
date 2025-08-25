@@ -5,7 +5,9 @@ namespace Elder.Platform.UI.Infrastructure
 {
     public class UIViewInfrastructure : InfrastructureBase, IUIViewInfrastructure
     {
-        // 여기서 UIRoot 생성 혹은 가져옴?
-        // 
+        public void RegisterViews()
+        {
+
+        }
     }
 }
