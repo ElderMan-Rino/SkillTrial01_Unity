@@ -49,7 +49,7 @@ namespace Elder.Core.UI.Application
             if (!TryGetApplication<IFluxRouter>(out var fluxRouter))
                 return false;
 
-            _loadGameLevelStateSubToken = fluxRouter.Subscribe<FxLoadGameLevelState>(HandleFxLoadGameLevelState);
+            _loadGameLevelStateSubToken = fluxRouter.Subscribe<FxLoadGameLevelState>(HandleFxLoadGameLevelState, FluxPhase.Pre);
             return true;
         }
         private void HandleFxLoadGameLevelState(in FxLoadGameLevelState message)

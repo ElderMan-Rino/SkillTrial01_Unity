@@ -35,6 +35,7 @@ namespace Elder.Core.CoreFrame.Application
             InjectInfrastructureDisposer(infraDisposer);
             InjectApplicationFactory(applicationFactory);
         }
+
         public bool TryInitialize()
         {
             InitializePersistentAppsContainer();
@@ -55,13 +56,15 @@ namespace Elder.Core.CoreFrame.Application
             }
             return true;
         }
+
         private bool TryInitializePersistentApps()
         {
             // 나중에 xml등으로 데이터 처리하는게 편할듯
             RegisterApplication<IFluxRouter>();
-            RegisterApplication<IGameLevelApplication>();
+            RegisterApplication<IMainLevelApplication>();
             return true;
         }
+
         private bool TryPostInitializePersistentApps()
         {
             foreach (var app in _persistentApps.Values)
@@ -71,14 +74,17 @@ namespace Elder.Core.CoreFrame.Application
             }
             return true;
         }
+
         private void InitializePersistentAppsContainer()
         {
             _persistentApps = new();
         }
+
         private void InitializeaSceneAppsContainer()
         {
             _sceneApps = new();
         }
+
         private bool TryInitializeLogSystem()
         {
             if (!TryInitializeLogApp())
@@ -95,15 +101,18 @@ namespace Elder.Core.CoreFrame.Application
 
             return true;
         }
+
         private bool TryBindLogger()
         {
             _logger = LogFacade.GetLoggerFor<CoreFrameApplication>();
             return _logger != null;
         }
+
         private bool TryPostInitializeLogApp()
         {
             return _logApp.TryPostInitialize();
         }
+
         private bool TryBindLogServiceToFacade()
         {
             if (_logApp is not ILoggerPublisher loggerPublisher)
@@ -112,6 +121,7 @@ namespace Elder.Core.CoreFrame.Application
             LogFacade.InjectProvider(loggerPublisher);
             return true;
         }
+
         private bool TryInitializeLogApp()
         {
             if (!TryCreateApplication<ILoggerPublisher>(out var logApp))
@@ -138,7 +148,6 @@ namespace Elder.Core.CoreFrame.Application
                 _logger.Error($"[Application Registration] Failed to create application '{type.FullName}'.");
                 return;
             }
-             
 
             var container = app.AppType switch
             {
@@ -148,23 +157,28 @@ namespace Elder.Core.CoreFrame.Application
             };
             container[type] = app;
         }
+
         private bool TryCreateApplication<T>(out IApplication app) where T : IApplication
         {
             var type = typeof(T);
             return _appFactory.TryCreateApplication(type, this, _infraProvider, _infraRegister, out app);
         }
+
         private void InjectInfrastructureDisposer(IInfrastructureDisposer infraDisposer)
         {
             _infraDisposer = infraDisposer;
         }
+
         private void InjectInfrastructureRegister(IInfrastructureRegister infraRegister)
         {
             _infraRegister = infraRegister;
         }
+
         private void InjectInfrastructureProvider(IInfrastructureProvider infraProvider)
         {
             _infraProvider = infraProvider;
         }
+
         public bool TryGetApplication<T>(out T targetApp) where T : class, IApplication
         {
             var type = typeof(T);
@@ -183,6 +197,7 @@ namespace Elder.Core.CoreFrame.Application
             targetApp = null;
             return false;
         }
+
         public bool TryGetApplications<T>(out T[] targetApps) where T : class, IApplication
         {
             var matches = _persistentApps.Values.Concat(_sceneApps.Values).OfType<T>().ToArray();
@@ -194,16 +209,22 @@ namespace Elder.Core.CoreFrame.Application
             targetApps = null;
             return false;
         }
-        public void RequestRunInitialScene()
+
+        public void StartGameFlow()
+        {
+            RequestRunInitialScene();
+        }
+
+        private void RequestRunInitialScene()
         {
             if (!TryGetApplication<IFluxRouter>(out var fluxRouter))
             {
                 _logger.Error("Failed to run initial scene: IFluxRouter is not registered in the application. Please ensure the messaging infrastructure is initialized before requesting scene changes.");
                 return;
             }
-            // 이것도 XML로 가져와야함
-            fluxRouter.Publish<FxRequestGameLevelChange>(new FxRequestGameLevelChange(GameLevelConstants.INITIAL_SCENE_KEY));
+            fluxRouter.Publish<FxRequestMainLevelChange>(new FxRequestMainLevelChange(GameLevelConstants.INITIALIZE_SCENE_KEY));
         }
+
         protected override void DisposeManagedResources()
         {
             PreDisposeSceneApps();

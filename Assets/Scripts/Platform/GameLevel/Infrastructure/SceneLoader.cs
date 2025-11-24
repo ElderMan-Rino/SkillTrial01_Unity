@@ -211,20 +211,22 @@ public class RxProgressReporter : IProgressReporter
          * 표기 방식은 어떻게 처리해야할까?
          * 
          */
-
         
         private async UniTask LoadSceneAsync(string sceneName, LoadSceneMode loadType)
         {
             await SceneManager.LoadSceneAsync(sceneName, loadType);
         }
+
         private async UniTask UnloadSceneAsync(string sceneName)
         {
             await SceneManager.UnloadSceneAsync(sceneName);
         }
+
         private async UniTask UnloadSceneAsync(Scene targetScene)
         {
             await SceneManager.UnloadSceneAsync(targetScene);
         }
+
         private async UniTask LoadSceneWithProgressAsync(string targetScene)
         {
             var asyncOperation = SceneManager.LoadSceneAsync(targetScene, LoadSceneMode.Additive);
@@ -255,6 +257,7 @@ public class RxProgressReporter : IProgressReporter
              */
             ChangeSceneAsync(gameLevelKey).Forget();
         }
+
         private async UniTask ChangeSceneAsync(string targetScene)
         {
             PublishCurrentLoadGameLevelState(LoadGameLevelState.LoadLoading);

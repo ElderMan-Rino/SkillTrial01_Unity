@@ -6,7 +6,7 @@ using System;
 
 namespace Elder.Platform.CoreFrame.Presentation
 {
-    public class CoreFrameInitializer
+    public sealed class CoreFrameInitializer
     {
         public CoreFrameApplication Initialize()
         {

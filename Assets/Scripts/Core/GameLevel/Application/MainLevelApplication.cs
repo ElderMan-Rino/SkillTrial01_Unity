@@ -11,7 +11,7 @@ using System;
 
 namespace Elder.Core.GameLevel.Application
 {
-    public class GameLevelApplication : ApplicationBase, IGameLevelApplication
+    public class MainLevelApplication : ApplicationBase, IMainLevelApplication
     {
         private ILoggerEx _logger;
         private IGameLevelExecutor _gameLevelExecutor;
@@ -28,15 +28,18 @@ namespace Elder.Core.GameLevel.Application
             RequireGameStepInfra();
             return true;
         }
+
         private void RequireGameStepInfra()
         {
             RequireInfrastructure<IGameLevelExecutor>();
         }
+
         private bool TryBindLogger()
         {
             _logger = LogFacade.GetLoggerFor<LoadingStatusApplication>();
             return _logger != null;
         }
+
         public override bool TryPostInitialize()
         {
             if (!TrySubscribeToGameLevelChange())
@@ -47,22 +50,26 @@ namespace Elder.Core.GameLevel.Application
 
             return true;
         }
+
         private bool TrySubscribeToGameLevelChange()
         {
             if (!TryGetApplication<IFluxRouter>(out var fluxRouter))
                 return false;
 
-            _gameLevelChangeSubToken = fluxRouter.Subscribe<FxRequestGameLevelChange>(HandleFxRequestGameLevelChange);
+            _gameLevelChangeSubToken = fluxRouter.Subscribe<FxRequestMainLevelChange>(HandleFxRequestGameLevelChange, FluxPhase.Normal);
             return true;
         }
-        private void HandleFxRequestGameLevelChange(in FxRequestGameLevelChange message)
+
+        private void HandleFxRequestGameLevelChange(in FxRequestMainLevelChange message)
         {
-            RequestGameLevelChange(message.GameLevelKey);
+            RequestGameLevelChange(message.MainLevelKey);
         }
+
         private void RequestGameLevelChange(string gameLevelKey)
         {
             _gameLevelExecutor.RequestGameLevelChange(gameLevelKey);
         }
+
         private bool TryBindGameLevelExecutor()
         {
             if (!TryGetInfrastructure<IGameLevelExecutor>(out var gameLevelExecutor))
@@ -73,17 +80,20 @@ namespace Elder.Core.GameLevel.Application
             _gameLevelExecutor = gameLevelExecutor;
             return true;
         }
+
         public override void PreDispose()
         {
             DisposeGameLevelChangeSubToken();
             base.PreDispose();
         }
+
         protected override void DisposeManagedResources()
         {
             ClearGameLevelExecutor();
             ClearLogger();
             base.DisposeManagedResources();
         }
+
         private void DisposeGameLevelChangeSubToken()
         {
             _gameLevelChangeSubToken.Dispose();

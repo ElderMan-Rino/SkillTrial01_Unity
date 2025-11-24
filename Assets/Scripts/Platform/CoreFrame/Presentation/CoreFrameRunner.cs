@@ -16,9 +16,9 @@ namespace Elder.Platform.CoreFrame.Presentation
         private void InitializeCoreFrame()
         {
             var initializer = new CoreFrameInitializer();
-            var app = initializer.Initialize();
-            app.RequestRunInitialScene();
-            _coreFrameAppDisposable = app;
+            var coreFrameApp = initializer.Initialize();
+            coreFrameApp.StartGameFlow();
+            _coreFrameAppDisposable = coreFrameApp;
         }
 
         private void RegisterDontDestroyOnLoad()

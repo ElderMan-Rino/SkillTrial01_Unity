@@ -28,7 +28,7 @@ namespace Elder.Core.CoreFrame.Application
             {
                 { typeof(ILoggerPublisher), () => new LogApplication () },
                 { typeof(IFluxRouter), () => new FluxRouter() },
-                { typeof(IGameLevelApplication), () => new GameLevelApplication() },
+                { typeof(IMainLevelApplication), () => new MainLevelApplication() },
                 { typeof(IUIAppService), () => new UIAppService() },
             };
         }

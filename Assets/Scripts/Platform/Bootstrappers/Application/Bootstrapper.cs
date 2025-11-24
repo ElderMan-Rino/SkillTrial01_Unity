@@ -12,6 +12,7 @@ namespace Elder.Platform.Bootstrappers.Application
         {
             CreateCoreFrameRunner();
         }
+
         private static void CreateCoreFrameRunner()
         {
             if (GameObject.Find(GameObjectName))
