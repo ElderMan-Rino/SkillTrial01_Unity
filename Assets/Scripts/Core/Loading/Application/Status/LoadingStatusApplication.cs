@@ -1,13 +1,13 @@
 using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Enums;
 using Elder.Core.CoreFrame.Interfaces;
-using Elder.Core.LoadingStatus.Interfaces;
+using Elder.Core.Loading.Interfaces.Status;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace Elder.Core.LoadingStatus.Applictaion
+namespace Elder.Core.Loading.Application.Status
 {
     public class LoadingStatusApplication : ApplicationBase, ILoadingStatusApplication
     {

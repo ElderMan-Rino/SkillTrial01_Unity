@@ -11,7 +11,7 @@ namespace Elder.Core.Common.BaseClasses
         private ISubInfrastructureCreator _subInfraCreator;
         private IApplicationProvider _appProvider;
 
-        public virtual InfrastructureType InfraType { get; }
+        public abstract InfrastructureType InfraType { get; }
 
         public virtual bool TryInitialize(IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator, IApplicationProvider appProvider)
         {
@@ -21,26 +21,32 @@ namespace Elder.Core.Common.BaseClasses
             InjectAppProvider(appProvider);
             return true;
         }
+       
         private void InjectAppProvider(IApplicationProvider appProvider)
         {
             _appProvider = appProvider; 
         }
+       
         private void InjectSubInfraCreator(ISubInfrastructureCreator subInfraCreator)
         {
             _subInfraCreator = subInfraCreator;
         }
+        
         private void InjectInfraProvider(IInfrastructureProvider infraProvider)
         {
             _infraProvider = infraProvider;
         }
+        
         private void InjectInfraRegister(IInfrastructureRegister infraRegister)
         {
             _infraRegister = infraRegister;
         }
+        
         protected bool TryGetInfrastructure<T>(out T targetInfrastructure) where T : class, IInfrastructure
         {
             return _infraProvider.TryGetInfrastructure<T>(out targetInfrastructure);
         }
+        
         protected void RegisterInfrastructure<T>() where T : IInfrastructure
         {
             _infraRegister.RegisterInfrastructure<T>();
@@ -64,18 +70,22 @@ namespace Elder.Core.Common.BaseClasses
         {
             _appProvider = null;
         }
+        
         private void ClearSubInfraCreator()
         {
             _subInfraCreator = null;
         }
+        
         private void ClearInfraRegister()
         {
             _infraRegister = null;
         }
+
         private void ClearInfraProvider()
         {
             _infraProvider = null;
         }
+
         protected override void DisposeUnmanagedResources()
         {
 

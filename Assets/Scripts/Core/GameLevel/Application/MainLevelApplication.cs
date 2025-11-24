@@ -4,7 +4,7 @@ using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.FluxMessage.Interfaces;
 using Elder.Core.GameLevel.Interfaces;
 using Elder.Core.GameLevel.Messages;
-using Elder.Core.LoadingStatus.Applictaion;
+using Elder.Core.Loading.Application.Status;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
 using System;

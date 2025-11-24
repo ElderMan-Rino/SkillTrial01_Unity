@@ -1,5 +1,5 @@
 using Elder.Core.Common.BaseClasses;
-using Elder.Core.LoadingStatus.Interfaces;
+using Elder.Core.Loading.Interfaces.Status;
 
 namespace Elder.Platform.LoadingStatus.Infrastructure
 {
