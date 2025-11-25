@@ -2,9 +2,11 @@ using Elder.Core.Common.BaseClasses;
 using Elder.Core.Common.Interfaces;
 using Elder.Core.CoreFrame.Interfaces;
 using Elder.Core.GameLevel.Interfaces;
+using Elder.Core.Loading.Interfaces.Feedback;
 using Elder.Core.Logging.Interfaces;
 using Elder.Core.UI.Interfaces;
 using Elder.Platform.GameLevel.Infrastructure;
+using Elder.Platform.Loading.Infrastructure.Feedback;
 using Elder.Platform.Logging.Infrastructure;
 using Elder.Platform.UI.Infrastructure;
 using System;
@@ -28,6 +30,7 @@ namespace Elder.Platform.CoreFrame.Infrastructure.Factories
                 { typeof(ILogEventDispatcher), () => new LoggingInfrastructure() },
                 { typeof(IGameLevelExecutor), () => new SceneLoader() },
                 { typeof(IUIViewInfrastructure), () => new UIViewInfrastructure() },
+                { typeof(ILoadingProgressTracker), () => new LoadingProgressTracker() }
             };
         }
         public bool TryCreateInfrastructure(Type type, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, ISubInfrastructureCreator subInfraCreator, IApplicationProvider appProvider, out IInfrastructure infrastructure)

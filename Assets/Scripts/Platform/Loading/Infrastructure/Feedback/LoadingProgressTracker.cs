@@ -5,7 +5,7 @@ using Elder.Core.Loading.Interfaces.Feedback;
 
 namespace Elder.Platform.Loading.Infrastructure.Feedback
 {
-    public class LoadingFeedbackInfrastructure : InfrastructureBase, ILoadingFeedbackInfrastructure
+    public class LoadingProgressTracker : InfrastructureBase, ILoadingProgressTracker
     {
         public override InfrastructureType InfraType => InfrastructureType.Persistent;
 

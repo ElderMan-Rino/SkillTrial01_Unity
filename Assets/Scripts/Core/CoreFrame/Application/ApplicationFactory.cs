@@ -5,6 +5,9 @@ using Elder.Core.FluxMessage.Application;
 using Elder.Core.FluxMessage.Interfaces;
 using Elder.Core.GameLevel.Application;
 using Elder.Core.GameLevel.Interfaces;
+using Elder.Core.Loading.Application.Feedback;
+using Elder.Core.Loading.Interfaces;
+using Elder.Core.Loading.Interfaces.Feedback;
 using Elder.Core.Logging.Application;
 using Elder.Core.Logging.Interfaces;
 using Elder.Core.UI.Application;
@@ -30,6 +33,7 @@ namespace Elder.Core.CoreFrame.Application
                 { typeof(IFluxRouter), () => new FluxRouter() },
                 { typeof(IMainLevelApplication), () => new MainLevelApplication() },
                 { typeof(IUIAppService), () => new UIAppService() },
+                { typeof(ILoadingFeedbackApplication), () => new LoadingFeedbackApplication() }
             };
         }
         public bool TryCreateApplication(Type type, IApplicationProvider appProvider, IInfrastructureProvider infraProvider, IInfrastructureRegister infraRegister, out IApplication application)

@@ -12,12 +12,14 @@ namespace Elder.Platform.GameLevel.Infrastructure
 {
     public class SceneLoader : InfrastructureBase, IGameLevelExecutor
     {
+        public override InfrastructureType InfraType => InfrastructureType.Persistent;
+
         /*
-         * DDD 구조에서 위의 씬 전환 로직을 반영하려면 **도메인 중심 설계** 원칙을 따르되, 유니티의 기술적 요구사항(씬 전환, 리소스 로드, UI 업데이트 등)을 반영한 구조가 필요합니다. 아래에 제안하는 구조는 \*\*"유스케이스 중심의 Application 레이어 + 책임 분리된 도메인/인프라 구현 + 메시지 기반 흐름"\*\*을 기반으로 구성됩니다.
-         * ---
-         * ## ? 전제: 유비쿼터스 언어 및 주요 컨셉
-         * | 개념                                 | 설명                              |
-         * | ---------------------------------- | ------------------------------- |
+* DDD 구조에서 위의 씬 전환 로직을 반영하려면 **도메인 중심 설계** 원칙을 따르되, 유니티의 기술적 요구사항(씬 전환, 리소스 로드, UI 업데이트 등)을 반영한 구조가 필요합니다. 아래에 제안하는 구조는 \*\*"유스케이스 중심의 Application 레이어 + 책임 분리된 도메인/인프라 구현 + 메시지 기반 흐름"\*\*을 기반으로 구성됩니다.
+* ---
+* ## ? 전제: 유비쿼터스 언어 및 주요 컨셉
+* | 개념                                 | 설명                              |
+* | ---------------------------------- | ------------------------------- |
 | **SceneChangeRequested**           | 메시지: 씬 변경 요청을 나타냄               |
 | **SceneLoadService**               | 도메인: 씬을 로드하는 도메인 서비스            |
 | **ResourceLoadService**            | 도메인: 리소스를 로드하는 도메인 서비스          |
@@ -69,26 +71,26 @@ _messageBus.Publish(new SceneChangeRequested("NextScene"));
 ```csharp
 public class SceneChangeApplication : ISceneChangeApplication, IMessageListener<SceneChangeRequested>
 {
-    public async void OnMessage(SceneChangeRequested message)
-    {
-        _progressReporter.Report(0f, "로딩 씬 로드 중...");
-        await _sceneLoader.LoadSceneAsync("Loading");
+public async void OnMessage(SceneChangeRequested message)
+{
+_progressReporter.Report(0f, "로딩 씬 로드 중...");
+await _sceneLoader.LoadSceneAsync("Loading");
 
-        _progressReporter.Report(0.1f, "기존 씬 언로드 중...");
-        await _sceneLoader.UnloadSceneAsync(_currentScene);
+_progressReporter.Report(0.1f, "기존 씬 언로드 중...");
+await _sceneLoader.UnloadSceneAsync(_currentScene);
 
-        _progressReporter.Report(0.2f, "새 씬 로드 중...");
-        await _sceneLoader.LoadSceneAsync(message.NextScene);
+_progressReporter.Report(0.2f, "새 씬 로드 중...");
+await _sceneLoader.LoadSceneAsync(message.NextScene);
 
-        _progressReporter.Report(0.4f, "리소스 로드 중...");
-        await _resourceLoader.LoadAllResourcesAsync(message.NextScene, progress =>
-        {
-            _progressReporter.Report(progress.Percent, progress.Description);
-        });
+_progressReporter.Report(0.4f, "리소스 로드 중...");
+await _resourceLoader.LoadAllResourcesAsync(message.NextScene, progress =>
+{
+_progressReporter.Report(progress.Percent, progress.Description);
+});
 
-        _progressReporter.Report(1f, "로딩 씬 정리 중...");
-        await _sceneLoader.UnloadSceneAsync("Loading");
-    }
+_progressReporter.Report(1f, "로딩 씬 정리 중...");
+await _sceneLoader.UnloadSceneAsync("Loading");
+}
 }
 ```
 
@@ -101,8 +103,8 @@ public class SceneChangeApplication : ISceneChangeApplication, IMessageListener<
 ```csharp
 public interface ISceneLoader
 {
-    UniTask LoadSceneAsync(string sceneName);
-    UniTask UnloadSceneAsync(string sceneName);
+UniTask LoadSceneAsync(string sceneName);
+UniTask UnloadSceneAsync(string sceneName);
 }
 ```
 
@@ -111,13 +113,13 @@ public interface ISceneLoader
 ```csharp
 public interface IResourceLoader
 {
-    UniTask LoadAllResourcesAsync(string sceneName, Action<LoadProgress> onProgress);
+UniTask LoadAllResourcesAsync(string sceneName, Action<LoadProgress> onProgress);
 }
 
 public struct LoadProgress
 {
-    public float Percent;
-    public string Description;
+public float Percent;
+public string Description;
 }
 ```
 
@@ -126,7 +128,7 @@ public struct LoadProgress
 ```csharp
 public interface IProgressReporter
 {
-    void Report(float percent, string description);
+void Report(float percent, string description);
 }
 ```
 
@@ -137,35 +139,35 @@ public interface IProgressReporter
 ```csharp
 public class UnitySceneLoader : ISceneLoader
 {
-    public async UniTask LoadSceneAsync(string sceneName)
-    {
-        await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-    }
+public async UniTask LoadSceneAsync(string sceneName)
+{
+await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+}
 
-    public async UniTask UnloadSceneAsync(string sceneName)
-    {
-        await SceneManager.UnloadSceneAsync(sceneName);
-    }
+public async UniTask UnloadSceneAsync(string sceneName)
+{
+await SceneManager.UnloadSceneAsync(sceneName);
+}
 }
 
 public class AddressableResourceLoader : IResourceLoader
 {
-    public async UniTask LoadAllResourcesAsync(string sceneName, Action<LoadProgress> onProgress)
-    {
-        // 예시: Addressables 로드
-        var resourceList = GetResourcesForScene(sceneName);
-        int total = resourceList.Count;
-        for (int i = 0; i < total; i++)
-        {
-            onProgress?.Invoke(new LoadProgress
-            {
-                Percent = (float)i / total,
-                Description = $"리소스 {i + 1}/{total} 로드 중..."
-            });
+public async UniTask LoadAllResourcesAsync(string sceneName, Action<LoadProgress> onProgress)
+{
+// 예시: Addressables 로드
+var resourceList = GetResourcesForScene(sceneName);
+int total = resourceList.Count;
+for (int i = 0; i < total; i++)
+{
+onProgress?.Invoke(new LoadProgress
+{
+Percent = (float)i / total,
+Description = $"리소스 {i + 1}/{total} 로드 중..."
+});
 
-            await Addressables.LoadAssetAsync<object>(resourceList[i]);
-        }
-    }
+await Addressables.LoadAssetAsync<object>(resourceList[i]);
+}
+}
 }
 ```
 
@@ -176,14 +178,14 @@ public class AddressableResourceLoader : IResourceLoader
 ```csharp
 public class RxProgressReporter : IProgressReporter
 {
-    private Subject<(float, string)> _progressSubject = new Subject<(float, string)>();
+private Subject<(float, string)> _progressSubject = new Subject<(float, string)>();
 
-    public IObservable<(float, string)> ProgressStream => _progressSubject;
+public IObservable<(float, string)> ProgressStream => _progressSubject;
 
-    public void Report(float percent, string description)
-    {
-        _progressSubject.OnNext((percent, description));
-    }
+public void Report(float percent, string description)
+{
+_progressSubject.OnNext((percent, description));
+}
 }
 ```
 
@@ -204,14 +206,14 @@ public class RxProgressReporter : IProgressReporter
 
 원하시면 이 구조를 기반으로 전체 코드 스캐폴드(폴더 구조 + 클래스 뼈대)도 제공해드릴 수 있어요. 원하시나요?
 
-         * 씬 변경을 따로 요청하고 
-         * 씬을 로딩씬으로 변경할 경우 
-         * 로딩 퍼센테이지 및 내용을 따로 특정 어플리케이션에 전달하고 
-         * 표기하는 곳에서 퍼센테이즈는 현재 걸린 것들 기준 퍼센테이즈들의 총 합  / 계산할 퍼센테이지의 수
-         * 표기 방식은 어떻게 처리해야할까?
-         * 
-         */
-        
+* 씬 변경을 따로 요청하고 
+* 씬을 로딩씬으로 변경할 경우 
+* 로딩 퍼센테이지 및 내용을 따로 특정 어플리케이션에 전달하고 
+* 표기하는 곳에서 퍼센테이즈는 현재 걸린 것들 기준 퍼센테이즈들의 총 합  / 계산할 퍼센테이지의 수
+* 표기 방식은 어떻게 처리해야할까?
+* 
+*/
+
         private async UniTask LoadSceneAsync(string sceneName, LoadSceneMode loadType)
         {
             await SceneManager.LoadSceneAsync(sceneName, loadType);

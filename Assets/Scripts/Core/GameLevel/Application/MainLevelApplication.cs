@@ -5,6 +5,7 @@ using Elder.Core.FluxMessage.Interfaces;
 using Elder.Core.GameLevel.Interfaces;
 using Elder.Core.GameLevel.Messages;
 using Elder.Core.Loading.Application.Status;
+using Elder.Core.Loading.Messages;
 using Elder.Core.Logging.Helpers;
 using Elder.Core.Logging.Interfaces;
 using System;
@@ -62,7 +63,16 @@ namespace Elder.Core.GameLevel.Application
 
         private void HandleFxRequestGameLevelChange(in FxRequestMainLevelChange message)
         {
+            NotifyLoadingStarted();
             RequestGameLevelChange(message.MainLevelKey);
+        }
+
+        private void NotifyLoadingStarted()
+        {
+            if (!TryGetApplication<IFluxRouter>(out var fluxRouter))
+                return;
+
+            fluxRouter.Publish<FxLoadingStarted>(new FxLoadingStarted());
         }
 
         private void RequestGameLevelChange(string gameLevelKey)
