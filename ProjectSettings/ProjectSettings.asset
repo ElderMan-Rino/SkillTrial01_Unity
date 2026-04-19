@@ -143,7 +143,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: v.0.0.0.1
+  bundleVersion: v.0.0.0
   preloadedAssets:
   - {fileID: 11400000, guid: a997740e24c8a60449aec960128eb5fc, type: 2}
   metroInputSource: 0
@@ -843,7 +843,7 @@ PlayerSettings:
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
-  allowUnsafeCode: 0
+  allowUnsafeCode: 1
   useDeterministicCompilation: 1
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1

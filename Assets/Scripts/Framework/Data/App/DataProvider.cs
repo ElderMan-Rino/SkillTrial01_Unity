@@ -1,113 +1,132 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Interfaces;
+using Elder.Framework.Blob.App;
+using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Boot.Messages;
 using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Data.Messages;
 using Elder.Framework.Flux.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Interfaces;
+using Elder.SkillTrial.Resources.Data;
 using System;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace Elder.Framework.Data.App
 {
-    public class DataProvider : IDisposable, IDataProvider, IInitializable
+    public class DataProvider : IDisposable, IDataProvider, IDataSheetLoader, IInitializable
     {
         private readonly IFluxRouter _router;
-        private readonly IDataDeserializer _deserializer;
         private readonly IAssetProvider _assetProvider;
-        private readonly IDataConfig _dataConfig;
-
+        private readonly IDataDeserializer _deserializer;
         private ILoggerEx _logger;
-        private GameDataContainer _gameData;
 
-        public DataProvider(IFluxRouter router, IDataDeserializer deserializer, IAssetProvider assetProvider, IDataConfig dataConfig)
+        private readonly Dictionary<Type, object> _dataHandles = new();
+
+        public DataProvider(IFluxRouter router, IAssetProvider assetProvider, IDataDeserializer deserializer)
         {
             _router = router;
-            _deserializer = deserializer;
             _assetProvider = assetProvider;
-            _dataConfig = dataConfig;
+            _deserializer = deserializer;
         }
 
         public void Initialize()
         {
-            InitializeLogger();
-            SubscribeToFluxEvent();
-        }
-
-        private void SubscribeToFluxEvent()
-        {
+            _logger = LogFacade.GetLoggerFor<DataProvider>();
             _router.Subscribe<FxInitializeSystem>(HandleInitializeSystem);
         }
 
         private void HandleInitializeSystem(in FxInitializeSystem message)
         {
-            // 비동기 로드를 실행하고 잊습니다 (Fire and Forget)
             LoadBaseDataAsync().Forget();
         }
 
         private async UniTaskVoid LoadBaseDataAsync()
         {
-            var baseDataKey = _dataConfig.BaseDataKey;
-            if (string.IsNullOrEmpty(baseDataKey))
-            {
-                _logger.Error("BaseDataKey is null or empty in FrameworkSettings!");
-                return;
-            }
-
-            _logger.Info($"Starting to load Base Data using key: {baseDataKey}");
-
             try
             {
-                // 1. Asset System을 통해 바이너리 파일(TextAsset) 로드
-                var handle = await _assetProvider.GetAssetAsync<TextAsset>(baseDataKey);
+                _logger.Info("Starting to load Blob Data...");
 
-                // 2. 바이너리 데이터를 GameDataContainer 객체로 역직렬화
-                _gameData = _deserializer.Deserialize<GameDataContainer>(handle.Asset.bytes);
-                _gameData.Initialize(); // 내부 Dictionary 매핑 초기화
+                var generatedLoader = new GeneratedBlobLoader();
+                await generatedLoader.LoadAllDataAsync(this);
 
-                // 3. 파싱이 끝났으므로 원본 TextAsset의 메모리 해제 (최적화)
-                handle.Dispose();
-
-                _logger.Info("Base Data loaded and parsed successfully.");
-
-                // TODO: 데이터 로드가 완료되었음을 알리는 Flux 메시지 발행 고려 (예: FxDataLoaded)
+                _router.Publish(new FxBaseDataInitialized());
+                _logger.Info("All Blob Data loaded successfully.");
             }
             catch (Exception ex)
             {
-                _logger.Error($"Failed to load Base Data: {ex.Message}");
+                _logger.Error($"Failed to load Blob Data: {ex.Message}\n{ex.StackTrace}");
             }
         }
 
-        public T GetData<T>(int id) where T : class, IDataRecord
+        public async UniTask LoadSheetAsync<T>(string assetName) where T : unmanaged
         {
-            if (_gameData == null)
+            var handle = await _assetProvider.GetAssetAsync<TextAsset>(assetName);
+            if (handle.Asset == null)
             {
-                _logger.Warn("GameData has not been loaded yet!");
-                return null;
+                _logger.Warn($"Failed to load blob asset: {assetName}");
+                return;
             }
-            return _gameData.GetData<T>(id);
-        }
-
-        public IReadOnlyList<T> GetAllData<T>() where T : class, IDataRecord
-        {
-            if (_gameData == null)
+            
+            try
             {
-                _logger.Warn("GameData has not been loaded yet!");
-                return Array.Empty<T>();
+                IDataHandle<T> dataHandle = _deserializer.Deserialize<T>(handle.Asset.bytes);
+                if (!_dataHandles.TryGetValue(typeof(T), out var listObj))
+                {
+                    listObj = new List<IDataHandle<T>>();
+                    _dataHandles[typeof(T)] = listObj;
+                }
+
+                var list = (List<IDataHandle<T>>)listObj;
+                list.Add(dataHandle);
             }
-            return _gameData.GetAllData<T>();
+            finally
+            {
+                handle.Dispose(); // TextAsset 해제
+            }
         }
 
-        private void InitializeLogger()
+        // 단일 조회 (가장 처음 로드된 시트 반환)
+        public IDataHandle<T> GetData<T>() where T : unmanaged
         {
-            _logger = LogFacade.GetLoggerFor<DataProvider>();
+            if (_dataHandles.TryGetValue(typeof(T), out var listObj))
+            {
+                var list = (List<IDataHandle<T>>)listObj;
+                if (list.Count > 0) return list[0];
+            }
+
+            // IDataHandle은 인터페이스(참조 타입)이므로 default 대신 null을 반환합니다.
+            return null;
+        }
+
+        // 다중 시트 일괄 조회 (GC 할당 없음)
+        public IReadOnlyList<IDataHandle<T>> GetAllData<T>() where T : unmanaged
+        {
+            if (_dataHandles.TryGetValue(typeof(T), out var listObj))
+            {
+                return (List<IDataHandle<T>>)listObj;
+            }
+
+            return Array.Empty<IDataHandle<T>>();
         }
 
         public void Dispose()
         {
-            _gameData = null;
+            // 게임 종료 시 메모리에 남아있는 모든 Blob 데이터 파괴
+            foreach (var listObj in _dataHandles.Values)
+            {
+                if (listObj is System.Collections.IList list)
+                {
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        if (list[i] is IDisposable handle) handle.Dispose();
+                    }
+                }
+            }
+            _dataHandles.Clear();
         }
     }
 }

@@ -21,7 +21,6 @@ namespace Elder.Framework.MainFrame
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterInstance<FrameworkSettings>(_frameworkSettings).As<IDataConfig>();
-
             new FrameworkInstaller().Install(builder);
         }
 

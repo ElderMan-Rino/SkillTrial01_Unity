@@ -1,9 +1,7 @@
-using UnityEngine;
-
 namespace Elder.Framework.Data.Interfaces
 {
-    public interface IDataDeserializer 
+    public interface IDataDeserializer
     {
-        T Deserialize<T>(byte[] data);
+        public IDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged;
     }
 }

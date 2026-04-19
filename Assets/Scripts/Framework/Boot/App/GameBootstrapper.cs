@@ -34,8 +34,9 @@ namespace Elder.Framework.Boot.App
 
         private void PublishBootSequence()
         {
-            _router?.Publish<FxInitializeSystem>(new FxInitializeSystem());
-            _router?.Publish<FxSceneTransition>(new FxSceneTransition(BootConstants.BootStrapSceneKey));
+            _router?.Publish(new FxInitializeSystem());
+            _router?.Publish(new FxPostInitializeSystem());
+            _router?.Publish(new FxSceneTransition(BootConstants.BootStrapSceneKey));
         }
     }
 }

@@ -12,5 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/TempScene.unity
     guid: 3d42bef950d38b341b855bc84dc3d6d4
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: f09e92a068d90ea439e1e2c228b2d944, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 58c021c74a6e32047899f0932fe038a6, type: 3}
   m_UseUCBPForAssetBundles: 0
