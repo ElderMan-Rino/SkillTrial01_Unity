@@ -15,8 +15,8 @@ MonoBehaviour:
   m_GroupName: DataGroup
   m_GUID: bc28a6392ac82994f814bdc737fbe247
   m_SerializeEntries:
-  - m_GUID: 27b9961fa93cae64895b1a946a8068f4
-    m_Address: TestSheet
+  - m_GUID: b7cb612d491c76f459b08ad185bd4f8e
+    m_Address: SceneInfo
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

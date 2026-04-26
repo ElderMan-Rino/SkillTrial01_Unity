@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Elder.Framework.Asset.App
 {
-    public class AssetRegistry : DisposableBase, IAssetRegistry
+    internal sealed class AssetRegistry : DisposableBase, IAssetRegistry
     {
         private readonly IEngineAssetLoader _loader;
         private readonly IEngineAssetReleaser _releaser;

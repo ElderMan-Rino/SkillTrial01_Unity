@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetSettings
-  m_DefaultGroup: 97d8e021b31fbdc4da11be49fe1da028
+  m_DefaultGroup: 9f9ea4266e8b98f48a0143bbdcebdb1a
   m_currentHash:
     serializedVersion: 2
-    Hash: ba5bf807cabd136241b544bd7302a3a6
+    Hash: 4b8250f63946ceb740191bc19e968a63
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -54,12 +54,13 @@ MonoBehaviour:
     m_Id: 
   m_RemoteCatalogLoadPath:
     m_Id: 
-  m_ContentStateBuildPathProfileVariableName: 
+  m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+  - {fileID: 11400000, guid: 91a3a25ce446586488690751cb34ad79, type: 2}
   - {fileID: 11400000, guid: f47f9f81b1e97994fb75faa3ab3b0c9a, type: 2}
   - {fileID: 11400000, guid: 6ee4c4e69302a8a49909b0d0078c32cc, type: 2}
   m_BuildSettings:

@@ -1,25 +1,35 @@
+using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Data.Interfaces;
-using System;
 using Unity.Entities;
 
 namespace Elder.Framework.Blob.Infra
 {
-    public class BlobDataHandle<T> : IDataHandle<T> where T : unmanaged
+    internal sealed class BlobDataHandle<T> : IBlobDataHandle<T> where T : unmanaged
     {
-        public readonly BlobAssetReference<T> Data;
+        private readonly BlobAssetReference<T> _data;
 
         public BlobDataHandle(BlobAssetReference<T> data)
         {
-            Data = data;
+            _data = data;
         }
 
-        // 래퍼가 파괴될 때 안전하게 Unmanaged 메모리를 해제합니다.
+        public bool TryGetData(out T data)
+        {
+            if (_data.IsCreated)
+            {
+                data = _data.Value;
+                return true;
+            }
+            data = default;
+            return false;
+        }
+
+        public BlobAssetReference<T> GetRawReference() => _data;
+
         public void Dispose()
         {
-            if (Data.IsCreated)
-            {
-                Data.Dispose();
-            }
+            if (_data.IsCreated)
+                _data.Dispose();
         }
     }
 }

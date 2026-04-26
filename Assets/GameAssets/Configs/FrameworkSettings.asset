@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff6befa9ed3a1ab40bc177f80bf531ad, type: 3}
   m_Name: FrameworkSettings
   m_EditorClassIdentifier: Assembly-CSharp::Elder.Framework.MainFrame.Infra.Configs.FrameworkSettings
-  <BaseDataPath>k__BackingField: 
+  <BaseDataKey>k__BackingField: 
+  <EncryptionKeyPartB>k__BackingField: coGuXYyYNTjdUzA6ZeOM21Nq/t7RQ2aGIJk6OdrwyD0=

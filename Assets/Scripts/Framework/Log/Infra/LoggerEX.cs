@@ -5,7 +5,7 @@ using System;
 
 namespace Elder.Framework.Log.Infra
 {
-    public class LoggerEX : DisposableBase, ILoggerEx
+    internal sealed class LoggerEX : DisposableBase, ILoggerEx
     {
         private Type _ownerType;
         private LogHandler _logHandler;

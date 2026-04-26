@@ -9,7 +9,9 @@ namespace Elder.Framework.Flux.Installer
     {
         public void Install(IContainerBuilder builder)
         {
-            builder.Register<FluxRouter>(Lifetime.Singleton).As<IFluxRouter>();
+            builder.Register<FluxRouter>(Lifetime.Singleton)
+                .As<IFluxRouter>()
+                .As<IFluxCancellable>();
         }
     }
 }

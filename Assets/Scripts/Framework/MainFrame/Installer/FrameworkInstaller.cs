@@ -1,6 +1,8 @@
 using Elder.Framework.Asset.Installer;
 using Elder.Framework.Boot.Installer;
+using Elder.Framework.Crypto.Installer;
 using Elder.Framework.Data.Installer;
+using Elder.Framework.Domain.Installer;
 using Elder.Framework.Flux.Installer;
 using Elder.Framework.Input.Installer;
 using Elder.Framework.Log.Installer;
@@ -16,9 +18,11 @@ namespace Elder.Framework.MainFrame.Installer
         {
             new LoggerInstaller().Install(builder);
             new FluxInstaller().Install(builder);
+            new DomainInstaller().Install(builder);
             new AssetSystemInstaller().Install(builder);
             new SceneSystemInstaller().Install(builder);
             new InputInstaller().Install(builder);
+            new CryptoInstaller().Install(builder);  // DataInstaller보다 먼저 등록
             new DataInstaller().Install(builder);
             new BootStrapperInstaller().Install(builder);
         }

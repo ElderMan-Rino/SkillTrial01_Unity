@@ -8,7 +8,7 @@ using VContainer.Unity;
 
 namespace Elder.Framework.Boot.App
 {
-    public class GameBootStrapper : DisposableBase, IStartable
+    internal sealed class GameBootStrapper : DisposableBase, IStartable
     {
         private readonly IFluxRouter _router;
         private readonly IStartupEnvironment _startUp;

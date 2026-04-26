@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Elder.Framework.Boot.Interfaces
 {
-    public interface IStartupEnvironment 
+    public interface IStartupEnvironment
     {
-        bool IsInitSceneActive();
+        public bool IsInitSceneActive();
     }
 }

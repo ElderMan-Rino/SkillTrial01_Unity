@@ -1,5 +1,4 @@
-//using Elder.Framework.Asset.Interfaces;
-//using Elder.Framework.Scene.App;
+using Elder.Framework.Scene.App;
 using Elder.Framework.Scene.Infra;
 using Elder.Framework.Scene.Interfaces;
 using VContainer;
@@ -11,10 +10,9 @@ namespace Elder.Framework.Scene.Installer
     {
         public void Install(IContainerBuilder builder)
         {
-            //builder.Register<SceneContextFactory>(Lifetime.Singleton).As<ISceneContextFactory>();
-            //builder.Register<AddressableSceneLoader>(Lifetime.Singleton).As<ISceneLoader>();
-            
-            //builder.RegisterEntryPoint<SceneTransitionCoordinator>(Lifetime.Singleton).As<ISceneTransitionCoordinator>();
+            builder.Register<SceneContextFactory>(Lifetime.Singleton).As<ISceneContextFactory>();
+            builder.Register<AddressableSceneLoader>(Lifetime.Singleton).As<ISceneLoader>();
+            builder.RegisterEntryPoint<SceneTransitionCoordinator>(Lifetime.Singleton).As<ISceneTransitionCoordinator>();
         }
     }
 }

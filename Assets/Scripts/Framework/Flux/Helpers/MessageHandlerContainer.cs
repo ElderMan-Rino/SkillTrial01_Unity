@@ -1,24 +1,29 @@
 using Elder.Framework.Common.Base;
 using Elder.Framework.Flux.Definitions;
 using Elder.Framework.Flux.Interfaces;
-using System;
 using System.Collections.Generic;
 
 namespace Elder.Framework.Flux.Helpers
 {
-    public class MessageHandlerContainer<T> : DisposableBase, IMessageHandler where T : struct, IFluxMessage
+    internal sealed class MessageHandlerContainer<T> : DisposableBase, IMessageHandler where T : struct, IFluxMessage
     {
         private readonly Dictionary<long, MessageHandler<T>> _handlers = new();
+        private long _lastTokenId;
 
         public void Publish(in T message)
         {
             foreach (var handler in _handlers.Values)
-                handler?.Invoke(message);
+                handler?.Invoke(in message);
         }
 
-        public void Add(long handlerId, MessageHandler<T> handler)
+        public void Add(MessageHandler<T> handler)
         {
-            _handlers.TryAdd(handlerId, handler);
+            _handlers.TryAdd(_lastTokenId, handler);
+        }
+
+        public void SetLastTokenId(long tokenId)
+        {
+            _lastTokenId = tokenId;
         }
 
         public void Remove(long handlerId)
@@ -28,13 +33,8 @@ namespace Elder.Framework.Flux.Helpers
 
         protected override void DisposeManagedResources()
         {
-            DisposeHandlers();
-            base.DisposeManagedResources();
-        }
-
-        private void DisposeHandlers()
-        {
             _handlers.Clear();
+            base.DisposeManagedResources();
         }
     }
 }

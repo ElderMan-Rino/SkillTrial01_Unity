@@ -1,6 +1,6 @@
 namespace Elder.Framework.Common.Utils
 {
-    public static class StringHashHelper 
+    public static class StringHashHelper
     {
         private const int FNV_OFFSET_BASIS = unchecked((int)2166136261);
         private const int FNV_PRIME = 16777619;
@@ -16,10 +16,8 @@ namespace Elder.Framework.Common.Utils
 
                 for (int i = 0; i < text.Length; i++)
                 {
-                    char character = text[i];
-
-                    hash = hash ^ character;
-                    hash = hash * FNV_PRIME;
+                    hash ^= text[i];
+                    hash *= FNV_PRIME;
                 }
 
                 return hash;

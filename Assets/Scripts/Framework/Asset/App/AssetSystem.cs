@@ -6,7 +6,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Elder.Framework.Asset.App
 {
-    public class AssetSystem : DisposableBase, IAssetProvider
+    internal sealed class AssetSystem : DisposableBase, IAssetProvider
     {
         private readonly IEngineAssetLoader _loader;
         private readonly IEngineAssetReleaser _releaser;

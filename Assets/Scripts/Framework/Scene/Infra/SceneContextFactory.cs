@@ -4,7 +4,7 @@ using UnityEngine.Pool;
 
 namespace Elder.Framework.Scene.Infra
 {
-    public class SceneContextFactory : ISceneContextFactory
+    internal sealed class SceneContextFactory : ISceneContextFactory
     {
         private readonly IObjectPool<SceneLoadContext> _pool;
 

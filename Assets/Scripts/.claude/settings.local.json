@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "deny": [
+      "Bash(git push*)"
+    ],
+    "allow": [
+      "Skill(update-config)"
+    ]
+  },
+  "autoCompactEnabled": true,
+  "autoCompactWindow": 100000,
+  "verbose": false,
+  "alwaysThinkingEnabled": false,
+  "cleanupPeriodDays": 7
+}

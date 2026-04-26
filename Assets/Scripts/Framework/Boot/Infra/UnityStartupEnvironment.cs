@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace Elder.Framework.Boot.Infra.Unity
 {
-    public class UnityStartupEnvironment : IStartupEnvironment
+    internal sealed class UnityStartupEnvironment : IStartupEnvironment
     {
         public bool IsInitSceneActive()
         {

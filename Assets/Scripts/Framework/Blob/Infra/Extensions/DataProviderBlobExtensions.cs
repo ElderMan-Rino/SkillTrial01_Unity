@@ -1,3 +1,4 @@
+using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Data.Interfaces;
 using System;
 using Unity.Entities;
@@ -10,17 +11,14 @@ namespace Elder.Framework.Blob.Infra.Extensions
         {
             var handle = provider.GetData<T>();
 
-            // ¾ÈÀüÇÑ Ä³½ºÆÃ (Å¸ÀÔ Ã¼Å©)
-            if (handle is BlobDataHandle<T> blobHandle)
-            {
-                return blobHandle.Data;
-            }
+            if (handle is null)
+                throw new InvalidOperationException($"ë°ì´í„°ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤: {typeof(T).Name}");
 
-            // ¸¸¾à Blob µ¥ÀÌÅÍ°¡ ¾Æ´Ñµ¥ ¿äÃ»Çß´Ù¸é ¸íÈ®ÇÑ ¿¡·¯¸¦ ¹ñ¾îÁİ´Ï´Ù.
-            if (handle == null)
-                throw new Exception($"µ¥ÀÌÅÍ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù: {typeof(T).Name}");
-            else
-                throw new InvalidOperationException($"µ¥ÀÌÅÍ°¡ Blob Çü½ÄÀÌ ¾Æ´Õ´Ï´Ù. ÇöÀç Å¸ÀÔ: {handle.GetType().Name}");
+            if (handle is IBlobDataHandle<T> blobHandle)
+                return blobHandle.GetRawReference();
+
+            throw new InvalidOperationException(
+                $"í•¸ë“¤ íƒ€ì…ì´ IBlobDataHandle<{typeof(T).Name}>ì„ êµ¬í˜„í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ì‹¤ì œ íƒ€ì…: {handle.GetType().Name}");
         }
     }
 }

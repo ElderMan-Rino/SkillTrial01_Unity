@@ -1,7 +1,10 @@
+#if UNITY_EDITOR
+using Elder.SkillTrial.Editor.Crypto;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,29 +12,33 @@ namespace Elder.Editor.Data.Tools
 {
     public class MessageToBlobConverter : UnityEditor.Editor
     {
-        private const string BlobExtension = ".blob.bytes"; 
+        private const string BlobExtension = ".blob.bytes";
         private const string SourceExtension = ".bytes";
+        private const string KeyConfigFilter = "t:EditorEncryptionKeyConfig";
 
         [MenuItem("Assets/Convert to DOTS Blob", false, 1)]
         public static void BakeSelectedBytesFiles()
         {
+            var keyConfig = LoadKeyConfig();
+            if (keyConfig == null) return;
+
+            // [HEAP] UTF-8 ë³€í™˜ â€” ì—ë””í„° ì „ìš©, ì„±ëŠ¥ ë¬´ê´€
+            byte[] keyPartB = Encoding.UTF8.GetBytes(keyConfig.KeyPartB);
+
             var selectedObjects = Selection.objects;
-            List<string> targetPaths = new List<string>();
+            var targetPaths = new List<string>();
 
             foreach (var obj in selectedObjects)
             {
                 string path = AssetDatabase.GetAssetPath(obj);
-
                 if (path.EndsWith(SourceExtension, StringComparison.OrdinalIgnoreCase) &&
                     !path.EndsWith(BlobExtension, StringComparison.OrdinalIgnoreCase))
-                {
                     targetPaths.Add(path);
-                }
             }
 
             if (targetPaths.Count == 0)
             {
-                EditorUtility.DisplayDialog("DataBaking", "º¯È¯ÇÒ ´ë»ó(.bytes)ÀÌ ¾ø°Å³ª ÀÌ¹Ì º¯È¯µÈ ÆÄÀÏÀÔ´Ï´Ù.", "È®ÀÎ");
+                EditorUtility.DisplayDialog("DataBaking", "ë³€í™˜í•  íŒŒì¼(.bytes)ì´ ì—†ê±°ë‚˜ ì´ë¯¸ ë³€í™˜ëœ íŒŒì¼ì…ë‹ˆë‹¤.", "í™•ì¸");
                 return;
             }
 
@@ -41,41 +48,44 @@ namespace Elder.Editor.Data.Tools
             foreach (string assetPath in targetPaths)
             {
                 string tableName = Path.GetFileNameWithoutExtension(assetPath);
-
                 string savePath = assetPath.Replace(SourceExtension, BlobExtension);
+
+                // [AOT RISK] ë¦¬í”Œë ‰ì…˜ â€” ì—ë””í„° ì „ìš©, ëŸ°íƒ€ì„ ë¯¸ì‚¬ìš©
                 Type bakerType = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(assm => assm.GetTypes())
+                    .SelectMany(a => a.GetTypes())
                     .FirstOrDefault(t => t.Name == $"{tableName}Baker");
 
-                if (bakerType != null)
+                if (bakerType is null)
                 {
-                    try
-                    {
-                        var bakeMethod = bakerType.GetMethod("Bake");
-                        if (bakeMethod != null)
-                        {
-                            bakeMethod.Invoke(null, new object[] { assetPath, savePath });
-
-                            AssetDatabase.ImportAsset(savePath);
-                            successCount++;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError($"[DataBaking] {tableName} º¯È¯ ½ÇÆĞ: {ex.InnerException?.Message ?? ex.Message}");
-                        failCount++;
-                    }
+                    Debug.LogWarning($"[DataBaking] {tableName}Bakerë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+                    failCount++;
+                    continue;
                 }
-                else
+
+                try
                 {
-                    Debug.LogWarning($"[DataBaking] {tableName}Baker¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+                    var bakeMethod = bakerType.GetMethod("Bake");
+                    if (bakeMethod is null)
+                    {
+                        Debug.LogWarning($"[DataBaking] {tableName}Baker.Bake ë©”ì„œë“œë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+                        failCount++;
+                        continue;
+                    }
+
+                    bakeMethod.Invoke(null, new object[] { assetPath, savePath, keyPartB });
+                    AssetDatabase.ImportAsset(savePath);
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[DataBaking] {tableName} ë³€í™˜ ì‹¤íŒ¨: {ex.InnerException?.Message ?? ex.Message}");
                     failCount++;
                 }
             }
 
             AssetDatabase.Refresh();
-            EditorUtility.DisplayDialog("DataBaking ¿Ï·á",
-                $"ÃÑ {targetPaths.Count}°³ Áß {successCount}°³ º¯È¯ ¼º°ø.\n°á°ú¹°: {BlobExtension}", "È®ÀÎ");
+            EditorUtility.DisplayDialog("DataBaking ì™„ë£Œ",
+                $"ì´ {targetPaths.Count}ê°œ ì¤‘ {successCount}ê°œ ë³€í™˜ ì„±ê³µ.\nì¶œë ¥: {BlobExtension}", "í™•ì¸");
         }
 
         [MenuItem("Assets/Convert to DOTS Blob", true)]
@@ -88,5 +98,22 @@ namespace Elder.Editor.Data.Tools
                        !path.EndsWith(BlobExtension, StringComparison.OrdinalIgnoreCase);
             });
         }
+
+        private static EditorEncryptionKeyConfig LoadKeyConfig()
+        {
+            // [AOT RISK] FindAssets â€” ì—ë””í„° ì „ìš©
+            string[] guids = AssetDatabase.FindAssets(KeyConfigFilter);
+            if (guids.Length == 0)
+            {
+                EditorUtility.DisplayDialog("ì•”í˜¸í™” í‚¤ ì—†ìŒ",
+                    "EditorEncryptionKeyConfig assetì´ ì—†ìŠµë‹ˆë‹¤.\n" +
+                    "ë©”ë‰´ Elder/Crypto/Create Encryption Key Configë¡œ ìƒì„± í›„ KeyPartBë¥¼ ì„¤ì •í•˜ì„¸ìš”.", "í™•ì¸");
+                return null;
+            }
+
+            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            return AssetDatabase.LoadAssetAtPath<EditorEncryptionKeyConfig>(path);
+        }
     }
 }
+#endif

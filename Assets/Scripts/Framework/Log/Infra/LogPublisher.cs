@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Elder.Framework.Log.Infra
 {
-    public class LogPublisher : DisposableBase, ILoggerPublisher
+    internal sealed class LogPublisher : DisposableBase, ILoggerPublisher
     {
         private readonly Dictionary<Type, LoggerEX> _loggerContainer = new();
         private readonly List<ILogAdapter> _logAdapters;

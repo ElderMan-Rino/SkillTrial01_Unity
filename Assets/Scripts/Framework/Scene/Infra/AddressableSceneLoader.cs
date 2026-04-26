@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace Elder.Framework.Scene.Infra
 {
-    public class AddressableSceneLoader : DisposableBase, ISceneLoader
+    internal sealed class AddressableSceneLoader : DisposableBase, ISceneLoader
     {
         public async UniTask<SceneInstance> LoadSceneAsync(string key, LoadSceneMode loadMode = LoadSceneMode.Additive, bool activateOnLoad = true)
         {

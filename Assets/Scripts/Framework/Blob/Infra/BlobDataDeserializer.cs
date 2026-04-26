@@ -5,19 +5,27 @@ using Unity.Entities.Serialization;
 
 namespace Elder.Framework.Blob.Infra
 {
-    public class BlobDataDeserializer : IDataDeserializer
+    internal sealed class BlobDataDeserializer : IDataDeserializer
     {
         public unsafe IDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged
         {
-            if (data == null || data.Length == 0) throw new ArgumentException("Data is empty");
+            if (data is null || data.Length == 0)
+                throw new ArgumentException("Data is empty");
+
+            return Deserialize<T>(data, data.Length);
+        }
+
+        // ArrayPool Î≤ÑÌçº + Ïú†Ìö® Í∏∏Ïù¥Î•º Î∞õÎäî ÎÇ¥Î∂Ä Ïò§Î≤ÑÎ°úÎìú (EncryptedBlobDataDeserializerÏóêÏÑú ÏÇ¨Ïö©)
+        internal unsafe IDataHandle<T> Deserialize<T>(byte[] data, int length) where T : unmanaged
+        {
+            if (data is null || length == 0)
+                throw new ArgumentException("Data is empty");
 
             fixed (byte* ptr = data)
             {
-                var reader = new MemoryBinaryReader(ptr, data.Length);
+                var reader = new MemoryBinaryReader(ptr, length);
                 BlobAssetReference<T> blobRef = reader.Read<T>();
                 reader.Dispose();
-
-                // ∑°∆€ ≈¨∑°Ω∫ø° ¥„æ∆º≠ π›»Ø«’¥œ¥Ÿ.
                 return new BlobDataHandle<T>(blobRef);
             }
         }
