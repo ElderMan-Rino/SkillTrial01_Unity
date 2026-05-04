@@ -7,10 +7,12 @@ using Elder.Framework.Flux.Helpers;
 using Elder.Framework.Flux.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Interfaces;
-using Elder.Framework.Scene.Domain.Data;
+using Elder.Framework.Scene.Definitions;
+using Elder.Framework.Scene.Domain.Models;
 using Elder.Framework.Scene.Interfaces;
 using Elder.Framework.Scene.Messages;
 using Elder.SkillTrial.Scene.Domain;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using VContainer.Unity;
 
 namespace Elder.Framework.Scene.App
@@ -23,8 +25,12 @@ namespace Elder.Framework.Scene.App
         private readonly IDataProvider _dataProvider;
         private ILoggerEx _logger;
 
-        private SceneLoadContext _currentContext;
         private SubscriptionToken _sceneTransitionSubscription;
+        private SceneTransitionState _state = SceneTransitionState.Idle;
+
+        // 현재 로드된 씬 인스턴스 (Single/Additive 언로드 시 필요)
+        private SceneInstance _activeSceneInstance;
+        private bool _hasActiveScene;
 
         public SceneTransitionCoordinator(
             ISceneLoader loader,
@@ -46,33 +52,94 @@ namespace Elder.Framework.Scene.App
 
         private void HandleSceneTransition(in FxSceneTransition fxMsg)
         {
-            ProcessSceneTransitionFlowAsync(fxMsg.TargetSceneKey).Forget();
+            if (_state == SceneTransitionState.InProgress)
+            {
+                _logger.Warn($"씬 전환 중 중복 요청 무시: {fxMsg.TargetSceneKey}");  // [HEAP] 문자열 보간
+                return;
+            }
+
+            ProcessSceneTransitionAsync(fxMsg.TargetSceneKey).Forget();
         }
 
-        private async UniTask<bool> ProcessSceneTransitionFlowAsync(string targetSceneKey)
+        private async UniTaskVoid ProcessSceneTransitionAsync(string targetSceneKey)
         {
-            // BlobString은 async 경계를 넘길 수 없으므로 필요한 값을 먼저 string으로 복사
-            if (!TryResolveSceneKeys(targetSceneKey, out string addressableKey, out SceneLoadMode loadMode))
-                return false;
+            _state = SceneTransitionState.InProgress;
 
-            var isAssetsPrepared = await PrepareSceneAssetsAsync();
-            if (!isAssetsPrepared)
-                return false;
+            try
+            {
+                // BlobString은 async 경계를 넘길 수 없으므로 필요한 값을 먼저 string으로 복사
+                if (!TryResolveSceneRow(targetSceneKey, out string addressableKey, out SceneLoadMode loadMode))
+                    return;
 
-            var isSwitched = await SwitchToSceneAsync();
-            if (!isSwitched)
-                return false;
+                _router.Publish(new FxSceneTransitionStarted(targetSceneKey));
 
+                var success = await ExecuteTransitionAsync(targetSceneKey, addressableKey, loadMode);
+                if (!success)
+                    _logger.Error($"씬 전환 실패: {targetSceneKey}");  // [HEAP] 문자열 보간
+            }
+            catch (System.Exception ex)
+            {
+                _logger.Error($"씬 전환 예외 [{targetSceneKey}]: {ex.Message}");  // [HEAP] 문자열 보간
+            }
+            finally
+            {
+                _state = SceneTransitionState.Idle;
+            }
+        }
+
+        private async UniTask<bool> ExecuteTransitionAsync(string targetSceneKey, string addressableKey, SceneLoadMode loadMode)
+        {
+            if (loadMode == SceneLoadMode.AdditiveKeepPrevious)
+                return await LoadAdditiveAsync(targetSceneKey, addressableKey);
+
+            return await SwapWithTempAsync(targetSceneKey, addressableKey);
+        }
+
+        // Single / Additive: Empty를 중간 버퍼로 배치해 메모리 스파이크 방지
+        // 순서: TempLoad → OldUnload → NewLoad → TempUnload
+        private async UniTask<bool> SwapWithTempAsync(string targetSceneKey, string addressableKey)
+        {
+            // TempScene을 먼저 올려 이전 씬 언로드 시 활성 씬이 없는 상태 방지
+            var tempInstance = await _loader.LoadSceneAsync(SceneConstants.TempSceneKey, UnityEngine.SceneManagement.LoadSceneMode.Additive, true);
+
+            if (_hasActiveScene)
+                await _loader.UnloadSceneAsync(_activeSceneInstance);
+
+            var context = _contextFactory.Create(targetSceneKey);
+            // Single/Additive 모두 내부적으로 Additive 로드 후 TempScene 언로드 — Unity의 Single은 DontDestroyOnLoad를 제거하므로 사용 안 함
+            var newInstance = await _loader.LoadSceneAsync(addressableKey, UnityEngine.SceneManagement.LoadSceneMode.Additive, true);
+
+            await _loader.UnloadSceneAsync(tempInstance);
+
+            _activeSceneInstance = newInstance;
+            _hasActiveScene = true;
+            _contextFactory.Release(context);
+
+            _router.Publish(new FxSceneTransitionCompleted(targetSceneKey));
+            return true;
+        }
+
+        // AdditiveKeepPrevious: 이전 씬 유지, 신규 씬만 추가
+        private async UniTask<bool> LoadAdditiveAsync(string targetSceneKey, string addressableKey)
+        {
+            var context = _contextFactory.Create(targetSceneKey);
+            var newInstance = await _loader.LoadSceneAsync(addressableKey, UnityEngine.SceneManagement.LoadSceneMode.Additive, true);
+
+            _activeSceneInstance = newInstance;
+            _hasActiveScene = true;
+            _contextFactory.Release(context);
+
+            _router.Publish(new FxSceneTransitionCompleted(targetSceneKey));
             return true;
         }
 
         // BlobAsset에서 필요한 값만 string으로 복사해 반환. ref 반환 불가(async 경계) 대안.
-        private bool TryResolveSceneKeys(string targetSceneKey, out string addressableKey, out SceneLoadMode loadMode)
+        private bool TryResolveSceneRow(string targetSceneKey, out string addressableKey, out SceneLoadMode loadMode)
         {
             addressableKey = null;
             loadMode = default;
 
-            var blobRef = _dataProvider.GetBlobReference<SceneTableRoot>();
+            var blobRef = _dataProvider.GetBlobReference<SceneInfoRoot>();
             ref var table = ref blobRef.Value;
 
             int targetHash = StringHashHelper.ToStableHash(targetSceneKey);
@@ -92,16 +159,6 @@ namespace Elder.Framework.Scene.App
 
             _logger.Warn($"SceneRow not found for key: {targetSceneKey}");  // [HEAP] 문자열 보간
             return false;
-        }
-
-        private async UniTask<bool> PrepareSceneAssetsAsync()
-        {
-            return true;
-        }
-
-        private async UniTask<bool> SwitchToSceneAsync()
-        {
-            return true;
         }
 
         protected override void DisposeManagedResources()

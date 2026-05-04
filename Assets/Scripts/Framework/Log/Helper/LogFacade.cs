@@ -1,9 +1,10 @@
+using Elder.Framework.Log.Infra;
 using Elder.Framework.Log.Interfaces;
 using System;
 
 namespace Elder.Framework.Log.Helper
 {
-    public static class LogFacade 
+    public static class LogFacade
     {
         private static ILoggerPublisher _provider;
 
@@ -19,8 +20,7 @@ namespace Elder.Framework.Log.Helper
 
         public static ILoggerEx GetLoggerFor(Type type)
         {
-            if (_provider == null)
-                throw new InvalidOperationException("Log Provider not initialized.");
+            if (_provider is null) return NullLoggerEx.Instance;
             return _provider.GetLogger(type);
         }
 

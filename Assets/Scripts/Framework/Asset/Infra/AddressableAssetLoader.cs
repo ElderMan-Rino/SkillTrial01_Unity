@@ -6,7 +6,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Elder.Framework.Asset.Infra
 {
-    internal class AddressableResourceLoader : IEngineAssetLoader, IEngineAssetReleaser
+    internal sealed class AddressableAssetLoader : IEngineAssetLoader, IEngineAssetReleaser
     {
         public async UniTask<AsyncOperationHandle<T>> LoadAsync<T>(string key)
             where T : UnityEngine.Object

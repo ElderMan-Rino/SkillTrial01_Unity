@@ -1,0 +1,22 @@
+{
+  "name": "Elder.Framework.Core",
+  "rootNamespace": "Elder.Framework",
+  "references": [
+    "UniTask",
+    "Unity.Entities",
+    "Unity.Burst",
+    "Unity.Collections",
+    "Unity.Addressables",
+    "Unity.ResourceManager",
+    "VContainer"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": true,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

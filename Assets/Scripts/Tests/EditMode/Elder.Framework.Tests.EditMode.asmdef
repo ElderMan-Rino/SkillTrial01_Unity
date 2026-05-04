@@ -1,0 +1,27 @@
+{
+  "name": "Elder.Framework.Tests.EditMode",
+  "rootNamespace": "Elder.Framework.Tests",
+  "references": [
+    "Elder.Framework.Core",
+    "Elder.Framework.Boot",
+    "Elder.Framework.Input",
+    "Elder.Framework.Scene",
+    "Elder.Game",
+    "UniTask",
+    "UnityEngine.TestRunner",
+    "UnityEditor.TestRunner"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Elder.Framework.Scene.Domain.Data
 {
-    public class SceneLoadContext : IDisposable
+    public sealed class SceneLoadContext : IDisposable
     {
         private readonly HashSet<string> _subSceneNames = new();
 
         public string MainSceneName { get; private set; }
         public IEnumerable<string> SubSceneNames => _subSceneNames;
 
-        public SceneLoadContext Initialize(string mainScenName)
+        public SceneLoadContext Initialize(string mainSceneName)
         {
-            MainSceneName = mainScenName; 
+            MainSceneName = mainSceneName;
             return this;
         }
 

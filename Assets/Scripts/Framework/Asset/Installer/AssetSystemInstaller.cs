@@ -10,7 +10,7 @@ namespace Elder.Framework.Asset.Installer
     {
         public void Install(IContainerBuilder builder)
         {
-            builder.Register<AddressableResourceLoader>(Lifetime.Singleton).As<IEngineAssetLoader>().As<IEngineAssetReleaser>();
+            builder.Register<AddressableAssetLoader>(Lifetime.Singleton).As<IEngineAssetLoader>().As<IEngineAssetReleaser>();
             builder.Register<AssetRegistry>(Lifetime.Singleton).As<IAssetRegistry>();
             builder.Register<AssetSystem>(Lifetime.Singleton).As<IAssetProvider>();
         }

@@ -1,0 +1,19 @@
+{
+  "name": "Elder.Framework.Input",
+  "rootNamespace": "Elder.Framework.Input",
+  "references": [
+    "Elder.Framework.Core",
+    "UniTask",
+    "Unity.InputSystem",
+    "VContainer"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -5,7 +5,7 @@ namespace Elder.Framework.Flux.Helpers
 {
     public struct SubscriptionToken
     {
-        private long _tokenId; // ���� ID �߰�
+        private long _tokenId;
         private Type _messageType;
         private IFluxCancellable _fluxCancellable;
 

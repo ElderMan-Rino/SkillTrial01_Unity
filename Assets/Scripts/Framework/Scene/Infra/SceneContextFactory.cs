@@ -10,15 +10,17 @@ namespace Elder.Framework.Scene.Infra
 
         public SceneContextFactory()
         {
-            _pool = new ObjectPool<SceneLoadContext>(createFunc: CreateFunc, actionOnRelease: OnContextReleasesd);
+            // [HEAP] ObjectPool 생성자 — createFunc/actionOnRelease 델리게이트 1회 할당
+            _pool = new ObjectPool<SceneLoadContext>(createFunc: CreateFunc, actionOnRelease: OnContextReleased);
         }
 
         private SceneLoadContext CreateFunc()
         {
+            // [HEAP] 풀 초과 시 새 인스턴스 생성
             return new SceneLoadContext();
         }
 
-        private void OnContextReleasesd(SceneLoadContext context)
+        private void OnContextReleased(SceneLoadContext context)
         {
             context.Dispose();
         }

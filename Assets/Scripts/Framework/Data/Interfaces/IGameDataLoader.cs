@@ -4,6 +4,7 @@ namespace Elder.Framework.Data.Interfaces
 {
     public interface IGameDataLoader
     {
-        public UniTask LoadAsync<T>(IDataSheetLoader loader, string key) where T : struct;
+        public UniTask LoadAllAsync(IDataSheetLoader loader);
+        public UniTask LoadAsync<T>(IDataSheetLoader loader, string key) where T : unmanaged;
     }
 }

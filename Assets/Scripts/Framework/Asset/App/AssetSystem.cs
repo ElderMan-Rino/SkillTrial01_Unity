@@ -24,17 +24,19 @@ namespace Elder.Framework.Asset.App
             if (!_entries.TryGetValue(key, out var entry))
             {
                 var handle = await _loader.LoadAsync<T>(key);
+                // [HEAP] 키당 최초 로드 시 ProviderEntry + ReleaseAction 1회 할당
                 entry = new ProviderEntry
                 {
                     Handle = handle,
                     Asset = handle.Result,
                     RefCount = 0
                 };
+                entry.ReleaseAction = () => Release(key);
                 _entries[key] = entry;
             }
 
             entry.RefCount++;
-            return new AssetHandle<T>((T)entry.Asset, () => Release(key));
+            return new AssetHandle<T>((T)entry.Asset, entry.ReleaseAction);
         }
 
         private void Release(string key)

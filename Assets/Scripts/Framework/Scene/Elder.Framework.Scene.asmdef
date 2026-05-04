@@ -1,0 +1,25 @@
+{
+  "name": "Elder.Framework.Scene",
+  "rootNamespace": "Elder.Framework.Scene",
+  "references": [
+    "Elder.Framework.Core",
+    "Elder.Game",
+    "UniTask",
+    "UniTask.Addressables",
+    "Unity.Entities",
+    "Unity.Burst",
+    "Unity.Collections",
+    "Unity.Addressables",
+    "Unity.ResourceManager",
+    "VContainer"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

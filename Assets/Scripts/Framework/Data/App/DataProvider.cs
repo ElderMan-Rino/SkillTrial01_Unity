@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Interfaces;
-using Elder.Framework.Boot.Messages;
+using Elder.Framework.Common.Messages;
 using Elder.Framework.Common.Base;
 using Elder.Framework.Data.Interfaces;
 using Elder.Framework.Data.Messages;
@@ -8,7 +8,6 @@ using Elder.Framework.Flux.Helpers;
 using Elder.Framework.Flux.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Interfaces;
-using Elder.SkillTrial.Resources.Data;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,17 +20,19 @@ namespace Elder.Framework.Data.App
         private readonly IFluxRouter _router;
         private readonly IAssetProvider _assetProvider;
         private readonly IDataDeserializer _deserializer;
+        private readonly IGameDataLoader _gameDataLoader;
         private ILoggerEx _logger;
 
         // [HEAP] 초기화 시 1회 할당
         private readonly Dictionary<Type, object> _dataHandles = new();
         private SubscriptionToken _initSubscription;
 
-        public DataProvider(IFluxRouter router, IAssetProvider assetProvider, IDataDeserializer deserializer)
+        public DataProvider(IFluxRouter router, IAssetProvider assetProvider, IDataDeserializer deserializer, IGameDataLoader gameDataLoader)
         {
             _router = router;
             _assetProvider = assetProvider;
             _deserializer = deserializer;
+            _gameDataLoader = gameDataLoader;
         }
 
         public void Initialize()
@@ -61,10 +62,11 @@ namespace Elder.Framework.Data.App
 
         public async UniTask LoadSheetAsync<T>(string assetName) where T : unmanaged
         {
+            _logger.Info($"<color=white>[BlobLoad] Loading: {assetName} ({typeof(T).Name})</color>");  // [HEAP] 문자열 보간
             var handle = await _assetProvider.GetAssetAsync<TextAsset>(assetName);
             if (handle.Asset is null)
             {
-                _logger.Warn($"Failed to load blob asset: {assetName}");  // [HEAP] 문자열 보간
+                _logger.Warn($"<color=white>[BlobLoad] FAIL - Asset not found: {assetName}</color>");  // [HEAP] 문자열 보간
                 return;
             }
 
@@ -72,6 +74,11 @@ namespace Elder.Framework.Data.App
             {
                 var dataHandle = _deserializer.Deserialize<T>(handle.Asset.bytes);
                 GetOrCreateList<T>().Add(dataHandle);
+                _logger.Info($"<color=white>[BlobLoad] OK - {assetName} ({typeof(T).Name}) loaded successfully</color>");  // [HEAP] 문자열 보간
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"<color=white>[BlobLoad] FAIL - Deserialize error: {assetName} | {ex.Message}</color>");  // [HEAP] 문자열 보간
             }
             finally
             {
@@ -106,14 +113,14 @@ namespace Elder.Framework.Data.App
         {
             try
             {
-                _logger.Info("Starting to load Blob Data...");
-                await GeneratedBlobLoader.LoadAllDataAsync(this);
+                _logger.Info("<color=white>[BlobLoad] === Start loading all Blob Data ===</color>");
+                await _gameDataLoader.LoadAllAsync(this);
                 _router.Publish(new FxBaseDataInitialized());
-                _logger.Info("All Blob Data loaded successfully.");
+                _logger.Info("<color=white>[BlobLoad] === All Blob Data loaded successfully ===</color>");
             }
             catch (Exception ex)
             {
-                _logger.Error($"Failed to load Blob Data: {ex.Message}\n{ex.StackTrace}");  // [HEAP] 문자열 보간
+                _logger.Error($"<color=white>[BlobLoad] === FAILED: {ex.Message}\n{ex.StackTrace}</color>");  // [HEAP] 문자열 보간
             }
         }
 

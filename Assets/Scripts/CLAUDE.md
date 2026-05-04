@@ -1,85 +1,85 @@
-# C# 코딩 컨벤션 (MSDN + 프로젝트 기반)
+# C# Coding Conventions (MSDN + Project-Based)
 
-이 프로젝트는 **MSDN C# 코딩 컨벤션**을 기준으로 하며, 아래 규칙이 우선 적용됩니다.  
-Unity + VContainer + UniTask + ECS Blob + Flux 메시징 구조를 사용합니다.
+This project follows **MSDN C# coding conventions** as a baseline, with the rules below taking priority.
+Uses Unity + VContainer + UniTask + ECS Blob + Flux messaging architecture.
 
-> **코드 작성 3대 원칙: 최적화 · 유지보수성 · 명확성**  
-> 힙 할당이 발생하는 코드에는 반드시 `// [HEAP]` 주석을 명시한다.  
-> AOT(IL2CPP) 환경의 코드 폭발(Code Bloat) 위험이 있는 패턴은 반드시 `// [AOT RISK]` 주석을 명시한다.
+> **Three core principles: Optimization · Maintainability · Clarity**
+> All code that causes heap allocation must include a `// [HEAP]` comment.
+> All patterns with AOT (IL2CPP) code bloat risk must include a `// [AOT RISK]` comment.
 
 ---
 
-## 1. 네이밍 규칙
+## 1. Naming Rules
 
-### 대소문자 규칙 (MSDN 기준)
+### Casing Rules (MSDN Standard)
 
-| 대상 | 방식 | 예시 |
+| Target | Style | Example |
 |------|------|------|
-| 클래스 / 인터페이스 / 구조체 | PascalCase | `FluxRouter`, `IFluxMessage` |
-| 메서드 | PascalCase | `LoadSheetAsync`, `GetData` |
-| 프로퍼티 | PascalCase | `MainSceneName`, `DomainEvents` |
-| 이벤트 | PascalCase | `OnInitialized` |
-| 열거형 타입 및 값 | PascalCase | `LogLevel.Warning` |
-| 로컬 변수 / 파라미터 | camelCase | `targetSceneKey`, `assetName` |
-| private 필드 | `_camelCase` (언더스코어 접두사) | `_router`, `_dataHandles` |
-| static 필드 | `_camelCase` (언더스코어 접두사) | `_globalTokenIdCounter` |
+| Class / Interface / Struct | PascalCase | `FluxRouter`, `IFluxMessage` |
+| Method | PascalCase | `LoadSheetAsync`, `GetData` |
+| Property | PascalCase | `MainSceneName`, `DomainEvents` |
+| Event | PascalCase | `OnInitialized` |
+| Enum type and values | PascalCase | `LogLevel.Warning` |
+| Local variable / Parameter | camelCase | `targetSceneKey`, `assetName` |
+| private field | `_camelCase` (underscore prefix) | `_router`, `_dataHandles` |
+| static field | `_camelCase` (underscore prefix) | `_globalTokenIdCounter` |
 | const | PascalCase | `BootStrapSceneKey` |
-| 인터페이스 | `I` 접두사 | `IFluxRouter`, `IDataProvider` |
+| Interface | `I` prefix | `IFluxRouter`, `IDataProvider` |
 
-### 프로젝트 특화 네이밍
+### Project-Specific Naming
 
-| 대상 | 규칙 | 예시 |
+| Target | Rule | Example |
 |------|------|------|
-| Flux 메시지 struct | `Fx` 접두사 | `FxInitializeSystem`, `FxSceneTransition` |
-| Installer | `*Installer` 접미사 | `FluxInstaller`, `DataInstaller` |
-| 비동기 메서드 | `*Async` 접미사 | `LoadSheetAsync`, `GetAssetAsync` |
-| 도메인 이벤트 | `*Event` 접미사 또는 의미 있는 과거형 | `DataLoadedEvent` |
+| Flux message struct | `Fx` prefix | `FxInitializeSystem`, `FxSceneTransition` |
+| Installer | `*Installer` suffix | `FluxInstaller`, `DataInstaller` |
+| Async method | `*Async` suffix | `LoadSheetAsync`, `GetAssetAsync` |
+| Domain event | `*Event` suffix or meaningful past tense | `DataLoadedEvent` |
 
 ---
 
-## 2. 접근 제한자 (Access Modifier) 규칙
+## 2. Access Modifier Rules
 
-### 기본 원칙
+### Core Principles
 
-- **모든 멤버에 접근 제한자를 반드시 명시한다** (생략 절대 금지).
-- **최소 권한 원칙(Principle of Least Privilege)**: 필요한 최소 범위의 접근 제한자를 사용한다.
-- 구현 클래스는 `internal`을 선호하고, 인터페이스를 통해서만 외부에 노출한다.
+- **All members must explicitly declare an access modifier** (omission is strictly forbidden).
+- **Principle of Least Privilege**: use the narrowest access modifier required.
+- Prefer `internal` for implementation classes; expose only through interfaces.
 
-### public 규칙
+### public Rules
 
-외부(다른 어셈블리 또는 레이어)에서 반드시 접근해야 하는 경우에만 사용한다.
+Use only when external access (from another assembly or layer) is strictly required.
 
 ```csharp
-// GOOD: 외부에 공개가 필요한 인터페이스 계약
+// GOOD: interface contract that must be publicly exposed
 public interface IFluxRouter
 {
     void Publish<T>(in T message) where T : struct;
     SubscriptionToken Subscribe<T>(MessageHandler<T> handler) where T : struct;
 }
 
-// GOOD: DI 컨테이너에 노출할 Application Service
+// GOOD: Application Service exposed to DI container
 public class DataProvider : IDataProvider
 {
-    public void Initialize() { }     // 인터페이스 구현 → public 필수
-    public void Dispose() { }        // IDisposable 구현 → public 필수
+    public void Initialize() { }     // interface implementation → public required
+    public void Dispose() { }        // IDisposable implementation → public required
 }
 ```
 
-### private 규칙
+### private Rules
 
-클래스 내부에서만 사용하는 모든 멤버는 `private`을 명시한다.  
-필드는 반드시 `_camelCase` 형태로 작성한다.
+All members used only within the class must be declared `private`.
+Fields must follow the `_camelCase` format.
 
 ```csharp
 public class DataProvider : IDataProvider, IDisposable
 {
-    // GOOD: private 필드는 _ 접두사 + camelCase
+    // GOOD: private fields use _ prefix + camelCase
     private readonly IFluxRouter _router;
     private readonly IAssetProvider _asset;
     private SubscriptionToken _subscription;
     private bool _isInitialized;
 
-    // GOOD: private 메서드는 PascalCase (함수 규칙 동일)
+    // GOOD: private methods use PascalCase (same as function rule)
     private void HandleInitializeSystem(in FxInitializeSystem msg)
     {
         LoadDataAsync().Forget();
@@ -92,21 +92,21 @@ public class DataProvider : IDataProvider, IDisposable
 }
 ```
 
-### protected 규칙
+### protected Rules
 
-상속 구조에서 파생 클래스에만 공개가 필요한 경우에 사용한다.  
-`protected virtual` / `protected override`를 통한 템플릿 메서드 패턴에 활용한다.
+Use when a member needs to be accessible only to derived classes in an inheritance hierarchy.
+Used for template method patterns via `protected virtual` / `protected override`.
 
 ```csharp
 public abstract class DisposableBase : IDisposable
 {
-    // GOOD: 파생 클래스에서 재정의할 훅 메서드
+    // GOOD: hook methods to be overridden by derived classes
     protected virtual void OnDisposing() { }
     protected virtual void DisposeManagedResources() { }
     protected virtual void DisposeUnmanagedResources() { }
     protected virtual void FinalizeDispose() { }
 
-    // GOOD: 외부에 공개되는 Dispose만 public
+    // GOOD: only Dispose is public
     public void Dispose()
     {
         OnDisposing();
@@ -117,12 +117,12 @@ public abstract class DisposableBase : IDisposable
 }
 ```
 
-### internal 규칙
+### internal Rules
 
-같은 어셈블리 내부에서만 접근 가능. 구현 클래스의 기본 접근 제한자로 사용한다.
+Accessible only within the same assembly. Use as the default access modifier for implementation classes.
 
 ```csharp
-// GOOD: 구현 클래스는 internal, 인터페이스로만 외부 노출
+// GOOD: implementation class is internal, exposed only through interface
 internal sealed class FluxRouter : IFluxRouter
 {
     private readonly Dictionary<Type, object> _handlerContainers = new();
@@ -130,38 +130,38 @@ internal sealed class FluxRouter : IFluxRouter
     public void Publish<T>(in T message) where T : struct
     {
         if (!_handlerContainers.TryGetValue(typeof(T), out var container)) return;
-        // [HEAP] Unsafe.As로 박싱 없이 캐스팅 (박싱 회피)
+        // [HEAP] Unsafe.As cast without boxing (boxing avoidance)
         Unsafe.As<MessageHandlerContainer<T>>(container).Publish(in message);
     }
 }
 ```
 
-### 접근 제한자 우선순위 요약
+### Access Modifier Priority Summary
 
 ```
 public → protected → internal → protected internal → private protected → private
 ```
 
-| 시나리오 | 권장 접근 제한자 |
+| Scenario | Recommended Modifier |
 |----------|----------------|
-| 인터페이스 계약 노출 | `public` |
-| 인터페이스 멤버 구현 | `public` (인터페이스 명시 구현 제외) |
-| 구현 클래스 자체 | `internal sealed` |
-| 상속용 훅 메서드 | `protected virtual` |
-| 클래스 내부 전용 필드/메서드 | `private` |
-| 동일 어셈블리 한정 유틸리티 | `internal` |
+| Exposing interface contract | `public` |
+| Implementing interface member | `public` (except explicit implementation) |
+| Implementation class itself | `internal sealed` |
+| Hook method for inheritance | `protected virtual` |
+| Class-internal field/method | `private` |
+| Same-assembly utility | `internal` |
 
 ---
 
-## 3. 인터페이스 규칙
+## 3. Interface Rules
 
-### 인터페이스 멤버 접근 제한자 명시
+### Explicit Access Modifiers on Interface Members
 
-C#의 인터페이스 멤버는 기본적으로 `public abstract`이지만,  
-**이 프로젝트에서는 인터페이스 멤버에도 반드시 `public`을 명시한다.**
+While C# interface members are implicitly `public abstract`,
+**this project requires `public` to be explicitly declared on all interface members.**
 
 ```csharp
-// GOOD: 인터페이스 멤버에 public 명시
+// GOOD: explicit public on interface members
 public interface IDataProvider
 {
     public void Initialize();
@@ -176,20 +176,20 @@ public interface IFluxRouter
     public void Unsubscribe(SubscriptionToken token);
 }
 
-// BAD: 접근 제한자 생략 (암묵적 public에 의존)
+// BAD: omitting access modifier (relying on implicit public)
 public interface IDataProvider
 {
-    void Initialize();     // ← 접근 제한자 없음, 금지
+    void Initialize();     // ← no access modifier, forbidden
     bool TryGetData<T>(string key, out T data) where T : unmanaged;
 }
 ```
 
-### 인터페이스 설계 원칙 (ISP)
+### Interface Design Principles (ISP)
 
-역할 단위로 인터페이스를 분리한다. 하나의 인터페이스에 여러 책임을 몰아넣지 않는다.
+Separate interfaces by role. Do not pack multiple responsibilities into a single interface.
 
 ```csharp
-// GOOD: 역할별 분리
+// GOOD: separated by role
 public interface IEngineAssetLoader
 {
     public UniTask<IAssetHandle<T>> LoadAsync<T>(string key) where T : UnityEngine.Object;
@@ -200,7 +200,7 @@ public interface IEngineAssetReleaser
     public void Release(string key);
 }
 
-// BAD: 단일 인터페이스에 모든 책임 집중
+// BAD: all responsibilities crammed into one interface
 public interface IAssetManager   // [VIOLATION: ISP]
 {
     UniTask Load();
@@ -210,53 +210,53 @@ public interface IAssetManager   // [VIOLATION: ISP]
 }
 ```
 
-### 명시적 인터페이스 구현 (Explicit Implementation)
+### Explicit Interface Implementation
 
-외부에서 인터페이스 타입으로만 접근해야 하고, 구현 타입에서 직접 호출을 막고 싶을 때 사용한다.  
-이 경우에는 접근 제한자를 붙이지 않는다 (C# 언어 규격).
+Use when access should only be through the interface type, and direct calls on the implementation type should be blocked.
+In this case, do not add an access modifier (C# language specification).
 
 ```csharp
 internal sealed class SpecialRouter : IFluxRouter, IDisposable
 {
-    // GOOD: 명시적 구현 - 접근 제한자 없음 (언어 규격)
+    // GOOD: explicit implementation - no access modifier (language spec)
     void IDisposable.Dispose()
     {
         CleanupResources();
     }
 
-    // GOOD: 일반 구현 - public 명시
+    // GOOD: regular implementation - explicit public
     public void Publish<T>(in T message) where T : struct { }
 }
 ```
 
 ---
 
-## 4. 제어 흐름 (if문) 규칙
+## 4. Control Flow (if) Rules
 
-### 핵심 원칙
+### Core Principles
 
-- **단일 문장 if**: 중괄호 없이 `if (조건) 실행문;` 형태로 **같은 줄에** 작성한다.
-- **복수 문장 / 블록 if**: 반드시 중괄호 + 줄바꿈(Allman 스타일)을 사용한다.
-- **else / else if**: 항상 중괄호 + 줄바꿈을 사용한다.
+- **Single-statement if**: write inline as `if (condition) statement;` — **no braces, same line**.
+- **Multi-statement / block if**: must use braces + newline (Allman style).
+- **else / else if**: always use braces + newline.
 
 ```csharp
-// ✅ GOOD: 단일 Guard clause — 한 줄 처리
+// ✅ GOOD: single guard clause — inline
 if (handle is null) return;
 if (!_isInitialized) return;
 if (!_entries.TryGetValue(key, out var entry)) return;
 
-// ✅ GOOD: 단일 할당/호출 — 한 줄 처리
+// ✅ GOOD: single assignment/call — inline
 if (isVisible) Enable();
 if (count > 0) ProcessQueue();
 
-// ✅ GOOD: 복수 문장 — 반드시 중괄호 + 줄바꿈
+// ✅ GOOD: multiple statements — braces + newline required
 if (isReady)
 {
     LoadData();
     NotifyReady();
 }
 
-// ✅ GOOD: else if / else — 반드시 중괄호 + 줄바꿈
+// ✅ GOOD: else if / else — braces + newline required
 if (state == State.Running)
 {
     UpdateLogic();
@@ -270,26 +270,26 @@ else
     StopLogic();
 }
 
-// ❌ BAD: 복수 문장인데 중괄호 없음
+// ❌ BAD: multiple statements without braces
 if (isReady)
     LoadData();
-    NotifyReady();  // ← 항상 실행됨! 버그 유발
+    NotifyReady();  // ← always executes! bug-prone
 
-// ❌ BAD: 단일 문장인데 불필요하게 줄바꿈
+// ❌ BAD: single statement with unnecessary newline
 if (handle is null)
-    return;         // ← Guard clause는 한 줄이 더 명확함
+    return;         // ← guard clause is clearer on one line
 
-// ❌ BAD: else 중괄호 없음
+// ❌ BAD: else without braces
 if (isReady) DoA();
-else DoB();         // ← 금지
+else DoB();         // ← forbidden
 ```
 
-### Guard Clause 패턴 (조기 반환 우선)
+### Guard Clause Pattern (Early Return First)
 
-중첩 if를 줄이고, 실패 조건을 먼저 처리하는 Guard Clause 패턴을 사용한다.
+Use guard clauses to eliminate nested ifs by handling failure conditions first.
 
 ```csharp
-// GOOD: Guard Clause로 중첩 제거
+// GOOD: guard clause removes nesting
 public void Publish<T>(in T message) where T : struct
 {
     if (!_handlerContainers.TryGetValue(typeof(T), out var container)) return;
@@ -298,7 +298,7 @@ public void Publish<T>(in T message) where T : struct
     container.Publish(in message);
 }
 
-// BAD: 깊은 중첩
+// BAD: deep nesting
 public void Publish<T>(in T message) where T : struct
 {
     if (_handlerContainers.TryGetValue(typeof(T), out var container))
@@ -313,85 +313,85 @@ public void Publish<T>(in T message) where T : struct
 
 ---
 
-## 5. 파일 및 폴더 구조
+## 5. File & Folder Structure
 
-### 레이어드 아키텍처 폴더 규칙
+### Layered Architecture Folder Rules
 
 ```
 {Module}/
-  Interfaces/    - 인터페이스 (계약 정의)
-  App/           - Application 서비스 (Use Case)
-  Domain/        - 도메인 모델 (Entity, VO, Aggregate)
-  Infra/         - 인프라 구현체 (Unity API, 외부 라이브러리)
-  Installer/     - VContainer DI 등록
-  Messages/      - Flux 메시지 (IFluxMessage 구현체)
-  Definitions/   - 열거형, 델리게이트, 상수
+  Interfaces/    - Interfaces (contract definitions)
+  App/           - Application services (Use Cases)
+  Domain/        - Domain models (Entity, VO, Aggregate)
+  Infra/         - Infrastructure implementations (Unity API, external libraries)
+  Installer/     - VContainer DI registration
+  Messages/      - Flux messages (IFluxMessage implementations)
+  Definitions/   - Enums, delegates, constants
 ```
 
-- 파일명은 클래스명과 반드시 일치
-- 하나의 파일에 하나의 public 타입만 정의
-- 인터페이스 파일명: `I{Name}.cs`
+- File name must match class name exactly
+- Only one public type per file
+- Interface file naming: `I{Name}.cs`
 
 ---
 
-## 6. 언어 구문 스타일 (MSDN 기준)
+## 6. Language Syntax Style (MSDN Standard)
 
-### 타입 선언
+### Type Declarations
 
 ```csharp
-// GOOD: var는 타입이 명확히 드러날 때만 사용
+// GOOD: use var only when type is clearly apparent
 var container = new MessageHandlerContainer<T>();
-MessageHandler<T> handler = GetHandler();  // 타입 불명확할 때는 명시
+MessageHandler<T> handler = GetHandler();  // explicit type when unclear
 
-// GOOD: string은 System.String 대신 키워드 사용
+// GOOD: use keyword string instead of System.String
 string name = "value";
 
-// GOOD: new() 타깃 타입 추론 활용
+// GOOD: use new() target-type inference
 private readonly Dictionary<Type, object> _dataHandles = new();
 ```
 
-### 프로퍼티
+### Properties
 
 ```csharp
-// GOOD: 읽기 전용 프로퍼티는 auto-property 또는 expression body
+// GOOD: read-only properties use auto-property or expression body
 public string MainSceneName { get; private set; }
 public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents;
 
-// GOOD: init-only 프로퍼티 활용
+// GOOD: use init-only properties
 public TId Id { get; protected set; }
 ```
 
-### Null 처리
+### Null Handling
 
 ```csharp
-// GOOD: null 체크는 is null / is not null 사용 (MSDN 권장)
+// GOOD: use is null / is not null for null checks (MSDN recommended)
 if (handle is null) return;
 if (provider is not null) provider.Load();
 
-// GOOD: null 병합 연산자 활용
+// GOOD: use null-conditional operator
 _router?.Publish(new FxInitializeSystem());
 ```
 
-### string
+### String
 
 ```csharp
-// GOOD: 문자열 보간 사용
-// [HEAP] 문자열 보간은 런타임에 새 string 객체를 생성함 (로그 등 빈도 낮은 곳에만 사용)
+// GOOD: use string interpolation
+// [HEAP] string interpolation creates a new string object at runtime (use only in low-frequency paths like logs)
 _logger.Error($"Failed to load: {assetName}");
 
-// AVOID: string.Format 직접 호출 지양
+// AVOID: direct string.Format calls
 _logger.Error(string.Format("Failed to load: {0}", assetName));
 
-// GOOD: 핫패스에서는 string 생성 자체를 피함
-// (로그 레벨 체크 후 보간 실행)
+// GOOD: avoid string creation entirely on hot paths
+// (check log level before interpolating)
 if (_logger.IsErrorEnabled) _logger.Error($"Failed: {assetName}");
 ```
 
 ---
 
-## 7. 코드 레이아웃
+## 7. Code Layout
 
-### 중괄호 (Allman 스타일, MSDN 기본)
+### Braces (Allman Style, MSDN Default)
 
 ```csharp
 // GOOD
@@ -401,18 +401,18 @@ public void Initialize()
     _subscription = _router.Subscribe<FxInitializeSystem>(HandleInitializeSystem);
 }
 
-// BAD: 단일 라인 중괄호 (복잡한 메서드)
+// BAD: single-line braces (for complex methods)
 public void Initialize() { _logger = LogFacade.GetLoggerFor<DataProvider>(); }
 ```
 
-### using 정렬 순서
+### using Sort Order
 
 ```csharp
-// 1. System 네임스페이스
+// 1. System namespaces
 using System;
 using System.Collections.Generic;
 
-// 2. 서드파티 (알파벳 순)
+// 2. Third-party (alphabetical)
 using Cysharp.Threading.Tasks;
 using MessagePack;
 using Unity.Entities;
@@ -420,12 +420,12 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-// 3. 내부 프로젝트 (Elder.*)
+// 3. Internal project (Elder.*)
 using Elder.Framework.Data.Interfaces;
 using Elder.Framework.Flux.Interfaces;
 ```
 
-### 멤버 선언 순서
+### Member Declaration Order
 
 ```csharp
 public class Example
@@ -439,134 +439,134 @@ public class Example
     // 3. private fields
     private SubscriptionToken _subscription;
 
-    // 4. 생성자
+    // 4. Constructor
     public Example(IFluxRouter router) { }
 
-    // 5. public 프로퍼티
+    // 5. public properties
     public string Name { get; }
 
-    // 6. public 메서드 (인터페이스 구현 포함)
+    // 6. public methods (including interface implementations)
     public void Initialize() { }
 
-    // 7. protected 메서드
+    // 7. protected methods
     protected override void DisposeManagedResources() { }
 
-    // 8. private 메서드
+    // 8. private methods
     private void HandleMessage(in FxInitializeSystem msg) { }
 }
 ```
 
 ---
 
-## 8. 주석 규칙
+## 8. Comment Rules
 
 ```csharp
-// GOOD: WHY가 비명확한 경우에만 주석 작성
-// Unsafe.As는 Dictionary lookup 박싱을 피하기 위한 성능 최적화
+// GOOD: comment only when WHY is non-obvious
+// Unsafe.As avoids boxing from Dictionary lookup — performance optimization
 var container = Unsafe.As<MessageHandlerContainer<T>>(containerBase);
 
-// GOOD: 한국어 XML 주석은 public API에만 (선택적)
-/// <summary>구독 해제 시 반드시 Dispose 호출 필요</summary>
+// GOOD: XML doc comments on public API only (optional)
+/// <summary>Must call Dispose after unsubscribing.</summary>
 public SubscriptionToken Subscribe<T>(MessageHandler<T> handler) where T : struct { }
 
-// BAD: WHAT을 설명하는 주석 (코드 자체가 설명해야 함)
-// 핸들러를 가져옴
+// BAD: comments that describe WHAT (the code itself should explain)
+// get the handler
 var handler = GetHandler();
 ```
 
-### 성능 관련 필수 주석 태그
+### Required Performance Comment Tags
 
-코드에 아래 상황이 발생하면 **반드시** 해당 태그를 주석으로 명시한다.
+When any of the following situations arise, the corresponding tag **must** be included as a comment.
 
-| 태그 | 설명 | 예시 상황 |
+| Tag | Description | Example Situations |
 |------|------|-----------|
-| `// [HEAP]` | 힙 할당 발생 | `new`, 람다 캡처, 박싱, string 생성, `params`, LINQ |
-| `// [AOT RISK]` | IL2CPP 코드 폭발 위험 | 과도한 제네릭 조합, 리플렉션, `MakeGenericType` |
-| `// [GC PRESSURE]` | 반복적 힙 할당으로 GC 유발 가능 | 핫패스 내 반복 `new`, 클로저 캡처 루프 |
-| `// [BOXING]` | 값 타입 박싱 발생 | interface 캐스팅, object 저장, non-generic 컬렉션 |
+| `// [HEAP]` | Heap allocation occurs | `new`, lambda capture, boxing, string creation, `params`, LINQ |
+| `// [AOT RISK]` | IL2CPP code bloat risk | Excessive generic combinations, reflection, `MakeGenericType` |
+| `// [GC PRESSURE]` | Repeated heap allocations may trigger GC | Repeated `new` in hot path, closure capture loops |
+| `// [BOXING]` | Value type boxing occurs | Interface casting, storing in object, non-generic collections |
 
 ```csharp
-// [HEAP] 람다는 클로저 캡처 시 힙 할당 발생 — 핫패스에서 사용 금지
+// [HEAP] lambda with closure capture causes heap allocation — forbidden in hot path
 Action callback = () => HandleComplete(result);
 
-// [BOXING] enum을 object으로 전달 시 박싱 발생
+// [BOXING] boxing occurs when passing enum as object
 object boxed = LogLevel.Warning;   // [BOXING]
 
-// [GC PRESSURE] 루프 내 string 보간은 반복 힙 할당 유발
+// [GC PRESSURE] string interpolation in loop causes repeated heap allocation
 for (int i = 0; i < 1000; i++)
 {
-    Log($"Item {i}");  // [GC PRESSURE] — 루프 밖으로 분리 또는 StringBuilder 사용
+    Log($"Item {i}");  // [GC PRESSURE] — move outside loop or use StringBuilder
 }
 
-// [AOT RISK] 런타임 제네릭 인스턴스화는 IL2CPP 코드 폭발 유발
+// [AOT RISK] runtime generic instantiation causes IL2CPP code bloat
 Type generic = typeof(List<>).MakeGenericType(someType);  // [AOT RISK]
 ```
 
 ---
 
-## 9. 성능 최적화 & 힙 할당 방지
+## 9. Performance Optimization & Heap Allocation Prevention
 
-### 힙 할당이 발생하는 주요 패턴 (반드시 [HEAP] 명시)
+### Common Patterns That Cause Heap Allocation (must include [HEAP])
 
 ```csharp
-// [HEAP] new로 클래스 인스턴스 생성
+// [HEAP] class instance creation via new
 var list = new List<int>();
 
-// [HEAP] 람다가 외부 변수를 캡처하면 클로저 객체 힙 할당
+// [HEAP] lambda capturing outer variable creates closure object on heap
 int captured = 10;
-Action a = () => Debug.Log(captured);  // [HEAP] 클로저
+Action a = () => Debug.Log(captured);  // [HEAP] closure
 
-// [HEAP] params 키워드는 내부적으로 배열 할당
+// [HEAP] params keyword internally allocates an array
 void Log(params object[] args) { }
-Log("a", "b");  // [HEAP] 매 호출마다 object[] 배열 생성
+Log("a", "b");  // [HEAP] object[] array created on every call
 
-// [BOXING] 값 타입 → 인터페이스/object 변환 시 박싱
+// [BOXING] value type → interface/object conversion causes boxing
 IComparable boxed = 42;           // [BOXING]
 object obj = someEnum;             // [BOXING]
 
-// [HEAP] LINQ는 내부적으로 열거자 객체를 힙에 할당
+// [HEAP] LINQ internally allocates enumerator objects on heap
 var filtered = list.Where(x => x > 0).ToList();  // [HEAP]
 ```
 
-### 힙 할당 회피 패턴
+### Heap Allocation Avoidance Patterns
 
 ```csharp
-// GOOD: struct로 값 타입 활용 (힙 할당 없음)
+// GOOD: use struct as value type (no heap allocation)
 public readonly struct FxInitializeSystem : IFluxMessage { }
 
-// GOOD: in 파라미터로 struct 복사 비용 제거
+// GOOD: use in parameter to avoid struct copy cost
 public void Publish<T>(in T message) where T : struct { }
 
-// GOOD: stackalloc으로 스택 배열 사용 (힙 할당 없음)
+// GOOD: use stackalloc for stack-based arrays (no heap allocation)
 Span<int> buffer = stackalloc int[64];
 
-// GOOD: ArrayPool로 배열 재사용
+// GOOD: reuse arrays with ArrayPool
 var array = ArrayPool<byte>.Shared.Rent(256);
-try { /* 사용 */ }
+try { /* use */ }
 finally { ArrayPool<byte>.Shared.Return(array); }
 
-// GOOD: 캡처 없는 static 람다 (C# 9+) — 힙 할당 없음
+// GOOD: capture-free static lambda (C# 9+) — no heap allocation
 private static readonly Action<int> s_log = static x => Debug.Log(x);
 
-// GOOD: Unsafe.As로 박싱 없이 타입 변환
-// [HEAP 없음] Unsafe.As는 참조만 재해석, 새 객체 생성 없음
+// GOOD: type reinterpretation via Unsafe.As without boxing
+// [no HEAP] Unsafe.As only reinterprets the reference, no new object created
 var container = Unsafe.As<MessageHandlerContainer<T>>(containerBase);
 ```
 
-### 핫패스(Hot Path) 체크리스트
+### Hot Path Checklist
 
-Update / FixedUpdate / 매 프레임 호출되는 함수에서 아래 항목을 금지한다.
+The following are forbidden in Update / FixedUpdate / per-frame functions:
 
-- `new` 클래스 인스턴스 생성 (구조체는 허용)
-- LINQ 사용
-- string 보간 / string.Format
-- 박싱 유발 코드
-- 람다 클로저 캡처
-- `params` 배열 생성
-- `foreach`를 List/Array 이외의 컬렉션에 사용 (열거자 힙 할당)
+- `new` class instantiation (structs are allowed)
+- LINQ usage
+- String interpolation / string.Format
+- Boxing-inducing code
+- Lambda closure captures
+- `params` array creation
+- `foreach` on collections other than List/Array (enumerator heap allocation)
 
 ```csharp
-// BAD: 매 프레임 힙 할당
+// BAD: heap allocation every frame
 private void Update()
 {
     var enemies = _enemies.Where(e => e.IsAlive).ToList();  // [HEAP][GC PRESSURE]
@@ -574,7 +574,7 @@ private void Update()
         e.Tick(Time.deltaTime);
 }
 
-// GOOD: 힙 할당 없는 업데이트
+// GOOD: update with no heap allocation
 private void Update()
 {
     for (int i = 0; i < _enemies.Count; i++)
@@ -586,56 +586,56 @@ private void Update()
 
 ---
 
-## 10. AOT(IL2CPP) 주의 사항
+## 10. AOT (IL2CPP) Considerations
 
-Unity IL2CPP 환경에서는 AOT(Ahead-of-Time) 컴파일을 사용하므로, 런타임 코드 생성이 불가능하다.  
-코드 폭발(Code Bloat) 및 AOT 오류를 유발하는 패턴에는 반드시 `// [AOT RISK]` 주석을 명시한다.
+Unity IL2CPP uses Ahead-of-Time compilation, so runtime code generation is not possible.
+All patterns that cause code bloat or AOT errors must include a `// [AOT RISK]` comment.
 
-### 위험 패턴
+### Dangerous Patterns
 
 ```csharp
-// [AOT RISK] MakeGenericType / MakeGenericMethod — IL2CPP에서 AOT 오류 가능
+// [AOT RISK] MakeGenericType / MakeGenericMethod — may cause AOT errors in IL2CPP
 Type genericType = typeof(List<>).MakeGenericType(runtimeType);
 
-// [AOT RISK] Activator.CreateInstance<T> — 리플렉션 기반 인스턴스화
+// [AOT RISK] Activator.CreateInstance<T> — reflection-based instantiation
 object instance = Activator.CreateInstance(type);
 
-// [AOT RISK] dynamic 키워드 — IL2CPP 미지원
+// [AOT RISK] dynamic keyword — not supported in IL2CPP
 dynamic value = GetValue();
 
-// [AOT RISK] 과도한 제네릭 중첩 — 코드 폭발(Code Bloat) 유발
-// 예: Handler<Wrapper<Message<Data<T>>>> 구조는 T 조합마다 별도 코드 생성
+// [AOT RISK] excessive generic nesting — causes code bloat
+// e.g.: Handler<Wrapper<Message<Data<T>>>> generates separate code per T combination
 public class Handler<T> where T : struct
 {
-    public Container<Wrapper<T>> GetContainer() => new();  // [AOT RISK] 조합 폭발
+    public Container<Wrapper<T>> GetContainer() => new();  // [AOT RISK] combination explosion
 }
 ```
 
-### 안전 패턴
+### Safe Patterns
 
 ```csharp
-// GOOD: 제네릭 constraint로 범위 제한 → 코드 폭발 억제
+// GOOD: constrain generics to limit code bloat
 public void Publish<T>(in T message) where T : struct, IFluxMessage { }
 
-// GOOD: 비제네릭 베이스 클래스로 공통 로직 분리
+// GOOD: extract common logic into a non-generic base class
 public abstract class HandlerContainerBase
 {
-    public abstract void Publish(object message);  // 비제네릭 진입점
+    public abstract void Publish(object message);  // non-generic entry point
 }
 
 public sealed class MessageHandlerContainer<T> : HandlerContainerBase where T : struct
 {
     public override void Publish(object message)
     {
-        // [BOXING] object → T 언박싱 발생, 단 진입점에서 1회만
+        // [BOXING] object → T unboxing occurs, but only once at entry point
         Publish((T)message);
     }
 
-    public void Publish(in T message) { /* 핵심 로직 */ }
+    public void Publish(in T message) { /* core logic */ }
 }
 
-// GOOD: MessagePack / MemoryPack 등 AOT 대응 직렬화 사용
-// Newtonsoft.Json 리플렉션 기반 직렬화 대신 코드 생성 방식 사용
+// GOOD: use AOT-compatible serialization like MessagePack / MemoryPack
+// Instead of Newtonsoft.Json reflection-based serialization, use code-generation approach
 [MessagePackObject]
 public readonly struct PlayerData
 {
@@ -644,59 +644,59 @@ public readonly struct PlayerData
 }
 ```
 
-### 제네릭 설계 가이드
+### Generic Design Guide
 
-| 상황 | 권장 방식 |
+| Situation | Recommended Approach |
 |------|-----------|
-| 제네릭 파라미터 수 | 1~2개로 제한. 3개 이상은 설계 재검토 |
-| 제네릭 중첩 depth | 2단계 이내 (`A<B<T>>` 까지만) |
-| 제네릭 + 인터페이스 조합 | constraint로 범위 명시 필수 |
-| 리플렉션 필요 시 | Editor 전용 코드로 분리 (`#if UNITY_EDITOR`) |
+| Number of generic parameters | Limit to 1–2. Reconsider design for 3+. |
+| Generic nesting depth | Up to 2 levels (`A<B<T>>` maximum) |
+| Generic + interface combination | Must explicitly specify constraints |
+| When reflection is needed | Isolate to Editor-only code (`#if UNITY_EDITOR`) |
 
 ---
 
-## 11. 비동기 패턴
+## 11. Async Patterns
 
 ```csharp
-// GOOD: 모든 비동기 메서드는 UniTask 반환
+// GOOD: all async methods return UniTask
 public async UniTask LoadSheetAsync<T>(string assetName) where T : unmanaged { }
 
-// GOOD: Fire-and-forget은 UniTaskVoid + Forget()
+// GOOD: fire-and-forget uses UniTaskVoid + Forget()
 private async UniTaskVoid LoadBaseDataAsync()
 {
     await GeneratedBlobLoader.LoadAllDataAsync(this);
 }
 LoadBaseDataAsync().Forget();
 
-// GOOD: 비동기 핸들러 래핑 시 변수 캡처 후 호출
-// [HEAP] 람다 클로저 — 초기화 시 1회만 할당, 핫패스 아님
+// GOOD: capture variable before calling async handler wrapper
+// [HEAP] lambda closure — allocated once at initialization, not on hot path
 MessageHandler<T> wrapper = (in T msg) =>
 {
-    var captured = msg;        // struct 복사 (스택)
+    var captured = msg;        // struct copy (stack)
     handler(captured).Forget();
 };
 
-// AVOID: async void 사용 금지
-private async void BadMethod() { }  // ← 금지
+// AVOID: async void is forbidden
+private async void BadMethod() { }  // ← forbidden
 ```
 
 ---
 
-## 12. 인터페이스 & SOLID
+## 12. Interfaces & SOLID
 
-### 단일 책임 원칙 (SRP)
+### Single Responsibility Principle (SRP)
 
-하나의 클래스/인터페이스는 하나의 변경 이유만 가진다.  
-역할이 다른 책임은 별도 클래스로 분리한다.
+Each class/interface should have only one reason to change.
+Separate responsibilities into distinct classes.
 
 ```csharp
-// GOOD: 각 클래스가 하나의 책임만 담당
-internal sealed class AesEncryptionProvider : IEncryptionProvider { }  // 암복호화만
-internal sealed class EncryptedBlobDataDeserializer : IDataDeserializer { }  // 복호화 후 역직렬화 위임만
-internal sealed class SceneBridgeSystem : IInitializable, IDisposable { }  // ECS 싱글톤 등록만
+// GOOD: each class handles exactly one responsibility
+internal sealed class AesEncryptionProvider : IEncryptionProvider { }          // encryption/decryption only
+internal sealed class EncryptedBlobDataDeserializer : IDataDeserializer { }    // delegates deserialization after decrypt only
+internal sealed class SceneBridgeSystem : IInitializable, IDisposable { }      // ECS singleton registration only
 
-// BAD: 하나의 클래스가 암호화 + 직렬화 + ECS 등록을 모두 담당
-internal sealed class SceneDataManager  // [VIOLATION: SRP] — 변경 이유가 3가지
+// BAD: one class handles encryption + serialization + ECS registration
+internal sealed class SceneDataManager  // [VIOLATION: SRP] — 3 reasons to change
 {
     public void Encrypt(byte[] data) { }
     public IDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged { }
@@ -704,16 +704,16 @@ internal sealed class SceneDataManager  // [VIOLATION: SRP] — 변경 이유가
 }
 ```
 
-### 리스코프 치환 원칙 (LSP)
+### Liskov Substitution Principle (LSP)
 
-파생 타입(구현체)은 기반 타입(인터페이스/추상 클래스)을 완전히 대체할 수 있어야 한다.  
-구현체가 인터페이스 계약을 좁히거나 예외를 추가로 던져서는 안 된다.
+Derived types (implementations) must fully substitute their base types (interfaces/abstract classes).
+Implementations must not narrow the interface contract or throw additional exceptions.
 
 ```csharp
-// GOOD: IDataDeserializer 계약을 완전히 충족
+// GOOD: fully satisfies IDataDeserializer contract
 internal sealed class EncryptedBlobDataDeserializer : IDataDeserializer
 {
-    // 계약: data가 null이거나 비어 있으면 ArgumentException — 기반 계약과 동일
+    // contract: throws ArgumentException if data is null or empty — same as base contract
     public IDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged
     {
         if (data is null || data.Length == 0)
@@ -722,37 +722,37 @@ internal sealed class EncryptedBlobDataDeserializer : IDataDeserializer
     }
 }
 
-// BAD: 계약에 없는 예외를 추가하거나 반환값 보장을 좁힘
+// BAD: adds exceptions not in contract or narrows return value guarantee
 internal sealed class BadDeserializer : IDataDeserializer
 {
     public IDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged
     {
-        // [VIOLATION: LSP] 기반 계약에 없는 NotSupportedException 추가
+        // [VIOLATION: LSP] NotSupportedException not in base contract
         throw new NotSupportedException("Use only for Scene data");
     }
 }
 
-// BAD: 구현 타입에 직접 캐스팅 — LSP 신뢰를 깨는 패턴
+// BAD: direct cast to implementation type — breaks LSP trust
 if (handle is BlobDataHandle<T> blobHandle) { }  // [VIOLATION: LSP/OCP]
 ```
 
-### 개방-폐쇄 원칙 (OCP)
+### Open-Closed Principle (OCP)
 
 ```csharp
-// GOOD: 인터페이스 메서드로 추상화 — 구현에 의존하지 않음
+// GOOD: abstracted via interface method — no dependency on implementation
 public interface IDataHandle<T> : IDisposable
 {
     public bool TryGetData(out T data);
 }
 
-// BAD: 구현 타입에 직접 캐스팅 — 확장 시 수정 필요
+// BAD: direct cast to implementation type — requires modification on extension
 if (handle is BlobDataHandle<T> blobHandle) { }  // [VIOLATION: OCP]
 ```
 
-### 의존성 역전 원칙 (DIP)
+### Dependency Inversion Principle (DIP)
 
 ```csharp
-// GOOD: 인터페이스에만 의존
+// GOOD: depend only on interfaces
 public class DataProvider : IDataProvider
 {
     private readonly IFluxRouter _router;
@@ -770,10 +770,10 @@ public class DataProvider : IDataProvider
 
 ---
 
-## 13. Dispose 패턴
+## 13. Dispose Pattern
 
 ```csharp
-// GOOD: DisposableBase 상속 + SubscriptionToken 반드시 저장
+// GOOD: inherit DisposableBase + always store SubscriptionToken
 public class DataProvider : IDataProvider, IDisposable
 {
     private readonly IFluxRouter _router;
@@ -781,7 +781,7 @@ public class DataProvider : IDataProvider, IDisposable
 
     public void Initialize()
     {
-        // [HEAP] Subscribe 내부에서 핸들러 래핑 객체 1회 할당 (초기화 시점)
+        // [HEAP] Subscribe allocates handler wrapper object once (at initialization)
         _initSubscription = _router.Subscribe<FxInitializeSystem>(HandleInitialize);
     }
 
@@ -801,63 +801,63 @@ public class DataProvider : IDataProvider, IDisposable
     }
 }
 
-// GOOD: DisposableBase 4단계 패턴
-protected override void OnDisposing() { }               // 1. 중단 처리
-protected override void DisposeManagedResources() { }   // 2. 관리 리소스 해제
-protected override void DisposeUnmanagedResources() { } // 3. 비관리 리소스 해제
-protected override void FinalizeDispose() { }           // 4. 정리 후 로깅
+// GOOD: DisposableBase 4-step pattern
+protected override void OnDisposing() { }               // 1. halt processing
+protected override void DisposeManagedResources() { }   // 2. release managed resources
+protected override void DisposeUnmanagedResources() { } // 3. release unmanaged resources
+protected override void FinalizeDispose() { }           // 4. post-cleanup logging
 ```
 
 ---
 
-## 14. DDD 패턴
+## 14. DDD Patterns
 
 ```csharp
-// Entity: Id로 동등성 판별
+// Entity: equality determined by Id
 public abstract class Entity<TId> : IEntity<TId> { }
 
-// ValueObject: 값으로 동등성 판별, readonly struct 또는 class 선택
+// ValueObject: equality determined by value; choose readonly struct or class
 public abstract class ValueObject
 {
     protected abstract IEnumerable<object> GetEqualityComponents();
-    // [HEAP] GetEqualityComponents()는 IEnumerable 반환 — 열거자 할당 발생
-    // 비교 빈도가 낮은 도메인 로직에서만 사용
+    // [HEAP] GetEqualityComponents() returns IEnumerable — enumerator allocation occurs
+    // use only in domain logic where comparison frequency is low
 }
 
-// AggregateRoot: DomainEvent 수집 → ApplicationService에서 Dispatch
+// AggregateRoot: collect DomainEvents → Dispatch in ApplicationService
 public abstract class AggregateRoot<TId> : Entity<TId>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();  // [HEAP] 초기화 시 1회
+    private readonly List<IDomainEvent> _domainEvents = new();  // [HEAP] allocated once at initialization
     public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents;
 
     protected void RaiseDomainEvent(IDomainEvent e)
     {
-        _domainEvents.Add(e);  // [HEAP] 이벤트 객체가 클래스인 경우
+        _domainEvents.Add(e);  // [HEAP] if event object is a class
     }
 }
 
-// ApplicationService: DispatchAndClearEvents 호출 후 저장소에 반영
+// ApplicationService: call DispatchAndClearEvents then persist to repository
 protected async UniTask DispatchAndClearEvents<TId>(AggregateRoot<TId> aggregate) { }
 ```
 
 ---
 
-## 15. 금지 사항
+## 15. Forbidden Patterns
 
-| 금지 항목 | 대안 |
+| Forbidden | Alternative |
 |-----------|------|
 | `async void` | `async UniTaskVoid` + `.Forget()` |
-| `Subscribe<T>()` 반환값 미저장 | `SubscriptionToken` 항상 보관 후 `Dispose` |
-| 구현 클래스를 직접 필드 타입으로 선언 | 인터페이스 타입 사용 |
-| 인터페이스 없는 `public` 구현 클래스 | `internal sealed` + 인터페이스 노출 |
-| `string.Format` 직접 사용 | 문자열 보간 `$""` 사용 |
-| GC 유발 람다 클로저 (핫패스) | 로컬 변수 먼저 캡처 후 사용, static 람다 고려 |
-| `dynamic` 키워드 | 제네릭 + 인터페이스 |
-| `MakeGenericType` / `MakeGenericMethod` | 사전 정의 제네릭 타입 사용 |
-| 접근 제한자 생략 | 반드시 명시 (`public` / `private` / `internal` 등) |
-| 인터페이스 멤버 접근 제한자 생략 | `public` 명시 |
-| 복수 문장 if 중괄호 생략 | 반드시 `{ }` + 줄바꿈 |
-| 핫패스 내 LINQ | `for` 루프 + 직접 인덱싱 |
-| 핫패스 내 `new` 클래스 | 오브젝트 풀 (`ObjectPool<T>`) 사용 |
-| 힙 할당 코드에 주석 미명시 | `// [HEAP]`, `// [BOXING]`, `// [GC PRESSURE]` 태그 필수 |
-| AOT 위험 코드에 주석 미명시 | `// [AOT RISK]` 태그 필수 |
+| Ignoring `Subscribe<T>()` return value | Always store `SubscriptionToken` and call `Dispose` |
+| Using implementation class as field type | Use interface type |
+| `public` implementation class without interface | `internal sealed` + expose through interface |
+| Direct `string.Format` usage | String interpolation `$""` |
+| GC-inducing lambda closures (hot path) | Capture to local variable first; consider static lambda |
+| `dynamic` keyword | Generics + interfaces |
+| `MakeGenericType` / `MakeGenericMethod` | Use pre-defined generic types |
+| Omitting access modifiers | Always explicit (`public` / `private` / `internal`, etc.) |
+| Omitting access modifier on interface members | Explicit `public` |
+| Omitting braces on multi-statement if | Always `{ }` + newline |
+| LINQ in hot path | `for` loop + direct indexing |
+| `new` class in hot path | Object pool (`ObjectPool<T>`) |
+| Heap-allocating code without comment | `// [HEAP]`, `// [BOXING]`, `// [GC PRESSURE]` tags required |
+| AOT-risky code without comment | `// [AOT RISK]` tag required |
