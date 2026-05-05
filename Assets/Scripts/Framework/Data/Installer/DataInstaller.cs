@@ -14,11 +14,7 @@ namespace Elder.Framework.Data.Installer
         {
             builder.Register<BlobDataDeserializer>(Lifetime.Singleton);
             builder.Register<IDataDeserializer, EncryptedBlobDataDeserializer>(Lifetime.Singleton);
-            builder.Register<IGameDataLoader, GeneratedBlobLoader>(Lifetime.Singleton);
-
-            builder.RegisterEntryPoint<DataProvider>(Lifetime.Singleton)
-                .As<IDataProvider>()
-                .As<IDataSheetLoader>();
+            builder.RegisterEntryPoint<DataProvider>(Lifetime.Singleton).As<IDataProvider>().As<IDataSheetLoader>();
         }
     }
 }

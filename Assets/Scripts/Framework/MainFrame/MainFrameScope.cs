@@ -2,8 +2,7 @@ using Elder.Framework.Data.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.MainFrame.Infra.Configs;
 using Elder.Framework.MainFrame.Installer;
-using Elder.SkillTrial.Resources;
-using Elder.SkillTrial.Resources.Data;
+using Elder.SkillTrial.Data.Installer;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -23,7 +22,8 @@ namespace Elder.Framework.MainFrame
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterInstance<FrameworkSettings>(_frameworkSettings).As<IDataConfig>();
-            builder.Register<GeneratedBlobLoader>(Lifetime.Singleton).As<IGameDataLoader>();
+
+            new GameInstaller().Install(builder);
             new FrameworkInstaller().Install(builder);
         }
 

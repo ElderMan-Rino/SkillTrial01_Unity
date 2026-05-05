@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -22,7 +23,6 @@ namespace Elder.Editor.Data.Tools
             var keyConfig = LoadKeyConfig();
             if (keyConfig == null) return;
 
-            // [HEAP] UTF-8 변환 — 에디터 전용, 성능 무관
             byte[] keyPartB = Encoding.UTF8.GetBytes(keyConfig.KeyPartB);
 
             var selectedObjects = Selection.objects;
@@ -38,7 +38,8 @@ namespace Elder.Editor.Data.Tools
 
             if (targetPaths.Count == 0)
             {
-                EditorUtility.DisplayDialog("DataBaking", "변환할 파일(.bytes)이 없거나 이미 변환된 파일입니다.", "확인");
+                EditorUtility.DisplayDialog("DataBaking",
+                    "변환할 파일(.bytes)이 없거나 이미 변환된 파일입니다.", "확인");
                 return;
             }
 
@@ -50,28 +51,18 @@ namespace Elder.Editor.Data.Tools
                 string tableName = Path.GetFileNameWithoutExtension(assetPath);
                 string savePath = assetPath.Replace(SourceExtension, BlobExtension);
 
-                // [AOT RISK] 리플렉션 — 에디터 전용, 런타임 미사용
-                Type bakerType = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(a => a.GetTypes())
-                    .FirstOrDefault(t => t.Name == $"{tableName}Baker");
+                // ─── 기존 직접 탐색 제거, FindBakerMethod로 통합 ──────────
+                var (bakerType, bakeMethod) = FindBakerMethod(tableName);
 
-                if (bakerType is null)
+                if (bakerType is null || bakeMethod is null)
                 {
-                    Debug.LogWarning($"[DataBaking] {tableName}Baker를 찾을 수 없습니다.");
+                    Debug.LogWarning($"[DataBaking] {tableName} 에 대응하는 Baker를 찾을 수 없습니다.");
                     failCount++;
                     continue;
                 }
 
                 try
                 {
-                    var bakeMethod = bakerType.GetMethod("Bake");
-                    if (bakeMethod is null)
-                    {
-                        Debug.LogWarning($"[DataBaking] {tableName}Baker.Bake 메서드를 찾을 수 없습니다.");
-                        failCount++;
-                        continue;
-                    }
-
                     bakeMethod.Invoke(null, new object[] { assetPath, savePath, keyPartB });
                     AssetDatabase.ImportAsset(savePath);
                     successCount++;
@@ -99,9 +90,37 @@ namespace Elder.Editor.Data.Tools
             });
         }
 
+        // ─── Baker 탐색 (1순위: 기존 / 2순위: 언어 공통 Baker) ────────────
+        private static (Type bakerType, MethodInfo bakeMethod) FindBakerMethod(
+            string tableName)
+        {
+            var allTypes = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => a.GetTypes());
+
+            // 1순위: "{TableName}Baker.Bake()" — 기존 일반 테이블
+            var directBaker = allTypes
+                .FirstOrDefault(t => t.Name == $"{tableName}Baker");
+            if (directBaker != null)
+            {
+                var method = directBaker.GetMethod("Bake");
+                if (method != null) return (directBaker, method);
+            }
+
+            // 2순위: "{DataName}Baker.Bake_{TableName}()" — 언어 공통 Baker
+            // "UI_Ko" → "Bake_UI_Ko" 메서드를 가진 Baker 클래스 탐색
+            string targetMethodName = $"Bake_{tableName}";
+            foreach (var type in allTypes)
+            {
+                if (!type.Name.EndsWith("Baker")) continue;
+                var method = type.GetMethod(targetMethodName);
+                if (method != null) return (type, method);
+            }
+
+            return (null, null);
+        }
+
         private static EditorEncryptionKeyConfig LoadKeyConfig()
         {
-            // [AOT RISK] FindAssets — 에디터 전용
             string[] guids = AssetDatabase.FindAssets(KeyConfigFilter);
             if (guids.Length == 0)
             {
