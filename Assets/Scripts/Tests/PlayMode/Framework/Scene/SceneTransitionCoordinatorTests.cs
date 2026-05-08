@@ -9,13 +9,13 @@ using Elder.Framework.Scene.App;
 using Elder.Framework.Scene.Domain.Data;
 using Elder.Framework.Scene.Interfaces;
 using Elder.Framework.Scene.Messages;
-using Elder.SkillTrial.Scene.Domain;
 using NUnit.Framework;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using Elder.SkillTrial.Resources.Data;
 
 namespace Elder.Framework.Tests.Scene
 {
@@ -60,7 +60,7 @@ namespace Elder.Framework.Tests.Scene
         public IEnumerator Transition_PublishesStartedAndCompleted_WhenSceneKeyExists()
             => UniTask.ToCoroutine(async () =>
             {
-                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadMode.Single);
+                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadType.Single);
 
                 var startedKeys = new List<string>();
                 var completedKeys = new List<string>();
@@ -82,7 +82,7 @@ namespace Elder.Framework.Tests.Scene
         public IEnumerator Transition_DoesNotPublishStarted_WhenSceneKeyMissing()
             => UniTask.ToCoroutine(async () =>
             {
-                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadMode.Single);
+                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadType.Single);
 
                 var startedCount = 0;
                 _router.Subscribe<FxSceneTransitionStarted>((in FxSceneTransitionStarted _) => startedCount++);
@@ -98,7 +98,7 @@ namespace Elder.Framework.Tests.Scene
         public IEnumerator Transition_InProgress_IgnoresDuplicateRequest()
             => UniTask.ToCoroutine(async () =>
             {
-                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadMode.Single);
+                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadType.Single);
                 _fakeLoader.LoadDelay = 5;
 
                 var startedCount = 0;
@@ -117,7 +117,7 @@ namespace Elder.Framework.Tests.Scene
             => UniTask.ToCoroutine(async () =>
             {
                 // Single path: SwapWithTempAsync loads TempScene + target = 2 loads, 0 unloads (no prior scene)
-                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadMode.Single);
+                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadType.Single);
 
                 _router.Publish(new FxSceneTransition("GameScene"));
                 await UniTask.DelayFrame(3);
@@ -131,7 +131,7 @@ namespace Elder.Framework.Tests.Scene
             => UniTask.ToCoroutine(async () =>
             {
                 // AdditiveKeepPrevious path: LoadAdditiveAsync — no TempScene
-                _fakeDataProvider.SetupScene("HudScene", "addressable/HudScene", SceneLoadMode.AdditiveKeepPrevious);
+                _fakeDataProvider.SetupScene("HudScene", "addressable/HudScene", SceneLoadType.Additive);
 
                 _router.Publish(new FxSceneTransition("HudScene"));
                 await UniTask.DelayFrame(3);
@@ -144,8 +144,8 @@ namespace Elder.Framework.Tests.Scene
         public IEnumerator Transition_Single_SecondTransition_UnloadsPreviousScene()
             => UniTask.ToCoroutine(async () =>
             {
-                _fakeDataProvider.SetupScene("SceneA", "addressable/SceneA", SceneLoadMode.Single);
-                _fakeDataProvider.SetupScene("SceneB", "addressable/SceneB", SceneLoadMode.Single);
+                _fakeDataProvider.SetupScene("SceneA", "addressable/SceneA", SceneLoadType.Single);
+                _fakeDataProvider.SetupScene("SceneB", "addressable/SceneB", SceneLoadType.Single);
 
                 _router.Publish(new FxSceneTransition("SceneA"));
                 await UniTask.DelayFrame(3);
@@ -163,7 +163,7 @@ namespace Elder.Framework.Tests.Scene
         public IEnumerator Dispose_UnsubscribesFromRouter_NoCallbackAfterDispose()
             => UniTask.ToCoroutine(async () =>
             {
-                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadMode.Single);
+                _fakeDataProvider.SetupScene("GameScene", "addressable/GameScene", SceneLoadType.Single);
 
                 var completedCount = 0;
                 _router.Subscribe<FxSceneTransitionCompleted>((in FxSceneTransitionCompleted _) => completedCount++);
@@ -218,7 +218,7 @@ namespace Elder.Framework.Tests.Scene
 
             // 여러 씬을 동일 Blob에 추가하려면 rows를 누적해야 하나,
             // 현재 테스트는 씬당 독립 테스트이므로 단일 Row Blob으로 충분
-            public void SetupScene(string key, string addressableKey, SceneLoadMode loadMode)
+            public void SetupScene(string key, string addressableKey, SceneLoadType loadMode)
             {
                 if (_hasData)
                 {
@@ -234,7 +234,7 @@ namespace Elder.Framework.Tests.Scene
                 rowArray[0].Id = 1;
                 rowArray[0].LoadMode = loadMode;
                 builder.AllocateString(ref rowArray[0].Key, key);
-                builder.AllocateString(ref rowArray[0].AddressableKey, addressableKey);
+                builder.AllocateString(ref rowArray[0].SceneKey, addressableKey);
 
                 _blobRef = builder.CreateBlobAssetReference<SceneInfoRoot>(Allocator.Persistent);
                 builder.Dispose();

@@ -8,8 +8,11 @@ namespace Elder.SkillTrial.Resources.Data
 	{
 		public async UniTask LoadAllAsync(IDataSheetLoader sheetLoader)
 		{
-			await sheetLoader.LoadSheetAsync<SceneInfoRoot>("SceneInfo");
-			await sheetLoader.LoadSheetAsync<LanguageInfoRoot>("Language");
+			await UniTask.WhenAll(
+				sheetLoader.LoadSheetAsync<SceneInfoRoot>("SceneInfo"),
+				sheetLoader.LoadSheetAsync<LocaleEntryRoot>("LocaleEntry"),
+				sheetLoader.LoadSheetAsync<ErrorCodeRoot>("ErrorCode")
+			);
 		}
 
 		public async UniTask LoadAsync<T>(IDataSheetLoader sheetLoader, string key) where T : unmanaged

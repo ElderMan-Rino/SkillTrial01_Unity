@@ -11,7 +11,7 @@ using Elder.Framework.Scene.Definitions;
 using Elder.Framework.Scene.Domain.Models;
 using Elder.Framework.Scene.Interfaces;
 using Elder.Framework.Scene.Messages;
-using Elder.SkillTrial.Scene.Domain;
+using Elder.SkillTrial.Resources.Data;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using VContainer.Unity;
 
@@ -68,12 +68,12 @@ namespace Elder.Framework.Scene.App
             try
             {
                 // BlobString은 async 경계를 넘길 수 없으므로 필요한 값을 먼저 string으로 복사
-                if (!TryResolveSceneRow(targetSceneKey, out string addressableKey, out SceneLoadMode loadMode))
+                if (!TryResolveSceneRow(targetSceneKey, out string addressableKey, out SceneLoadType loadType))
                     return;
 
                 _router.Publish(new FxSceneTransitionStarted(targetSceneKey));
 
-                var success = await ExecuteTransitionAsync(targetSceneKey, addressableKey, loadMode);
+                var success = await ExecuteTransitionAsync(targetSceneKey, addressableKey, loadType);
                 if (!success)
                     _logger.Error($"씬 전환 실패: {targetSceneKey}");  // [HEAP] 문자열 보간
             }
@@ -87,9 +87,9 @@ namespace Elder.Framework.Scene.App
             }
         }
 
-        private async UniTask<bool> ExecuteTransitionAsync(string targetSceneKey, string addressableKey, SceneLoadMode loadMode)
+        private async UniTask<bool> ExecuteTransitionAsync(string targetSceneKey, string addressableKey, SceneLoadType loadType)
         {
-            if (loadMode == SceneLoadMode.AdditiveKeepPrevious)
+            if (loadType == SceneLoadType.Additive)
                 return await LoadAdditiveAsync(targetSceneKey, addressableKey);
 
             return await SwapWithTempAsync(targetSceneKey, addressableKey);
@@ -134,10 +134,10 @@ namespace Elder.Framework.Scene.App
         }
 
         // BlobAsset에서 필요한 값만 string으로 복사해 반환. ref 반환 불가(async 경계) 대안.
-        private bool TryResolveSceneRow(string targetSceneKey, out string addressableKey, out SceneLoadMode loadMode)
+        private bool TryResolveSceneRow(string targetSceneKey, out string addressableKey, out SceneLoadType loadType)
         {
             addressableKey = null;
-            loadMode = default;
+            loadType = default;
 
             var blobRef = _dataProvider.GetBlobReference<SceneInfoRoot>();
             ref var table = ref blobRef.Value;
@@ -151,8 +151,8 @@ namespace Elder.Framework.Scene.App
                 if (StringHashHelper.ToStableHash(candidate.Key.ToString()) == targetHash)
                 {
                     // [HEAP] BlobString.ToString() — async 경계 통과를 위한 불가피한 string 복사
-                    addressableKey = candidate.AddressableKey.ToString();
-                    loadMode = candidate.LoadMode;
+                    addressableKey = candidate.SceneKey.ToString();
+                    loadType = candidate.LoadMode;
                     return true;
                 }
             }

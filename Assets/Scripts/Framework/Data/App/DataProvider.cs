@@ -114,6 +114,13 @@ namespace Elder.Framework.Data.App
             try
             {
                 _logger.Info("<color=white>[BlobLoad] === Start loading all Blob Data ===</color>");
+                // 여기서 기본 BaseData들을 로드해서 
+                // 해당 데이터에 있는 것들을 가지고 쭉 로드 진행
+                // 언어 데이터는 시스템중 언어 시스템의 언어를 가져와서 처리 
+                // GeneratedBlobLoader가 확장 혹은 변경되야됨
+                // 다른 데이터들을 로드하는 것은 
+                // 어드레서블 에셋을 다운로드 한 다음 로드 과정이 추가되어야함 
+                // 
                 await _gameDataLoader.LoadAllAsync(this);
                 _router.Publish(new FxBaseDataInitialized());
                 _logger.Info("<color=white>[BlobLoad] === All Blob Data loaded successfully ===</color>");
