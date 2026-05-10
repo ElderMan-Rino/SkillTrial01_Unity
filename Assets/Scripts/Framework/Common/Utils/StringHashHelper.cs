@@ -1,3 +1,6 @@
+using Unity.Entities;
+using UnityEngine;
+
 namespace Elder.Framework.Common.Utils
 {
     public static class StringHashHelper
@@ -21,6 +24,34 @@ namespace Elder.Framework.Common.Utils
                 }
 
                 return hash;
+            }
+        }
+
+        public static unsafe int ToStableHash(ref BlobString blobString)
+        {
+            fixed (BlobString* blobPtr = &blobString)
+            {
+                int* layout = (int*)blobPtr;
+                int offsetPtr = layout[0]; // m_OffsetPtr
+                int length = layout[1]; // m_Length (null 포함)
+
+                // null terminator 제외
+                int byteLength = Mathf.Max(0, length - 1);
+                if (byteLength == 0) return 0;
+
+                // 실제 데이터 주소 = &m_OffsetPtr + m_OffsetPtr
+                byte* dataPtr = (byte*)layout + offsetPtr;
+
+                unchecked
+                {
+                    int hash = FNV_OFFSET_BASIS;
+                    for (int i = 0; i < byteLength; i++)
+                    {
+                        hash ^= dataPtr[i];
+                        hash *= FNV_PRIME;
+                    }
+                    return hash;
+                }
             }
         }
     }

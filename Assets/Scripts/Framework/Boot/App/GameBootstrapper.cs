@@ -1,11 +1,10 @@
-using Elder.Framework.Boot.Definitions.Constants;
 using Elder.Framework.Boot.Interfaces;
+using Elder.Framework.Boot.Messages;
 using Elder.Framework.Common.Messages;
 using Elder.Framework.Common.Base;
 using Elder.Framework.Data.Messages;
 using Elder.Framework.Flux.Helpers;
 using Elder.Framework.Flux.Interfaces;
-using Elder.Framework.Scene.Messages;
 using VContainer.Unity;
 
 namespace Elder.Framework.Boot.App
@@ -37,7 +36,7 @@ namespace Elder.Framework.Boot.App
         private void HandleBaseDataInitialized(in FxBaseDataInitialized msg)
         {
             _dataInitializedSubscription.Dispose();
-            _router.Publish(new FxSceneTransition(BootConstants.BootStrapSceneKey));
+            _router.Publish(new FxSystemInitializeEnd());
         }
 
         protected override void DisposeManagedResources()

@@ -1,12 +1,11 @@
 using Elder.Framework.Boot.App;
-using Elder.Framework.Boot.Definitions.Constants;
 using Elder.Framework.Boot.Interfaces;
+using Elder.Framework.Boot.Messages;
 using Elder.Framework.Common.Messages;
 using Elder.Framework.Data.Messages;
 using Elder.Framework.Flux.Definitions;
 using Elder.Framework.Flux.Infra;
 using Elder.Framework.Flux.Interfaces;
-using Elder.Framework.Scene.Messages;
 using NUnit.Framework;
 
 namespace Elder.Framework.Tests.Boot
@@ -72,29 +71,29 @@ namespace Elder.Framework.Tests.Boot
             Assert.IsTrue(published);
         }
 
-        // ─── FxBaseDataInitialized → FxSceneTransition ────────────────────────
+        // ─── FxBaseDataInitialized → FxSystemInitializeEnd ───────────────────
 
         [Test]
-        public void OnBaseDataInitialized_PublishesFxSceneTransitionToBootstrapScene()
+        public void OnBaseDataInitialized_PublishesFxSystemInitializeEnd()
         {
-            string targetKey = null;
-            _router.Subscribe<FxSceneTransition>(
-                (MessageHandler<FxSceneTransition>)((in FxSceneTransition msg) => targetKey = msg.TargetSceneKey));
+            var published = false;
+            _router.Subscribe<FxSystemInitializeEnd>(
+                (MessageHandler<FxSystemInitializeEnd>)((in FxSystemInitializeEnd _) => published = true));
 
             _bootstrapper = new GameBootStrapper(_router, new StubStartupEnvironment(true));
             _bootstrapper.Start();
 
             _router.Publish(new FxBaseDataInitialized());
 
-            Assert.AreEqual(BootConstants.BootStrapSceneKey, targetKey);
+            Assert.IsTrue(published);
         }
 
         [Test]
-        public void OnBaseDataInitialized_SecondPublication_NoSecondSceneTransition()
+        public void OnBaseDataInitialized_SecondPublication_NoSecondSystemInitializeEnd()
         {
             var count = 0;
-            _router.Subscribe<FxSceneTransition>(
-                (MessageHandler<FxSceneTransition>)((in FxSceneTransition _) => count++));
+            _router.Subscribe<FxSystemInitializeEnd>(
+                (MessageHandler<FxSystemInitializeEnd>)((in FxSystemInitializeEnd _) => count++));
 
             _bootstrapper = new GameBootStrapper(_router, new StubStartupEnvironment(true));
             _bootstrapper.Start();
@@ -102,18 +101,18 @@ namespace Elder.Framework.Tests.Boot
             _router.Publish(new FxBaseDataInitialized());
             _router.Publish(new FxBaseDataInitialized());
 
-            // Subscription disposed after first — second publish must not trigger another transition
+            // Subscription disposed after first — second publish must not trigger again
             Assert.AreEqual(1, count);
         }
 
         // ─── Dispose ───────────────────────────────────────────────────────────
 
         [Test]
-        public void Dispose_AfterStart_BaseDataInitializedNoLongerTriggerTransition()
+        public void Dispose_AfterStart_BaseDataInitializedNoLongerPublishesSystemInitializeEnd()
         {
             var count = 0;
-            _router.Subscribe<FxSceneTransition>(
-                (MessageHandler<FxSceneTransition>)((in FxSceneTransition _) => count++));
+            _router.Subscribe<FxSystemInitializeEnd>(
+                (MessageHandler<FxSystemInitializeEnd>)((in FxSystemInitializeEnd _) => count++));
 
             _bootstrapper = new GameBootStrapper(_router, new StubStartupEnvironment(true));
             _bootstrapper.Start();

@@ -266,7 +266,9 @@ namespace Elder.Framework.Tests.Scene
 
             public FakeBlobDataHandle(BlobAssetReference<T> blobRef) => _ref = blobRef;
 
+            public bool IsCreated => _ref.IsCreated;
             public BlobAssetReference<T> GetRawReference() => _ref;
+            public ref T GetRef() => ref _ref.Value;
 
             public bool TryGetData(out T data)
             {

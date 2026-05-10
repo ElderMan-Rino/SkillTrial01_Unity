@@ -7,6 +7,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
 namespace Elder.Editor.Data.Tools
@@ -16,6 +18,7 @@ namespace Elder.Editor.Data.Tools
         private const string BlobExtension = ".blob.bytes";
         private const string SourceExtension = ".bytes";
         private const string KeyConfigFilter = "t:EditorEncryptionKeyConfig";
+        private const string AddressablesGroup = "GameData";
 
         [MenuItem("Assets/Convert to DOTS Blob", false, 1)]
         public static void BakeSelectedBytesFiles()
@@ -65,6 +68,7 @@ namespace Elder.Editor.Data.Tools
                 {
                     bakeMethod.Invoke(null, new object[] { assetPath, savePath, keyPartB });
                     AssetDatabase.ImportAsset(savePath);
+                    RegisterToAddressables(savePath, tableName);
                     successCount++;
                 }
                 catch (Exception ex)
@@ -117,6 +121,29 @@ namespace Elder.Editor.Data.Tools
             }
 
             return (null, null);
+        }
+
+        private static void RegisterToAddressables(string assetPath, string address)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            if (settings is null)
+            {
+                Debug.LogWarning("[DataBaking] AddressableAssetSettings not found.");
+                return;
+            }
+
+            var group = settings.FindGroup(AddressablesGroup)
+                        ?? settings.CreateGroup(AddressablesGroup, false, false, false, null);
+
+            string guid = AssetDatabase.AssetPathToGUID(assetPath);
+            if (string.IsNullOrEmpty(guid)) return;
+
+            var entry = settings.FindAssetEntry(guid);
+            if (entry is null)
+                entry = settings.CreateOrMoveEntry(guid, group, false, false);
+
+            entry.address = address;
+            settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
         }
 
         private static EditorEncryptionKeyConfig LoadKeyConfig()

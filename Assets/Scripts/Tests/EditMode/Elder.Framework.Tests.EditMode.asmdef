@@ -8,6 +8,8 @@
     "Elder.Framework.Scene",
     "Elder.Game",
     "UniTask",
+    "Unity.Entities",
+    "Unity.Collections",
     "UnityEngine.TestRunner",
     "UnityEditor.TestRunner"
   ],

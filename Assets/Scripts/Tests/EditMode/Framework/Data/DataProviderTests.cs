@@ -5,6 +5,7 @@ using Elder.Framework.Data.Interfaces;
 using Elder.Framework.Flux.Definitions;
 using Elder.Framework.Flux.Infra;
 using Elder.Framework.Flux.Interfaces;
+using Elder.Framework.Localize.Interfaces;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -20,6 +21,7 @@ namespace Elder.Framework.Tests.Data
         private StubAssetProvider _assetProvider;
         private StubDeserializer _deserializer;
         private StubGameDataLoader _gameDataLoader;
+        private StubLocaleSystem _localeSystem;
         private DataProvider _provider;
 
         [SetUp]
@@ -29,8 +31,9 @@ namespace Elder.Framework.Tests.Data
             _assetProvider = new StubAssetProvider();
             _deserializer = new StubDeserializer();
             _gameDataLoader = new StubGameDataLoader();
+            _localeSystem = new StubLocaleSystem();
 
-            _provider = new DataProvider(_router, _assetProvider, _deserializer, _gameDataLoader);
+            _provider = new DataProvider(_router, _assetProvider, _deserializer, _gameDataLoader, _localeSystem);
             _provider.Initialize();
         }
 
@@ -125,8 +128,19 @@ namespace Elder.Framework.Tests.Data
             yield return null;
             yield return null;
 
-            Assert.IsTrue(_gameDataLoader.LoadAllCalled);
             Assert.IsTrue(published);
+        }
+
+        [UnityTest]
+        public IEnumerator OnFxInitializeSystem_LoadAllAsync_IsCalled()
+        {
+            _router.Publish(new Elder.Framework.Common.Messages.FxInitializeSystem());
+
+            yield return null;
+            yield return null;
+
+            Assert.IsTrue(_gameDataLoader.LoadAllCalled);
+            Assert.IsNotEmpty(_gameDataLoader.LoadAllLanguageCode);
         }
 
         // ─── Dispose ───────────────────────────────────────────────────────────
@@ -146,6 +160,13 @@ namespace Elder.Framework.Tests.Data
         // ─── Stubs & fixtures ──────────────────────────────────────────────────
 
         private struct DummyData { }
+
+        private sealed class StubLocaleSystem : ILocaleSystem
+        {
+            private string _code = "Ko";
+            public string GetLanguageCode() => _code;
+            public void SetLanguageCode(string languageCode) => _code = languageCode;
+        }
 
         private sealed class StubAssetProvider : IAssetProvider
         {
@@ -192,21 +213,31 @@ namespace Elder.Framework.Tests.Data
 
         private sealed class StubGameDataLoader : IGameDataLoader
         {
+            public bool LoadByKeyCalled;
             public bool LoadAllCalled;
-
-            public UniTask LoadAllAsync(IDataSheetLoader loader)
-            {
-                LoadAllCalled = true;
-                return UniTask.CompletedTask;
-            }
+            public string LoadAllLanguageCode;
 
             public UniTask LoadAsync<T>(IDataSheetLoader loader, string key) where T : unmanaged
                 => UniTask.CompletedTask;
+
+            public UniTask LoadByKeyAsync(IDataSheetLoader loader, string key)
+            {
+                LoadByKeyCalled = true;
+                return UniTask.CompletedTask;
+            }
+
+            public UniTask LoadAllAsync(IDataSheetLoader loader, IDataProvider provider, string languageCode)
+            {
+                LoadAllCalled = true;
+                LoadAllLanguageCode = languageCode;
+                return UniTask.CompletedTask;
+            }
         }
 
         private sealed class FakeDataHandle : IDataHandle<DummyData>
         {
             public bool Disposed;
+            public bool IsCreated => true;
             public bool TryGetData(out DummyData data) { data = default; return true; }
             public void Dispose() { Disposed = true; }
         }

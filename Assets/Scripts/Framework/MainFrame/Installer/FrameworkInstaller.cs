@@ -5,6 +5,7 @@ using Elder.Framework.Data.Installer;
 using Elder.Framework.Domain.Installer;
 using Elder.Framework.Flux.Installer;
 using Elder.Framework.Input.Installer;
+using Elder.Framework.Localize.Installer;
 using Elder.Framework.Log.Installer;
 using Elder.Framework.Scene.Installer;
 using VContainer;
@@ -23,6 +24,7 @@ namespace Elder.Framework.MainFrame.Installer
             new SceneSystemInstaller().Install(builder);
             new InputInstaller().Install(builder);
             new CryptoInstaller().Install(builder);  // DataInstaller보다 먼저 등록
+            new LocaleInstaller().Install(builder);
             new DataInstaller().Install(builder);
             new BootStrapperInstaller().Install(builder);
         }

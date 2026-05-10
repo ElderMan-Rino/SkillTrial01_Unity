@@ -13,10 +13,13 @@ namespace Elder.Framework.Blob.Infra
             _data = data;
         }
 
+        public bool IsCreated => _data.IsCreated;
+
         public bool TryGetData(out T data)
         {
             if (_data.IsCreated)
             {
+                // BlobArray/BlobString 포함 타입은 복사 시 내부 오프셋 무효화 — GetRef() 사용
                 data = _data.Value;
                 return true;
             }
@@ -25,6 +28,8 @@ namespace Elder.Framework.Blob.Infra
         }
 
         public BlobAssetReference<T> GetRawReference() => _data;
+
+        public ref T GetRef() => ref _data.Value;
 
         public void Dispose()
         {

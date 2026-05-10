@@ -12,6 +12,7 @@ namespace Elder.Framework.Boot.Installer
         {
             builder.Register<UnityStartupEnvironment>(Lifetime.Singleton).As<IStartupEnvironment>();
             builder.RegisterEntryPoint<GameBootStrapper>();
+            builder.RegisterEntryPoint<GameStartService>();
         }
     }
 }

@@ -147,8 +147,8 @@ namespace Elder.Framework.Scene.App
             for (int i = 0; i < table.Rows.Length; i++)
             {
                 ref var candidate = ref table.Rows[i];
-                // [HEAP] BlobString.ToString() — 공개 API 제약으로 힙 불가피. 씬 수만큼 발생.
-                if (StringHashHelper.ToStableHash(candidate.Key.ToString()) == targetHash)
+                // BlobString 직접 해시 비교 — ToString() 없이 무할당
+                if (StringHashHelper.ToStableHash(ref candidate.Key) == targetHash)
                 {
                     // [HEAP] BlobString.ToString() — async 경계 통과를 위한 불가피한 string 복사
                     addressableKey = candidate.SceneKey.ToString();

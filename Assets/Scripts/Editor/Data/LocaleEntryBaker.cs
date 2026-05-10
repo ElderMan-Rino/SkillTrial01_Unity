@@ -1,11 +1,9 @@
 ﻿#if UNITY_EDITOR
-using Elder.Framework.Crypto;
 using MessagePack;
 using MessagePack.Resolvers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Entities.Serialization;
