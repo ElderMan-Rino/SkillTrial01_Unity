@@ -1,15 +1,14 @@
+using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Data.Interfaces;
 using Elder.SkillTrial.Resources.Data;
-using VContainer;
-using VContainer.Unity;
 
 namespace Elder.SkillTrial.Data.Installer
 {
-    public readonly struct GameInstaller : IInstaller
+    public readonly struct GameInstaller : ISystemRegistrar
     {
-        public void Install(IContainerBuilder builder)
+        public void Install(ISystemRegistry registry)
         {
-            builder.Register<IGameDataLoader, GeneratedBlobLoader>(Lifetime.Singleton);
+            registry.Register<IGameDataLoader, GeneratedBlobLoader>();
         }
     }
 }

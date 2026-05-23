@@ -12,46 +12,20 @@ namespace Elder.Framework.Log.Infra
     {
         public void DispatchLogEvent(in LogEvent logEvent)
         {
-            switch (logEvent.Level)
-            {
-                case LogLevel.Debug:
-                    LogDebug(logEvent);
-                    break;
-                case LogLevel.Info:
-                    LogInfo(logEvent);
-                    break;
-                case LogLevel.Warning:
-                    LogWarning(logEvent);
-                    break;
-                case LogLevel.Error:
-                    LogError(logEvent);
-                    break;
-            }
+            var logType = ToUnityLogType(logEvent.Level);
+            Debug.unityLogger.Log(logType, FormatLogMessage(logEvent));
         }
 
-        private void LogDebug(LogEvent logEvent)
+        private static LogType ToUnityLogType(LogLevel level) => level switch
         {
-            Debug.Log(FormatLogMessage(logEvent));
-        }
+            LogLevel.Warning => LogType.Warning,
+            LogLevel.Error   => LogType.Error,
+            _                => LogType.Log,
+        };
 
-        private void LogInfo(LogEvent logEvent)
+        private static string FormatLogMessage(in LogEvent logEvent)
         {
-            Debug.Log(FormatLogMessage(logEvent));
-        }
-
-        private void LogWarning(LogEvent logEvent)
-        {
-            Debug.LogWarning(FormatLogMessage(logEvent));
-        }
-
-        private void LogError(LogEvent logEvent)
-        {
-            Debug.LogError(FormatLogMessage(logEvent));
-        }
-
-        private string FormatLogMessage(LogEvent logEvent)
-        {
-            return $"[{logEvent.Level}] <{logEvent.OwnerType.Name}> {logEvent.Message}";
+            return $"[{logEvent.Level}] <{logEvent.OwnerType.Name}> {logEvent.Message}";  // [HEAP] 문자열 보간
         }
     }
 }

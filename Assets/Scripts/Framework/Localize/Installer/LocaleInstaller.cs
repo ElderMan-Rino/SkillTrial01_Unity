@@ -1,15 +1,14 @@
+using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Localize.App;
 using Elder.Framework.Localize.Interfaces;
-using VContainer;
-using VContainer.Unity;
 
 namespace Elder.Framework.Localize.Installer
 {
-    public readonly struct LocaleInstaller : IInstaller
+    public readonly struct LocaleInstaller : ISystemRegistrar
     {
-        public void Install(IContainerBuilder builder)
+        public void Install(ISystemRegistry registry)
         {
-            builder.Register<LocaleSystem>(Lifetime.Singleton).As<ILocaleSystem>();
+            registry.Register<ILocaleSystem, LocaleSystem>();
         }
     }
 }

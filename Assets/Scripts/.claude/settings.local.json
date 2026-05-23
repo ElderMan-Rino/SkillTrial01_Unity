@@ -1,16 +1,22 @@
 {
+  "cleanupPeriodDays": 7,
   "permissions": {
-    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Skill(update-config)",
+      "Bash(Remove-Item \"D:\\\\Programming\\\\SkillTrial01_Unity\\\\Assets\\\\Scripts\\\\Framework\\\\Elder.Framework.Core.asmdef\",)",
+      "Bash(\"D:\\\\Programming\\\\SkillTrial01_Unity\\\\Assets\\\\Scripts\\\\Framework\\\\Boot\\\\Elder.Framework.Boot.asmdef\",)",
+      "Bash(\"D:\\\\Programming\\\\SkillTrial01_Unity\\\\Assets\\\\Scripts\\\\Framework\\\\Input\\\\Elder.Framework.Input.asmdef\",)",
+      "Bash(\"D:\\\\Programming\\\\SkillTrial01_Unity\\\\Assets\\\\Scripts\\\\Framework\\\\Scene\\\\Elder.Framework.Scene.asmdef\",)",
+      "Bash(\"D:\\\\Programming\\\\SkillTrial01_Unity\\\\Assets\\\\Scripts\\\\Game\\\\Elder.Game.asmdef\",)",
+      "Bash(powershell.exe *)"
+    ],
     "deny": [
       "Bash(git push*)"
     ],
-    "allow": [
-      "Skill(update-config)"
-    ]
+    "defaultMode": "bypassPermissions"
   },
-  "autoCompactEnabled": true,
+  "alwaysThinkingEnabled": false,
   "autoCompactWindow": 100000,
   "verbose": false,
-  "alwaysThinkingEnabled": false,
-  "cleanupPeriodDays": 7
+  "autoCompactEnabled": true
 }

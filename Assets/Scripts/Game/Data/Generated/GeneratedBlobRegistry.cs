@@ -1,0 +1,28 @@
+﻿using Cysharp.Threading.Tasks;
+using Elder.Framework.Data.Interfaces;
+using System;
+using System.Collections.Generic;
+
+namespace Elder.SkillTrial.Resources.Data
+{
+	public static class GeneratedBlobRegistry
+	{
+		// [HEAP] 초기화 시 1회 할당
+		public static readonly Dictionary<int, Func<IDataSheetLoader, UniTask>> Registry = new()
+		{
+			[SheetKey.SceneInfoHash] = static l => l.LoadSheetAsync<SceneInfoRoot>(SheetKey.SceneInfo),
+			[SheetKey.ErrorCodeHash] = static l => l.LoadSheetAsync<ErrorCodeRoot>(SheetKey.ErrorCode),
+			[SheetKey.BootstrapDataHash] = static l => l.LoadSheetAsync<BootstrapDataRoot>(SheetKey.BootstrapData),
+			[SheetKey.AudioSettingsHash] = static l => l.LoadSheetAsync<AudioSettingsRoot>(SheetKey.AudioSettings),
+			[SheetKey.GraphicsSettingsHash] = static l => l.LoadSheetAsync<GraphicsSettingsRoot>(SheetKey.GraphicsSettings),
+			[SheetKey.LocaleSettingsHash] = static l => l.LoadSheetAsync<LocaleSettingsRoot>(SheetKey.LocaleSettings),
+			[SheetKey.BootstrapLocale_KoHash] = static l => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.BootstrapLocale_Ko),
+			[SheetKey.BootstrapLocale_JpHash] = static l => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.BootstrapLocale_Jp),
+			[SheetKey.BootstrapLocale_EnHash] = static l => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.BootstrapLocale_En),
+			[SheetKey.ErrorMsgLocale_KoHash] = static l => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.ErrorMsgLocale_Ko),
+			[SheetKey.ErrorMsgLocale_JpHash] = static l => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.ErrorMsgLocale_Jp),
+			[SheetKey.ErrorMsgLocale_EnHash] = static l => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.ErrorMsgLocale_En),
+			[SheetKey.BootstrapLocaleSheetHash] = static l => l.LoadSheetAsync<BootstrapLocaleSheetRoot>(SheetKey.BootstrapLocaleSheet),
+		};
+	}
+}

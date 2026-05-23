@@ -144,7 +144,9 @@ namespace Elder.Editor.Data.Tools
 
                 try
                 {
-                    bakeMethod.Invoke(null, new object[] { srcPath, savePath, keyPartB });
+                    // AesEncryptionProvider 생성자가 keyPartB를 ZeroMemory로 소거하므로 매 파일마다 복사본 전달
+                    byte[] keyPartBCopy = (byte[])keyPartB.Clone();
+                    bakeMethod.Invoke(null, new object[] { srcPath, savePath, keyPartBCopy });
                     AssetDatabase.ImportAsset(savePath);
 
                     string address = ResolveAddress(tableName);

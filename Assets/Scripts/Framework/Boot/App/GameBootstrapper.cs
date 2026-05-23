@@ -3,20 +3,19 @@ using Elder.Framework.Boot.Messages;
 using Elder.Framework.Common.Messages;
 using Elder.Framework.Common.Base;
 using Elder.Framework.Data.Messages;
-using Elder.Framework.Flux.Helpers;
-using Elder.Framework.Flux.Interfaces;
-using VContainer.Unity;
+using Elder.Framework.Signal.Helpers;
+using Elder.Framework.Signal.Interfaces;
 
 namespace Elder.Framework.Boot.App
 {
-    public sealed class GameBootStrapper : DisposableBase, IStartable
+    public sealed class GameBootStrapper : DisposableBase
     {
-        private readonly IFluxRouter _router;
+        private readonly ISignalRouter _router;
         private readonly IStartupEnvironment _startUp;
 
-        private SubscriptionToken _dataInitializedSubscription;
+        private SignalToken _dataInitializedSubscription;
 
-        public GameBootStrapper(IFluxRouter router, IStartupEnvironment startUp)
+        public GameBootStrapper(ISignalRouter router, IStartupEnvironment startUp)
         {
             _router = router;
             _startUp = startUp;
@@ -28,15 +27,15 @@ namespace Elder.Framework.Boot.App
                 return;
 
             // [HEAP] Subscribe 내부 핸들러 래핑 객체 1회 할당 (부트 시점)
-            _dataInitializedSubscription = _router.Subscribe<FxBaseDataInitialized>(HandleBaseDataInitialized);
-            _router.Publish(new FxInitializeSystem());
-            _router.Publish(new FxPostInitializeSystem());
+            _dataInitializedSubscription = _router.Subscribe<BaseDataInitializedSignal>(HandleBaseDataInitialized);
+            _router.Publish(new SystemInitializeSignal());
+            _router.Publish(new SystemPostInitializeSignal());
         }
 
-        private void HandleBaseDataInitialized(in FxBaseDataInitialized msg)
+        private void HandleBaseDataInitialized(in BaseDataInitializedSignal msg)
         {
             _dataInitializedSubscription.Dispose();
-            _router.Publish(new FxSystemInitializeEnd());
+            _router.Publish(new SystemInitializeEndSignal());
         }
 
         protected override void DisposeManagedResources()

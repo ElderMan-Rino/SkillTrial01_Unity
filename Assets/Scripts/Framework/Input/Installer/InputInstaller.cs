@@ -1,18 +1,20 @@
+using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Input.Infra;
 using Elder.Framework.Input.Infra.Generated;
 using Elder.Framework.Input.Interfaces;
-using VContainer;
-using VContainer.Unity;
 
 namespace Elder.Framework.Input.Installer
 {
-    public readonly struct InputInstaller : IInstaller
+    public readonly struct InputInstaller : ISystemRegistrar
     {
-        public void Install(IContainerBuilder builder)
+        public void Install(ISystemRegistry registry)
         {
-            builder.Register<GameInputActions>(Lifetime.Singleton);
-
-            builder.Register<UnityInputService>(Lifetime.Singleton).As<IInputService>();
+            registry.Register<GameInputActions, GameInputActions>();
+            registry.RegisterFactory<IInputService>(p =>
+            {
+                p.TryResolve<GameInputActions>(out var inputActions);
+                return new UnityInputService(inputActions);
+            });
         }
     }
 }

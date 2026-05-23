@@ -13,7 +13,7 @@ namespace Elder.Framework.Log.Infra
 
         public LogPublisher(IEnumerable<ILogAdapter> logAdapters)
         {
-            _logAdapters = new(logAdapters);
+            _logAdapters = new(logAdapters);  // [HEAP] List<T> 생성자 호출
         }
 
         public ILoggerEx GetLogger<T>() where T : class
@@ -50,7 +50,7 @@ namespace Elder.Framework.Log.Infra
 
         private void DisposeLoggerEXContainer()
         {
-            foreach (var loggerEX in _loggerContainer.Values)
+            foreach (var loggerEX in _loggerContainer.Values)  // [HEAP] Dictionary.Values 열거자 할당
                 loggerEX.Dispose();
             _loggerContainer.Clear();
         }

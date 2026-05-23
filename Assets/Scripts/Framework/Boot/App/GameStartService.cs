@@ -1,20 +1,19 @@
 using Elder.Framework.Boot.Definitions.Constants;
 using Elder.Framework.Boot.Messages;
 using Elder.Framework.Common.Base;
-using Elder.Framework.Flux.Helpers;
-using Elder.Framework.Flux.Interfaces;
+using Elder.Framework.Signal.Helpers;
+using Elder.Framework.Signal.Interfaces;
 using Elder.Framework.Scene.Messages;
-using VContainer.Unity;
 
 namespace Elder.Framework.Boot.App
 {
-    public sealed class GameStartService : DisposableBase, IInitializable
+    public sealed class GameStartService : DisposableBase
     {
-        private readonly IFluxRouter _router;
+        private readonly ISignalRouter _router;
 
-        private SubscriptionToken _subscription;
+        private SignalToken _subscription;
 
-        public GameStartService(IFluxRouter router)
+        public GameStartService(ISignalRouter router)
         {
             _router = router;
         }
@@ -22,13 +21,13 @@ namespace Elder.Framework.Boot.App
         public void Initialize()
         {
             // [HEAP] Subscribe 내부 핸들러 래핑 객체 1회 할당 (부트 시점)
-            _subscription = _router.Subscribe<FxSystemInitializeEnd>(HandleSystemInitializeEnd);
+            _subscription = _router.Subscribe<SystemInitializeEndSignal>(HandleSystemInitializeEnd);
         }
 
-        private void HandleSystemInitializeEnd(in FxSystemInitializeEnd msg)
+        private void HandleSystemInitializeEnd(in SystemInitializeEndSignal msg)
         {
             _subscription.Dispose();
-            _router.Publish(new FxSceneTransition(BootConstants.BootStrapSceneKey));
+            _router.Publish(new SceneTransitionSignal(BootConstants.BootStrapSceneKey));
         }
 
         protected override void DisposeManagedResources()

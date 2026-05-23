@@ -1,25 +1,20 @@
-using Elder.Framework.Log.Helper;
+using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Log.Infra;
 using Elder.Framework.Log.Interfaces;
-using VContainer;
-using VContainer.Unity;
 
 namespace Elder.Framework.Log.Installer
 {
-    public readonly struct LoggerInstaller : IInstaller
+    public readonly struct LoggerInstaller : ISystemRegistrar
     {
-        public void Install(IContainerBuilder builder)
+        public void Install(ISystemRegistry registry)
         {
-            builder.Register<UnityLogAdapter>(Lifetime.Singleton).As<ILogAdapter>();
-            builder.Register<LogPublisher>(Lifetime.Singleton).As<ILoggerPublisher>();
-
-            builder.RegisterBuildCallback(HandleRegisterBuildCallback);
-        }
-
-        private static void HandleRegisterBuildCallback(IObjectResolver resolver)
-        {
-            var publisher = resolver.Resolve<ILoggerPublisher>();
-            LogFacade.InjectProvider(publisher);
+            registry.Register<ILogAdapter, UnityLogAdapter>();
+            registry.RegisterFactory<ILoggerPublisher>(p =>
+            {
+                p.TryResolve<ILogAdapter>(out var adapter);
+                // [HEAP] 배열 1회 할당 — 초기화 시점
+                return new LogPublisher(new[] { adapter });
+            });
         }
     }
 }

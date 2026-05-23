@@ -2,6 +2,7 @@ using Elder.Framework.Crypto.Infra.KeyDerivation;
 using Elder.Framework.Crypto.Interfaces;
 using System;
 using System.Buffers;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
@@ -93,31 +94,39 @@ namespace Elder.Framework.Crypto.Infra
 
             int encryptedBodyLen = ciphertext.Length - IvSize;
 
-            // [HEAP] ArrayPool 대여 — new byte[] 대신 풀 재사용
-            byte[] rentedBuffer = ArrayPool<byte>.Shared.Rent(encryptedBodyLen);
-            var pinHandle = GCHandle.Alloc(rentedBuffer, GCHandleType.Pinned);
+            // [HEAP] ArrayPool 대여 — CryptoStream 입력용 (ToArray 대체)
+            byte[] rentedInput = ArrayPool<byte>.Shared.Rent(encryptedBodyLen);
+            // [HEAP] ArrayPool 대여 — CryptoStream 출력용
+            byte[] rentedOutput = ArrayPool<byte>.Shared.Rent(encryptedBodyLen);
+            var inputPin = GCHandle.Alloc(rentedInput, GCHandleType.Pinned);
+            var outputPin = GCHandle.Alloc(rentedOutput, GCHandleType.Pinned);
 
             try
             {
+                ciphertext[IvSize..].CopyTo(rentedInput);
+
                 using var aes = CreateAes(ciphertext[..IvSize]);
                 aes.Key = _derivedKey;
-
                 using var decryptor = aes.CreateDecryptor();
-                // [HEAP] TransformFinalBlock — 프레임워크 제약. PKCS7 패딩 제거 후 실제 평문 반환.
-                byte[] decrypted = decryptor.TransformFinalBlock(
-                    ciphertext[IvSize..].ToArray(), 0, encryptedBodyLen);
 
-                decrypted.CopyTo(destination);
-                int actualLength = decrypted.Length;
+                // CryptoStream + Write(Span) — TransformFinalBlock 힙 할당 제거
+                using var ms = new MemoryStream(rentedOutput, writable: true);
+                using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write);
+                cs.Write(rentedInput, 0, encryptedBodyLen);
+                cs.FlushFinalBlock();
 
-                CryptographicOperations.ZeroMemory(decrypted);
+                int actualLength = (int)ms.Position;
+                rentedOutput.AsSpan(0, actualLength).CopyTo(destination);
                 return actualLength;
             }
             finally
             {
-                CryptographicOperations.ZeroMemory(rentedBuffer.AsSpan(0, encryptedBodyLen));
-                pinHandle.Free();
-                ArrayPool<byte>.Shared.Return(rentedBuffer);
+                CryptographicOperations.ZeroMemory(rentedInput.AsSpan(0, encryptedBodyLen));
+                CryptographicOperations.ZeroMemory(rentedOutput.AsSpan(0, encryptedBodyLen));
+                inputPin.Free();
+                outputPin.Free();
+                ArrayPool<byte>.Shared.Return(rentedInput);
+                ArrayPool<byte>.Shared.Return(rentedOutput);
             }
         }
 

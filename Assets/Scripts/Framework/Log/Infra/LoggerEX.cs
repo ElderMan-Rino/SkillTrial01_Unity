@@ -2,6 +2,7 @@ using Elder.Framework.Common.Base;
 using Elder.Framework.Log.Definitions;
 using Elder.Framework.Log.Interfaces;
 using System;
+using System.Diagnostics;
 
 namespace Elder.Framework.Log.Infra
 {
@@ -16,7 +17,7 @@ namespace Elder.Framework.Log.Infra
             _logHandler = logHandler;
         }
 
-        [System.Diagnostics.Conditional("ENABLE_LOGGING")]
+        [Conditional("ENABLE_LOGGING")]
         private void PublishLog(in LogEvent logEvent)
         {
             _logHandler?.Invoke(logEvent);

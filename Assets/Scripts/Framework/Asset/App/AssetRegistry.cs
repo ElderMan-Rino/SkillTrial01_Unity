@@ -89,7 +89,7 @@ namespace Elder.Framework.Asset.App
 
         protected override void DisposeManagedResources()
         {
-            foreach (var entry in _entries.Values)
+            foreach (var entry in _entries.Values)  // [HEAP] Dictionary.Values 열거자 할당
                 _releaser.Release(entry.Handle);
             _entries.Clear();
         }

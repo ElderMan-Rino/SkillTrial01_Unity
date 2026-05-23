@@ -9,7 +9,7 @@ namespace Elder.Framework.Localize.App
 
         public LocaleSystem()
         {
-            _languageCode = ResolveSystemLanguage(Application.systemLanguage);
+            _languageCode = ResolveSystemLanguage(UnityEngine.Application.systemLanguage);
         }
 
         public string GetLanguageCode() => _languageCode;

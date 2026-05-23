@@ -1,15 +1,19 @@
+using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Domain.Events;
 using Elder.Framework.Domain.Infra;
-using VContainer;
-using VContainer.Unity;
+using Elder.Framework.Signal.Interfaces;
 
 namespace Elder.Framework.Domain.Installer
 {
-    public readonly struct DomainInstaller : IInstaller
+    public readonly struct DomainInstaller : ISystemRegistrar
     {
-        public void Install(IContainerBuilder builder)
+        public void Install(ISystemRegistry registry)
         {
-            builder.Register<FluxDomainEventDispatcher>(Lifetime.Singleton).As<IDomainEventDispatcher>();
+            registry.RegisterFactory<IDomainEventDispatcher>(p =>
+            {
+                p.TryResolve<ISignalRouter>(out var router);
+                return new SignalDomainEventDispatcher(router);
+            });
         }
     }
 }
