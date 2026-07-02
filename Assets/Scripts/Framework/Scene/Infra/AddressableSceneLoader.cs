@@ -8,7 +8,11 @@ using UnityEngine.SceneManagement;
 
 namespace Elder.Framework.Scene.Infra
 {
-    internal sealed class AddressableSceneLoader : DisposableBase, ISceneLoader
+    // ✅ OK: internal sealed — 구현 클래스 접근 수정자 준수
+    // ✅ OK: 폴더 위치 — Infra/ (Addressables Unity API 어댑터)
+    // ❌ VIOLATION: BaseSystem/BaseSystemComponent 미상속 — IGameSystem 라이프사이클(InjectDependency/Initialize 등) 없음
+    //   제안: BaseSystem 상속 추가 또는 IGameSystemRegistry에 등록하지 않는 순수 팩토리로만 사용 시 명시적 주석 필요
+    internal sealed class AddressableSceneLoader : ISceneLoader
     {
         public async UniTask<SceneInstance> LoadSceneAsync(string key, LoadSceneMode loadMode = LoadSceneMode.Additive, bool activateOnLoad = true)
         {

@@ -5,14 +5,13 @@ using Elder.Framework.Core.Interfaces;
 
 namespace Elder.Framework.Asset.Installer
 {
-    public readonly struct AssetSystemInstaller : ISystemRegistrar
+    public readonly struct AssetSystemInstaller
     {
-        public void Install(ISystemRegistry registry)
+        public void Install(IGameSystemRegistry registry)
         {
-            registry.RegisterShared<AddressableAssetLoader>().As<IEngineAssetLoader>().As<IEngineAssetReleaser>();
-            // [HEAP] 등록 시점 1회
-            registry.RegisterInstance<IAssetRegistry>(new AssetRegistry());
-            registry.RegisterInstance<IAssetProvider>(new AssetSystem());
+            registry.Register<AddressableAssetLoader>().As<IEngineAssetLoader>().As<IEngineAssetReleaser>();
+            registry.Register<AssetRegistry>().As<IAssetRegistry>();
+            registry.Register<AssetSystem>().As<IAssetProvider>();
         }
     }
 }

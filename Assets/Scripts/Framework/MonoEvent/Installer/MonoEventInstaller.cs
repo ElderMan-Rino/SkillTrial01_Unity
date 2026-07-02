@@ -4,11 +4,11 @@ using Elder.Framework.MonoEvent.Interfaces;
 
 namespace Elder.Framework.MonoEvent.Installer
 {
-    public readonly struct MonoEventInstaller : ISystemRegistrar
+    public readonly struct MonoEventInstaller
     {
-        public void Install(ISystemRegistry registry)
+        public void Install(IGameSystemRegistry registry)
         {
-            registry.Register<IMonoEventBus, MonoEventSystem>();
+            registry.Register<MonoEventSystem>().As<IMonoEventBus>();
         }
     }
 }

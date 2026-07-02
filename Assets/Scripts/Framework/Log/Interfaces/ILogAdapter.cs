@@ -3,7 +3,7 @@ using Elder.Framework.Log.Definitions;
 
 namespace Elder.Framework.Log.Interfaces
 {
-    public interface ILogAdapter : IGameSystem
+    public interface ILogAdapter : ISystemComponent
     {
         public void DispatchLogEvent(in LogEvent logEvent);
     }

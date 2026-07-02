@@ -1,4 +1,4 @@
-namespace Elder.Framework.Data.Interfaces
+namespace Elder.Framework.Data.App
 {
     internal interface IDataHandleList
     {

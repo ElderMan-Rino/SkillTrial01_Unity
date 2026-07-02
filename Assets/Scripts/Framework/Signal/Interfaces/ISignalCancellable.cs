@@ -3,7 +3,7 @@ using System;
 
 namespace Elder.Framework.Signal.Interfaces
 {
-    public interface ISignalCancellable : IGameSystem
+    public interface ISignalCancellable : ISystemComponent
     {
         public void Unsubscribe(Type signalType, long tokenId);
     }

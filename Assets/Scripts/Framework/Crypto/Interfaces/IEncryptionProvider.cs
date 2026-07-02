@@ -3,7 +3,7 @@ using System;
 
 namespace Elder.Framework.Crypto.Interfaces
 {
-    public interface IEncryptionProvider : IGameSystem, IDisposable
+    public interface IEncryptionProvider : ISystemComponent, IDisposable
     {
         // 암호화된 바이트를 destination에 쓰고 실제 쓴 길이 반환
         public int Encrypt(ReadOnlySpan<byte> plaintext, Span<byte> destination);

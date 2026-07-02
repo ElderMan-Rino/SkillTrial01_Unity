@@ -1,13 +1,12 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Interfaces;
-using Elder.Framework.Core;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Elder.Framework.Asset.Infra
 {
-    internal sealed class AddressableAssetLoader : BaseSystem, IEngineAssetLoader, IEngineAssetReleaser
+    internal sealed class AddressableAssetLoader : IEngineAssetLoader, IEngineAssetReleaser
     {
         public async UniTask<AsyncOperationHandle<T>> LoadAsync<T>(string key)
             where T : UnityEngine.Object
@@ -17,9 +16,9 @@ namespace Elder.Framework.Asset.Infra
             return handle;
         }
 
-        public async UniTask<AsyncOperationHandle<IList<UnityEngine.Object>>> LoadAllAsync(string label)
+        public async UniTask<AsyncOperationHandle<IList<T>>> LoadAllAsync<T>(string label) where T : UnityEngine.Object
         {
-            var handle = Addressables.LoadAssetsAsync<UnityEngine.Object>(label, null);
+            var handle = Addressables.LoadAssetsAsync<T>(label, null);
             await handle.ToUniTask();
             return handle;
         }

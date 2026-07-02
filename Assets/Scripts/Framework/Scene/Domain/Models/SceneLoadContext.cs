@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Elder.Framework.Scene.Interfaces;
 
-namespace Elder.Framework.Scene.Domain.Data
+namespace Elder.Framework.Scene.Domain.Models
 {
-    public sealed class SceneLoadContext : IDisposable
+    internal sealed class SceneLoadContext : ISceneLoadContext, IDisposable
     {
         private readonly HashSet<string> _subSceneNames = new();
 

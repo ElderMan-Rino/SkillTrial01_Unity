@@ -1,4 +1,4 @@
-namespace Elder.Framework.Common.Enums
+namespace Elder.Framework.Common.Definitions.Enums
 {
     public enum ButtonStates
     {

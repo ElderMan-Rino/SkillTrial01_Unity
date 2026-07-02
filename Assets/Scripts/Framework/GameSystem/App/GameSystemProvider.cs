@@ -4,21 +4,13 @@ using System.Collections.Generic;
 
 namespace Elder.Framework.GameSystem.App
 {
-    internal sealed class GameSystemProvider : IGameSystemProvider
+    internal sealed class GameSystemProvider : GameSystemProviderBase
     {
-        private readonly Dictionary<Type, ISystemComponent> _map;
-        // [HEAP] 빌드 시점 1회 할당 — IGameSystem 구현체 순서 보장용
-        private readonly List<IGameSystem> _systems;
+        internal GameSystemProvider(Dictionary<Type, ISystemComponent> systemComponents, List<ISystemComponent> orderedSystems) : base(systemComponents, orderedSystems) {}
 
-        internal GameSystemProvider(Dictionary<Type, ISystemComponent> map, List<IGameSystem> systems)
+        public override bool TryGetSystem<T>(out T system)
         {
-            _map = map;
-            _systems = systems;
-        }
-
-        public bool TryGetSystem<T>(out T system) where T : class, ISystemComponent
-        {
-            if (_map.TryGetValue(typeof(T), out var obj) && obj is T typed)
+            if (_systemComponents.TryGetValue(typeof(T), out var obj) && obj is T typed)
             {
                 system = typed;
                 return true;
@@ -28,28 +20,18 @@ namespace Elder.Framework.GameSystem.App
             return false;
         }
 
-        public void InjectAll()
+        public override bool TryGetSystems<T>(ref List<T> results)
         {
-            for (int i = 0; i < _systems.Count; i++)
-                _systems[i].TryInjectDependency(this);
-        }
-
-        public void InitializeAll()
-        {
-            for (int i = 0; i < _systems.Count; i++)
-                _systems[i].TryInitialize();
-        }
-
-        public void PostInitializeAll()
-        {
-            for (int i = 0; i < _systems.Count; i++)
-                _systems[i].TryPostInitialize();
-        }
-
-        public void DisposeAll()
-        {
-            for (int i = _systems.Count - 1; i >= 0; i--)
-                _systems[i].TryDispose();
+            bool found = false;
+            for (int i = 0; i < _orderedSystems.Count; i++)
+            {
+                if (_orderedSystems[i] is T typed)
+                {
+                    results.Add(typed);
+                    found = true;
+                }
+            }
+            return found;
         }
     }
 }

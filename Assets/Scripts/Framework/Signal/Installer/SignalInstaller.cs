@@ -4,11 +4,11 @@ using Elder.Framework.Signal.Interfaces;
 
 namespace Elder.Framework.Signal.Installer
 {
-    public readonly struct SignalInstaller : ISystemRegistrar
+    public readonly struct SignalInstaller
     {
-        public void Install(ISystemRegistry registry)
+        public void Install(IGameSystemRegistry registry)
         {
-            registry.RegisterShared<SignalRouter>().As<ISignalRouter>().As<ISignalCancellable>();
+            registry.Register<SignalRouter>().As<ISignalRouter>().As<ISignalCancellable>();
         }
     }
 }

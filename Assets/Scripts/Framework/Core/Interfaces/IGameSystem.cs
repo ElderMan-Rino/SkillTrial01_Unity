@@ -1,10 +1,11 @@
+using Cysharp.Threading.Tasks;
+
 namespace Elder.Framework.Core.Interfaces
 {
     public interface IGameSystem : ISystemComponent
     {
-        public bool TryInjectDependency(IGameSystemProvider provider);
-        public bool TryInitialize();
-        public bool TryPostInitialize();
-        public void TryDispose();
+        public void InjectDependency(IGameSystemProvider provider);
+        public UniTask InitializeAsync();
+        public UniTask PostInitializeAsync();
     }
 }

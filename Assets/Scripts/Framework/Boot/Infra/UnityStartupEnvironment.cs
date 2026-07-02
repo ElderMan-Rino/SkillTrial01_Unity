@@ -2,9 +2,9 @@ using Elder.Framework.Boot.Interfaces;
 using Elder.Framework.Core;
 using UnityEngine.SceneManagement;
 
-namespace Elder.Framework.Boot.Infra.Unity
+namespace Elder.Framework.Boot.Infra
 {
-    internal sealed class UnityStartupEnvironment : BaseSystem, IStartupEnvironment
+    internal sealed class UnityStartupEnvironment : IStartupEnvironment
     {
         private const int InitSceneIndex = 0;
 

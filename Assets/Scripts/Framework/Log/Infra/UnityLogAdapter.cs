@@ -1,14 +1,11 @@
-using Elder.Framework.Core;
 using Elder.Framework.Log.Definitions;
 using Elder.Framework.Log.Definitions.Enums;
 using Elder.Framework.Log.Interfaces;
-using System;
 using UnityEngine;
 
 namespace Elder.Framework.Log.Infra
 {
-    [Serializable]
-    internal sealed class UnityLogAdapter : BaseSystem, ILogAdapter
+    internal sealed class UnityLogAdapter : ILogAdapter
     {
         public void DispatchLogEvent(in LogEvent logEvent)
         {

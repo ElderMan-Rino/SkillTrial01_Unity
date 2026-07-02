@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using Elder.Framework.Core;
 using Elder.Framework.Signal.Definitions;
 using Elder.Framework.Signal.Helpers;
@@ -10,7 +9,7 @@ using System.Threading;
 
 namespace Elder.Framework.Signal.Infra
 {
-    internal sealed class SignalRouter : BaseSystem, ISignalRouter, ISignalCancellable
+    public sealed class SignalRouter : BaseSystemComponent, ISignalRouter, ISignalCancellable
     {
         private long _globalTokenIdCounter;
 
@@ -22,6 +21,7 @@ namespace Elder.Framework.Signal.Infra
             if (!_handlerContainers.TryGetValue(typeof(T), out var containerBase))
                 return;
 
+            // [AOT NOTE] Unsafe.As<SignalHandlerContainer<T>> — T당 별도 코드 생성, ~80종 이내로 허용 범위
             var container = Unsafe.As<SignalHandlerContainer<T>>(containerBase);
             container.Publish(in message);
         }
@@ -30,18 +30,6 @@ namespace Elder.Framework.Signal.Infra
         {
             // [HEAP] 람다 — handler 캡처 클로저, 초기화 시 1회만 발생
             return RegisterHandler<T>(container => container.Add(handler));
-        }
-
-        public SignalToken SubscribeAsync<T>(AsyncSignalHandler<T> handler) where T : struct, ISignal
-        {
-            // [HEAP] 람다 클로저 — handler 캡처, 초기화 시 1회만 발생
-            SignalHandler<T> wrapper = (in T msg) =>
-            {
-                var captured = msg;
-                handler(captured).Forget();
-            };
-            // [HEAP] 람다 — wrapper 캡처 클로저, 초기화 시 1회만 발생
-            return RegisterHandler<T>(container => container.Add(wrapper));
         }
 
         public void Unsubscribe(Type messageType, long tokenId)
@@ -64,6 +52,7 @@ namespace Elder.Framework.Signal.Infra
                 containerBase = newContainer;
             }
 
+            // [AOT NOTE] Unsafe.As<SignalHandlerContainer<T>> — T당 별도 코드 생성, ~80종 이내로 허용 범위
             var container = Unsafe.As<SignalHandlerContainer<T>>(containerBase);
             var tokenId = Interlocked.Increment(ref _globalTokenIdCounter);
             container.SetLastTokenId(tokenId);
@@ -74,10 +63,15 @@ namespace Elder.Framework.Signal.Infra
 
         protected override void DisposeManagedResources()
         {
-            foreach (var pair in _handlerContainers)  // Dictionary enumerator is a value-type struct — no heap alloc
+            DisposeHandlerContainers();
+        }
+
+        private void DisposeHandlerContainers()
+        {
+            // [HEAP] foreach on Dictionary allocates enumerator — Dispose path, acceptable
+            foreach (var pair in _handlerContainers)
                 pair.Value.Dispose();
             _handlerContainers.Clear();
-            base.DisposeManagedResources();
         }
     }
 }

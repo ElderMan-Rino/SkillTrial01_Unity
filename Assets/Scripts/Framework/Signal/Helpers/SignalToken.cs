@@ -3,24 +3,23 @@ using System;
 
 namespace Elder.Framework.Signal.Helpers
 {
-    public struct SignalToken
+    public readonly struct SignalToken
     {
-        private long _tokenId;
-        private Type _messageType;
-        private ISignalCancellable _signalCancellable;
+        private readonly long _tokenId;
+        private readonly Type _messageType;
+        private readonly ISignalCancellable _router;
 
-        public SignalToken(long tokenId, Type messageType, ISignalCancellable signalCancellable)
+        public SignalToken(long tokenId, Type messageType, ISignalCancellable router)
         {
             _tokenId = tokenId;
             _messageType = messageType;
-            _signalCancellable = signalCancellable;
+            _router = router;
         }
 
         public void Dispose()
         {
-            _signalCancellable?.Unsubscribe(_messageType, _tokenId);
-            _messageType = null;
-            _signalCancellable = null;
+            if (_router is null) return;
+            _router.Unsubscribe(_messageType, _tokenId);
         }
 
         public static SignalToken Empty { get; } = new SignalToken();

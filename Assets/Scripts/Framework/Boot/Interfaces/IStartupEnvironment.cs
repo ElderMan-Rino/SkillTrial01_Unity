@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Elder.Framework.Boot.Interfaces
 {
-    public interface IStartupEnvironment : IGameSystem
+    public interface IStartupEnvironment : ISystemComponent
     {
         public bool IsInitSceneActive();
     }

@@ -1,14 +1,14 @@
 using Elder.Framework.Core.Interfaces;
-using Elder.Framework.Data.Interfaces;
-using Elder.SkillTrial.Resources.Data;
+using Elder.Game.SkillTrial.Installer;
 
 namespace Elder.SkillTrial.Data.Installer
 {
-    public readonly struct GameInstaller : ISystemRegistrar
+    public readonly struct GameInstaller
     {
-        public void Install(ISystemRegistry registry)
+        public void Install(IGameSystemRegistry registry)
         {
-            registry.Register<IGameDataLoader, GeneratedBlobLoader>();
+            new SkillTrialInstaller().Install(registry);
+            new DataInstaller().Install(registry);
         }
     }
 }

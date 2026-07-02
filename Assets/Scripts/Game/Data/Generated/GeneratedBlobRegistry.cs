@@ -8,24 +8,6 @@ namespace Elder.SkillTrial.Resources.Data
 	public static class GeneratedBlobRegistry
 	{
 		// [HEAP] 초기화 시 1회 할당
-		public static readonly Dictionary<int, string> HashToKey = new()
-		{
-			[SheetKey.BootstrapLocaleKeyHash] = SheetKey.BootstrapLocaleKey,
-			[SheetKey.AudioSettingsHash]      = SheetKey.AudioSettings,
-			[SheetKey.BootstrapDataHash]      = SheetKey.BootstrapData,
-			[SheetKey.ErrorCodeHash]          = SheetKey.ErrorCode,
-			[SheetKey.GraphicsSettingsHash]   = SheetKey.GraphicsSettings,
-			[SheetKey.LocaleSettingsHash]     = SheetKey.LocaleSettings,
-			[SheetKey.SceneInfoHash]          = SheetKey.SceneInfo,
-			[SheetKey.BootstrapLocale_KoHash] = SheetKey.BootstrapLocale_Ko,
-			[SheetKey.BootstrapLocale_JpHash] = SheetKey.BootstrapLocale_Jp,
-			[SheetKey.BootstrapLocale_EnHash] = SheetKey.BootstrapLocale_En,
-			[SheetKey.ErrorMsgLocale_KoHash]  = SheetKey.ErrorMsgLocale_Ko,
-			[SheetKey.ErrorMsgLocale_JpHash]  = SheetKey.ErrorMsgLocale_Jp,
-			[SheetKey.ErrorMsgLocale_EnHash]  = SheetKey.ErrorMsgLocale_En,
-		};
-
-		// [HEAP] 초기화 시 1회 할당
 		public static readonly Dictionary<int, Func<IDataSheetLoader, UniTask>> Registry = new()
 		{
 			[SheetKey.BootstrapLocaleKeyHash] = static l => l.LoadSheetAsync<BootstrapLocaleKeyRoot>(SheetKey.BootstrapLocaleKey),

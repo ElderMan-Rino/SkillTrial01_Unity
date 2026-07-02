@@ -2,21 +2,21 @@ using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Core;
 using System.Collections.Generic;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Elder.Framework.Asset.App
 {
     internal sealed class AssetSystem : BaseSystem, IAssetProvider
     {
+        private readonly Dictionary<string, ProviderEntry> _entries = new();
+        
         private IEngineAssetLoader _loader;
         private IEngineAssetReleaser _releaser;
-        private readonly Dictionary<string, ProviderEntry> _entries = new();
 
-        protected override bool OnInjectDependency()
+
+        protected override void HandleInjectDependency()
         {
             TryGetSystem<IEngineAssetLoader>(out _loader);
             TryGetSystem<IEngineAssetReleaser>(out _releaser);
-            return true;
         }
 
         public async UniTask<IAssetHandle<T>> GetAssetAsync<T>(string key)
@@ -54,11 +54,20 @@ namespace Elder.Framework.Asset.App
             _entries.Remove(key);
         }
 
-        protected override void OnDispose()
+        protected override void DisposeManagedResources()
         {
-            foreach (var entry in _entries.Values)  // [HEAP] Dictionary.Values 열거자 할당
-                _releaser.Release(entry.Handle);
+            DisposeEntries();
+        }
+
+        private void DisposeEntries()
+        {
+            foreach (var entry in _entries)  
+                _releaser.Release(entry.Value.Handle);
             _entries.Clear();
         }
+
+        public override UniTask InitializeAsync() => UniTask.CompletedTask;
+
+        public override UniTask PostInitializeAsync() => UniTask.CompletedTask;
     }
 }

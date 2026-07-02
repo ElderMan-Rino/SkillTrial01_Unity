@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Elder.Framework.Core;
 using Elder.Framework.Crypto.Interfaces;
 using Elder.Framework.Data.Interfaces;
@@ -14,13 +15,14 @@ namespace Elder.Framework.Blob.Infra
     internal sealed class EncryptedBlobDataDeserializer : BaseSystem, IDataDeserializer
     {
         private IEncryptionProvider _encryption;
-        private BlobDataDeserializer _inner;
+        private IRawDataDeserializer _inner;
 
-        protected override bool OnInjectDependency()
+        protected override void HandleInjectDependency()
         {
-            TryGetSystem<IEncryptionProvider>(out _encryption);
-            TryGetSystem<BlobDataDeserializer>(out _inner);
-            return true;
+            if (!TryGetSystem<IEncryptionProvider>(out _encryption))
+                throw new InvalidOperationException($"[DI] Required system not found: {nameof(IEncryptionProvider)}");
+            if (!TryGetSystem<IRawDataDeserializer>(out _inner))
+                throw new InvalidOperationException($"[DI] Required system not found: {nameof(IRawDataDeserializer)}");
         }
 
         public IDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged
@@ -52,5 +54,11 @@ namespace Elder.Framework.Blob.Infra
                 ArrayPool<byte>.Shared.Return(rentedBuffer);
             }
         }
+
+      
+
+        public override UniTask InitializeAsync() => UniTask.CompletedTask;
+
+        public override UniTask PostInitializeAsync() => UniTask.CompletedTask;
     }
 }

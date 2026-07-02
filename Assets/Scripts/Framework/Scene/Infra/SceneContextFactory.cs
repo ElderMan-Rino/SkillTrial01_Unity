@@ -1,5 +1,6 @@
-using Elder.Framework.Scene.Domain.Data;
+using Elder.Framework.Scene.Domain.Models;
 using Elder.Framework.Scene.Interfaces;
+using System;
 using UnityEngine.Pool;
 
 namespace Elder.Framework.Scene.Infra
@@ -14,25 +15,26 @@ namespace Elder.Framework.Scene.Infra
             _pool = new ObjectPool<SceneLoadContext>(createFunc: CreateFunc, actionOnRelease: OnContextReleased);
         }
 
-        private SceneLoadContext CreateFunc()
+        private static SceneLoadContext CreateFunc()
         {
-            // [HEAP] 풀 초과 시 새 인스턴스 생성
-            return new SceneLoadContext();
+            return new SceneLoadContext(); // [HEAP] 풀 초과 시 새 인스턴스 생성
         }
 
-        private void OnContextReleased(SceneLoadContext context)
+        private static void OnContextReleased(SceneLoadContext context)
         {
             context.Dispose();
         }
 
-        public SceneLoadContext Create(string mainSceneName)
+        public ISceneLoadContext Create(string mainSceneName)
         {
             return _pool.Get().Initialize(mainSceneName);
         }
 
-        public void Release(SceneLoadContext context)
+        public void Release(ISceneLoadContext context)
         {
-            _pool.Release(context);
+            if (context is not SceneLoadContext concrete)
+                throw new ArgumentException($"[Pool] Unexpected context type: {context?.GetType().Name}", nameof(context));
+            _pool.Release(concrete);
         }
     }
 }

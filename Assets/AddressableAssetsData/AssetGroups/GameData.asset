@@ -15,8 +15,133 @@ MonoBehaviour:
   m_GroupName: GameData
   m_GUID: cf466ef1c1fb466408e4007cc6838b70
   m_SerializeEntries:
-  - m_GUID: 4739ed02e0689c94289b05977ba4c16d
+  - m_GUID: 0ea0c6b303f459c4dba2356001da4b4d
+    m_Address: LocaleSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28017cccb358308468758977954ae978
+    m_Address: BootstrapData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a270c11680021d4784c49cd1b4eb9bc
+    m_Address: GraphicsSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a9f3aa4d8689da4cb9e8cb22581915d
+    m_Address: LocaleSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 394612fb206f384409c3cd57b9db2582
+    m_Address: BootstrapData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b7cd9b38507924449d9e3c404c465ab
+    m_Address: ErrorMsgLocale_En
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46e5ceaa3ee832f4f9cbff1f0441cbd3
+    m_Address: ErrorMsgLocale_En
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 546e5ca09f69ebf4dae76f9c1c6348c9
+    m_Address: ErrorCode
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5552099722e63b948bca99ef50e64e41
+    m_Address: ErrorMsgLocale_Jp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5563c12208247674f88f6ec48f5b45ac
+    m_Address: BootstrapLocale_Jp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a9dd4ec53493a347b7c88ba97f8da2a
+    m_Address: BootstrapLocale_En
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c7f7a70b3afcfb4c98a1abb2647630b
     m_Address: BootstrapLocaleKey
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 834d00e8feab84b4f9f5f6aad5ecd662
+    m_Address: BootstrapLocale_En
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9469a3eb5996f3f4db4243c26f21d213
+    m_Address: BootstrapLocale_Ko
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 979a7e851d835474e84c6bbd0634cded
+    m_Address: AudioSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e4612c0bf9cb1344b2aecba1aedc0c9
+    m_Address: GraphicsSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f7c83728be54ac40840a52854404965
+    m_Address: SceneInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2c0ff9daa2ef1c478911eee1ee3efff
+    m_Address: ErrorCode
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b39118dd4cb296944958b89a4de2c869
+    m_Address: BootstrapLocale_Jp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfc10992e9241c7469af555e34ab563f
+    m_Address: BootstrapLocaleKey
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2a0b67112e8cd14fa921d8bb2d8081f
+    m_Address: ErrorMsgLocale_Jp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c46f222f344ac3c48b71e0f455a8b2a8
+    m_Address: SceneInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc97e3a65642940408324101dc59543e
+    m_Address: ErrorMsgLocale_Ko
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5bbd98ea267a16438d39ce6a583e14a
+    m_Address: AudioSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed93a38470200f84e9ec00a79c2d09f5
+    m_Address: BootstrapLocale_Ko
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fac578e032318ee4a874e2ac9f2dcf3d
+    m_Address: ErrorMsgLocale_Ko
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

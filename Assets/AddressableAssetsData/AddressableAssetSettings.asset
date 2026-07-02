@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 9f9ea4266e8b98f48a0143bbdcebdb1a
   m_currentHash:
     serializedVersion: 2
-    Hash: b065ca9c6f51356bbaca44a69d00f6f1
+    Hash: 7b6520e5490e6a3812e5a15da177106e
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -64,6 +64,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b4e76ccb6c4ae154e942f2c5eca0158c, type: 2}
   - {fileID: 11400000, guid: c7866d7a3acb4bb4aa33a10857c6a61b, type: 2}
   - {fileID: 11400000, guid: f47f9f81b1e97994fb75faa3ab3b0c9a, type: 2}
+  - {fileID: 11400000, guid: 37fa2e2b14ecf7f4bb0906010e693180, type: 2}
+  - {fileID: 11400000, guid: 501f9f2d0a18fc142bf58f001c7c23a6, type: 2}
   - {fileID: 11400000, guid: 3f8fded41848647438fcaebeb356795f, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
@@ -103,7 +105,7 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-    - default
+    - Textures/Splash
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: f5a8fdac62df18a44acc6f660801efa9, type: 2}

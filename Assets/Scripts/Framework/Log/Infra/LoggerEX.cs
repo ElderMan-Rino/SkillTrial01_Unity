@@ -52,5 +52,7 @@ namespace Elder.Framework.Log.Infra
         {
             _logHandler = null;
         }
+
+        public override void PreDispose() { }
     }
 }

@@ -14,67 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: BootStrapData
   m_GUID: 9f63e0f999c466248ad6332cfdddd7c0
-  m_SerializeEntries:
-  - m_GUID: 1614b72fb3a6c134db6d05b203814db4
-    m_Address: GraphicsSettings
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1b410879ac1f8d342aec3b5d28990045
-    m_Address: SceneInfo
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 266596cffb09fc24c8d9ee82e37bfb72
-    m_Address: AudioSettings
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 368d41b718f1b594ba1edf2bf30797de
-    m_Address: LocaleSettings
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4460a7ab8af9004459ea859ec7823ba5
-    m_Address: ErrorMsgLocale_Jp
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 60ecbd87170f7ea4f932c29b2756b491
-    m_Address: BootstrapData
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7f2bf75064c91314490c6bba08659362
-    m_Address: BootstrapLocale_Jp
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 87ceba5875fdb344484ef967ba2705bb
-    m_Address: ErrorCode
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b676ddf1567f0594cb8323310606ab51
-    m_Address: ErrorMsgLocale_Ko
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c7586bf4bab768948a452cb1289957ef
-    m_Address: BootstrapLocale_Ko
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d306cb79fe6941b45936b11708cfeaf5
-    m_Address: BootstrapLocale_En
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e365f90928a5c774d84b0b2b1d5f5e90
-    m_Address: ErrorMsgLocale_En
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c026558488ee67347bc080d7499d5ed3, type: 2}
   m_SchemaSet:

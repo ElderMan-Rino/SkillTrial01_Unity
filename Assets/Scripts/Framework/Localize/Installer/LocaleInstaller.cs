@@ -5,13 +5,11 @@ using Elder.Framework.Settings.Interfaces;
 
 namespace Elder.Framework.Localize.Installer
 {
-    public readonly struct LocaleInstaller : ISystemRegistrar
+    public readonly struct LocaleInstaller
     {
-        public void Install(ISystemRegistry registry)
+        public void Install(IGameSystemRegistry registry)
         {
-            registry.RegisterShared<LocaleSystem>()
-                .As<ILocaleSystem>()
-                .As<ISettingsApplicable>();
+            registry.Register<LocaleSystem>().As<ILocaleSystem>().As<ISettingsApplicable>();
         }
     }
 }

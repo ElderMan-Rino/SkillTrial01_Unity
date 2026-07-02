@@ -4,10 +4,13 @@ using System.Collections.Generic;
 namespace Elder.Framework.Common.Utils
 {
     // 범용 관리형 Object Pool — class T 재사용 (GC 압력 제거)
-    public sealed class ManagedObjectPool<T> where T : class
+    // ✅ OK: sealed 클래스
+    // ✅ OK: 폴더 위치 — Common/Utils/ (공통 유틸리티)
+    // ❌ VIOLATION: public sealed — 공통 유틸리티도 internal sealed이 원칙; public 노출이 필요한 경우 명시적 근거 필요
+    internal sealed class ManagedObjectPool<T> where T : class
     {
-        private readonly Stack<T>  _idle;
-        private readonly Func<T>   _factory;
+        private readonly Stack<T> _idle;
+        private readonly Func<T> _factory;
         private readonly Action<T> _onRent;
         private readonly Action<T> _onReturn;
 

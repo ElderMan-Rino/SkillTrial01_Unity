@@ -1,7 +1,7 @@
 using Elder.Framework.Data.Interfaces;
 using System.Collections.Generic;
 
-namespace Elder.Framework.Data.Infra
+namespace Elder.Framework.Data.App
 {
     internal sealed class DataHandleList<T> : IDataHandleList where T : unmanaged
     {

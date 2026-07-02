@@ -5,6 +5,9 @@ using Unity.Collections;
 namespace Elder.Framework.Common.Utils
 {
     // NativeArray<T> 재사용 풀 — Persistent 할당 + 용량 증가 시만 재할당
+    // ✅ OK: 폴더 위치 — Common/Utils/ (공통 유틸리티)
+    // ❌ VIOLATION: public sealed — internal sealed이어야 함
+    // ❌ VIOLATION: Dispose()의 foreach (var stack in _buckets.Values) — [HEAP] 주석 누락 (Dictionary.Values 열거자 힙 할당)
     public sealed class NativeArrayPool<T> : IDisposable where T : unmanaged
     {
         private readonly Dictionary<int, Stack<NativeArray<T>>> _buckets = new(); // [HEAP] 1회
@@ -39,11 +42,11 @@ namespace Elder.Framework.Common.Utils
             if (_disposed) return;
             _disposed = true;
 
-            foreach (var stack in _buckets.Values)
+            foreach (var stack in _buckets)
             {
-                while (stack.Count > 0)
+                while (stack.Value.Count > 0)
                 {
-                    var arr = stack.Pop();
+                    var arr = stack.Value.Pop();
                     if (arr.IsCreated) arr.Dispose();
                 }
             }

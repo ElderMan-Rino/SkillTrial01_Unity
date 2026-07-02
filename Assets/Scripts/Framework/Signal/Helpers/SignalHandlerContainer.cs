@@ -11,20 +11,16 @@ namespace Elder.Framework.Signal.Helpers
         private readonly Dictionary<long, int> _tokenToIndex = new();
         // index → tokenId (역방향 조회용, foreach 없이 O(1) swap 갱신)
         private readonly List<long> _indexToToken = new();
-        // [HEAP] Publish 중 Subscribe/Unsubscribe 호출로 인한 컬렉션 변경 방지용 스냅샷 버퍼
-        private readonly List<SignalHandler<T>> _publishSnapshot = new();
         // _tokenToIndex와 동기화된 핸들러 목록 — Publish 시 Dictionary.Values 열거자 힙 할당 제거
         private readonly List<SignalHandler<T>> _handlerValues = new();
         private long _lastTokenId;
 
         public void Publish(in T message)
         {
-            _publishSnapshot.Clear();
-            for (int i = 0; i < _handlerValues.Count; i++)
-                _publishSnapshot.Add(_handlerValues[i]);
-
-            for (int i = 0; i < _publishSnapshot.Count; i++)
-                _publishSnapshot[i]?.Invoke(in message);
+            // Publish 진입 시 count 캡처 — 순회 중 Add는 범위 밖, Remove(swap-remove)는 캡처 범위 내 인덱스만 영향
+            int count = _handlerValues.Count;
+            for (int i = 0; i < count; i++)
+                _handlerValues[i]?.Invoke(in message);
         }
 
         public void Add(SignalHandler<T> handler)
@@ -62,8 +58,8 @@ namespace Elder.Framework.Signal.Helpers
             _tokenToIndex.Clear();
             _indexToToken.Clear();
             _handlerValues.Clear();
-            _publishSnapshot.Clear();
-            base.DisposeManagedResources();
         }
+
+        public override void PreDispose() { }
     }
 }

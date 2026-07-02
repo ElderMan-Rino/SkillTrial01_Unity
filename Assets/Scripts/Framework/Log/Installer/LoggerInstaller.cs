@@ -4,14 +4,12 @@ using Elder.Framework.Log.Interfaces;
 
 namespace Elder.Framework.Log.Installer
 {
-    public readonly struct LoggerInstaller : ISystemRegistrar
+    public readonly struct LoggerInstaller
     {
-        public void Install(ISystemRegistry registry)
+        public void Install(IGameSystemRegistry registry)
         {
-            registry.Register<ILogAdapter, UnityLogAdapter>();
-            registry.TryGetRegistered<ILogAdapter>(out var adapter);
-            // [HEAP] 배열 1회 할당 — 등록 시점
-            registry.RegisterInstance<ILoggerPublisher>(new LogPublisher(new[] { adapter }));
+            registry.Register<UnityLogAdapter>().As<ILogAdapter>();
+            registry.Register<LogPublisher>().As<ILoggerPublisher>();
         }
     }
 }

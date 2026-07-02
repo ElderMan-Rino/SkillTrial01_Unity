@@ -1,5 +1,4 @@
-using Elder.Framework.Common.Base;
-using Elder.Framework.Core.Interfaces;
+using Elder.Framework.Core;
 using Elder.Framework.Crypto.Infra.KeyDerivation;
 using Elder.Framework.Crypto.Interfaces;
 using System;
@@ -16,12 +15,10 @@ namespace Elder.Framework.Crypto.Infra
     // 보안 트레이드오프: 파생 키가 앱 생존 기간 동안 메모리 상주.
     //   GCHandle.Pinned으로 GC 이동 차단, Dispose에서 ZeroMemory 보장.
     //   1~2단계 공격 저항 수준 유지.
-    internal sealed class AesEncryptionProvider : DisposableBase, IEncryptionProvider, IGameSystem
+    // ✅ OK: internal sealed — 구현 클래스 접근 수정자 준수
+    // ✅ OK: 폴더 위치 — Infra/ (AES 암호화 인프라 구현체)
+    internal sealed class AesEncryptionProvider : BaseSystemComponent, IEncryptionProvider
     {
-        public bool TryInjectDependency(IGameSystemProvider provider) => true;
-        public bool TryInitialize() => true;
-        public bool TryPostInitialize() => true;
-        public void TryDispose() => Dispose();
         private const int IvSize = 16;
         private const int KeySize = 32;
         private const int BlockSize = 16;
@@ -59,7 +56,7 @@ namespace Elder.Framework.Crypto.Infra
         }
 
         // GCHandle.Pinned은 비관리 리소스에 준하므로 DisposeUnmanagedResources에서 해제
-        protected override void DisposeUnmanagedResources()
+        protected sealed override void DisposeUnmanagedResources()
         {
             CryptographicOperations.ZeroMemory(_derivedKey);
             if (_derivedKeyPin.IsAllocated) _derivedKeyPin.Free();
@@ -162,5 +159,7 @@ namespace Elder.Framework.Crypto.Infra
             aes.Padding = PaddingMode.PKCS7;
             return aes;
         }
+
+      
     }
 }

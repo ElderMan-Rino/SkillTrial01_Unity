@@ -1,24 +1,18 @@
 using Elder.Framework.Blob.Infra;
-using Elder.Framework.Common.Interfaces;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Data.App;
 using Elder.Framework.Data.Interfaces;
 
 namespace Elder.Framework.Data.Installer
 {
-    public readonly struct DataInstaller : ISystemRegistrar
+    public readonly struct DataInstaller
     {
-        public void Install(ISystemRegistry registry)
+        public void Install(IGameSystemRegistry registry)
         {
-            registry.Register<BlobDataDeserializer, BlobDataDeserializer>();
-            // [HEAP] 등록 시점 1회
-            registry.RegisterInstance<IDataDeserializer>(new EncryptedBlobDataDeserializer());
-            registry.RegisterShared<DataProvider>()
-                .As<IDataProvider>()
-                .As<IDataSheetLoader>();
-            registry.RegisterShared<DataInitializer>()
-                .As<IScopedSystem>()
-                .As<DataInitializer>();
+            registry.Register<BlobDataDeserializer>().As<IRawDataDeserializer>();
+            registry.Register<EncryptedBlobDataDeserializer>().As<IDataDeserializer>();
+            registry.Register<DataProvider>().As<IDataProvider>().As<IDataSheetLoader>();
+            registry.Register<DataInitializer>().As<IDataInitializer>();
         }
     }
 }

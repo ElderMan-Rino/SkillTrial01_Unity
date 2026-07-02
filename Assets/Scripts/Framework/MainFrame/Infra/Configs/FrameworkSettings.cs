@@ -3,8 +3,11 @@ using UnityEngine;
 
 namespace Elder.Framework.MainFrame.Infra.Configs
 {
+    // ❌ VIOLATION: ScriptableObject 사용 — 프로젝트 규칙상 보안 이슈로 금지 (feedback_no_scriptableobject.md)
+      //   제안: MessagePack 직렬화 구조체 + ECS Blob 패턴으로 교체 필요
+    // ✅ OK: 폴더 위치 — Infra/Configs/ (Unity 설정 파일 어댑터)
     [CreateAssetMenu(fileName = "FrameworkSettings", menuName = "Elder/Framework/FrameworkSettings")]
-    public class FrameworkSettings : ScriptableObject, IBootConfig
+    public sealed class FrameworkSettings : ScriptableObject, IBootConfig
     {
         [field: SerializeField] public string BaseDataKey { get; private set; }
 

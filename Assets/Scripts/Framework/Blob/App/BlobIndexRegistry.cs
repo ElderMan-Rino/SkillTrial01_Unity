@@ -1,10 +1,11 @@
 using Elder.Framework.Blob.Interfaces;
+using Elder.Framework.Core;
 using System;
 using System.Collections.Generic;
 
 namespace Elder.Framework.Blob.App
 {
-    internal sealed class BlobIndexRegistry : IBlobIndexProvider
+    internal sealed class BlobIndexRegistry : BaseSystemComponent, IBlobIndexProvider
     {
         // [HEAP] 타입별 Dictionary 1회 할당 — 초기화 이후 read-only
         private readonly Dictionary<Type, Dictionary<int, int>> _indices = new();

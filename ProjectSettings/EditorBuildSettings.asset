@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/AddressableAssets/Remote/Scenes/Initialize.unity
+    path: Assets/AddressableAssets/Local/Scenes/Preload.unity
     guid: 1e73450926bc03641960d14980170c54
   - enabled: 0
-    path: Assets/AddressableAssets/Remote/Scenes/Empty.unity
+    path: Assets/AddressableAssets/Local/Scenes/Empty.unity
     guid: 3d42bef950d38b341b855bc84dc3d6d4
   - enabled: 0
     path: Assets/AddressableAssets/Remote/Scenes/Loading.unity

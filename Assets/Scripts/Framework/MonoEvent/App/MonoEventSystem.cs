@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Elder.Framework.Core;
 using Elder.Framework.MonoEvent.Infra;
 using Elder.Framework.MonoEvent.Interfaces;
@@ -16,18 +17,23 @@ namespace Elder.Framework.MonoEvent.App
         public Observable<bool> OnApplicationPause => _source.ApplicationPauseSubject;
         public Observable<Unit> OnApplicationQuit => _source.ApplicationQuitSubject;
 
-        public override bool TryInitialize()
+        protected override void HandleInjectDependency() { }
+
+        public override UniTask InitializeAsync()
         {
             // [HEAP] GameObject + MonoBehaviour 생성 — 초기화 시 1회
             var go = new GameObject("[MonoEventSource]");
             Object.DontDestroyOnLoad(go);
             _source = go.AddComponent<MonoEventSource>();
-            return true;
+            return UniTask.CompletedTask;
         }
 
-        protected override void OnDispose()
+        public override UniTask PostInitializeAsync() => UniTask.CompletedTask;
+
+        protected override void DisposeManagedResources()
         {
-            if (_source is not null)
+            // Unity 종료 시 이미 파괴된 경우 gameObject 접근 자체가 MissingReferenceException 발생
+            if (_source != null)
             {
                 Object.Destroy(_source.gameObject);
                 _source = null;

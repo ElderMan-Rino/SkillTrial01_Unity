@@ -1,10 +1,14 @@
+using Elder.Framework.Core.Interfaces;
 using System;
 
 namespace Elder.Framework.Common.Base
 {
-    public abstract class DisposableBase : IDisposable
+    public abstract class DisposableBase : IDisposableBase 
+
     {
         private bool _disposed = false;
+
+        public abstract void PreDispose();
 
         public void Dispose()
         {

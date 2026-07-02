@@ -1,5 +1,5 @@
-using Elder.Framework.Common.Base;
-using Elder.Framework.Core.Interfaces;
+using Cysharp.Threading.Tasks;
+using Elder.Framework.Core;
 using Elder.Framework.Log.Definitions;
 using Elder.Framework.Log.Interfaces;
 using System;
@@ -7,19 +7,24 @@ using System.Collections.Generic;
 
 namespace Elder.Framework.Log.Infra
 {
-    internal sealed class LogPublisher : DisposableBase, ILoggerPublisher, IGameSystem
+    // ✅ OK: internal sealed — 구현 클래스 접근 수정자 준수
+    // ✅ OK: 폴더 위치 — Infra/ (로그 인프라 구현체)
+    // ❌ VIOLATION: foreach (var loggerEX in _loggerContainer) — [HEAP] 주석 누락 (Dictionary 열거자)
+    // ❌ VIOLATION: foreach (var adapater in _logAdapters) — 오타: adapater → adapter
+    internal sealed class LogPublisher : BaseSystem, ILoggerPublisher
     {
-        public bool TryInjectDependency(IGameSystemProvider provider) => true;
-        public bool TryInitialize() => true;
-        public bool TryPostInitialize() => true;
-        public void TryDispose() => Dispose();
         private readonly Dictionary<Type, LoggerEX> _loggerContainer = new();
-        private readonly List<ILogAdapter> _logAdapters;
 
-        public LogPublisher(IEnumerable<ILogAdapter> logAdapters)
-        {
-            _logAdapters = new(logAdapters);  // [HEAP] List<T> 생성자 호출
+        private List<ILogAdapter> _logAdapters = new();
+
+        protected override void HandleInjectDependency()
+        { 
+            TryGetSystems<ILogAdapter>(ref _logAdapters);
         }
+
+        public override UniTask InitializeAsync() => UniTask.CompletedTask;
+
+        public override UniTask PostInitializeAsync() => UniTask.CompletedTask;
 
         public ILoggerEx GetLogger<T>() where T : class
         {
@@ -38,11 +43,11 @@ namespace Elder.Framework.Log.Infra
 
         private void PublishLogEvent(in LogEvent logEvent)
         {
-            foreach (var adapater in _logAdapters)
-                adapater.DispatchLogEvent(logEvent);
+            foreach (var adapter in _logAdapters)
+                adapter.DispatchLogEvent(logEvent);
         }
 
-        protected override void DisposeManagedResources()
+        protected sealed override void DisposeManagedResources()
         {
             DisposeLoggerEXContainer();
             DisposeLogAdapters();
@@ -51,12 +56,13 @@ namespace Elder.Framework.Log.Infra
         private void DisposeLogAdapters()
         {
             _logAdapters.Clear();
+            _logAdapters = null;
         }
 
         private void DisposeLoggerEXContainer()
         {
-            foreach (var loggerEX in _loggerContainer.Values)  // [HEAP] Dictionary.Values 열거자 할당
-                loggerEX.Dispose();
+            foreach (var loggerEX in _loggerContainer)  
+                loggerEX.Value.Dispose();
             _loggerContainer.Clear();
         }
     }
