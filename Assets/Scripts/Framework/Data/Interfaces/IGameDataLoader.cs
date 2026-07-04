@@ -5,6 +5,6 @@ namespace Elder.Framework.Data.Interfaces
 {
     public interface IGameDataLoader : ISystemComponent
     {
-        public UniTask LoadAsync(IDataSheetLoader loader, int hash);
+        public UniTask LoadAsync(IDataSheetLoader loader, int hash, int scope);
     }
 }

@@ -8,6 +8,12 @@ namespace Elder.Framework.Data.App
         // [HEAP] 타입당 1회 할당
         private readonly List<IDataHandle<T>> _handles = new();
 
+        internal DataHandleList(int scope)
+        {
+            Scope = scope;
+        }
+
+        public int Scope { get; }
         internal int Count => _handles.Count;
         internal IDataHandle<T> this[int i] => _handles[i];
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 9f9ea4266e8b98f48a0143bbdcebdb1a
   m_currentHash:
     serializedVersion: 2
-    Hash: 7b6520e5490e6a3812e5a15da177106e
+    Hash: 111db0eaabdef7ae890a4132228baa24
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -60,12 +60,11 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
-  - {fileID: 11400000, guid: 91a3a25ce446586488690751cb34ad79, type: 2}
   - {fileID: 11400000, guid: b4e76ccb6c4ae154e942f2c5eca0158c, type: 2}
-  - {fileID: 11400000, guid: c7866d7a3acb4bb4aa33a10857c6a61b, type: 2}
+  - {fileID: 11400000, guid: 49ada58e77148af438dc0d8fbdb50567, type: 2}
   - {fileID: 11400000, guid: f47f9f81b1e97994fb75faa3ab3b0c9a, type: 2}
-  - {fileID: 11400000, guid: 37fa2e2b14ecf7f4bb0906010e693180, type: 2}
   - {fileID: 11400000, guid: 501f9f2d0a18fc142bf58f001c7c23a6, type: 2}
+  - {fileID: 11400000, guid: 80ec6db6dd7c42e499ef2d11ac9669f3, type: 2}
   - {fileID: 11400000, guid: 3f8fded41848647438fcaebeb356795f, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
@@ -105,7 +104,8 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-    - Textures/Splash
+    - SplashSprites
+    - BootBgm
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: f5a8fdac62df18a44acc6f660801efa9, type: 2}

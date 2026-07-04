@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b06d01058395bd4dad59ba716515bd6
+    m_Address: SplashEntryInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 28017cccb358308468758977954ae978
     m_Address: BootstrapData
     m_ReadOnly: 0
@@ -112,6 +117,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bfc10992e9241c7469af555e34ab563f
     m_Address: BootstrapLocaleKey
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c117779e9cec3d04fa804cb15156c105
+    m_Address: Boot
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

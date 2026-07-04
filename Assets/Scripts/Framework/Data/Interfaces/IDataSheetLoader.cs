@@ -5,6 +5,6 @@ namespace Elder.Framework.Data.Interfaces
 {
     public interface IDataSheetLoader : IGameSystem
     {
-        public UniTask LoadSheetAsync<T>(string assetName) where T : unmanaged;
+        public UniTask LoadSheetAsync<T>(string assetName, int scope) where T : unmanaged;
     }
 }

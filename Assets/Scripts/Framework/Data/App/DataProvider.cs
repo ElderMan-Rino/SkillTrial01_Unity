@@ -38,7 +38,7 @@ namespace Elder.Framework.Data.App
             return null;
         }
 
-        public async UniTask LoadSheetAsync<T>(string assetName) where T : unmanaged
+        public async UniTask LoadSheetAsync<T>(string assetName, int scope) where T : unmanaged
         {
             var handle = await _assetProvider.GetAssetAsync<TextAsset>(assetName);
             if (handle.Asset is null)
@@ -55,7 +55,7 @@ namespace Elder.Framework.Data.App
                 var dataHandle = _deserializer.Deserialize<T>(bytes);  // AES 복호화 + BlobAsset 역직렬화 — 순수 CPU
                 await UniTask.SwitchToMainThread();
 
-                GetOrCreateList<T>().Add(dataHandle);
+                GetOrCreateList<T>(scope).Add(dataHandle);
             }
             catch (Exception ex)
             {
@@ -74,12 +74,12 @@ namespace Elder.Framework.Data.App
         }
 
 
-        private DataHandleList<T> GetOrCreateList<T>() where T : unmanaged
+        private DataHandleList<T> GetOrCreateList<T>(int scope) where T : unmanaged
         {
             if (!_dataHandles.TryGetValue(typeof(T), out var listObj))
             {
                 // [HEAP] 첫 로드 시 타입당 1회 할당
-                listObj = new DataHandleList<T>();
+                listObj = new DataHandleList<T>(scope);
                 _dataHandles[typeof(T)] = listObj;
             }
             return (DataHandleList<T>)listObj;

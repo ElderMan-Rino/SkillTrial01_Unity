@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Elder.Framework.Blob.Infra.Extensions;
 using Elder.Framework.Common.Utils;
 using Elder.Framework.Core;
+using Elder.Framework.Data.Definitions;
 using Elder.Framework.Data.Interfaces;
 using System.Threading;
 
@@ -20,7 +21,7 @@ namespace Elder.SkillTrial.Resources.Data
         public async UniTask LoadBootstrapAsync(IDataSheetLoader loader, IDataProvider provider, string languageCode, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
-            await _dataLoader.LoadAsync(loader, SheetKey.BootstrapDataHash);
+            await _dataLoader.LoadAsync(loader, SheetKey.BootstrapDataHash, DataScope.PersistentHash);
 
             ct.ThrowIfCancellationRequested();
             var blobRef = provider.GetBlobReference<BootstrapDataRoot>();
@@ -28,9 +29,9 @@ namespace Elder.SkillTrial.Resources.Data
 
             var tasks = new UniTask[rowCount + 2]; // [HEAP] 1회 할당
             for (int i = 0; i < rowCount; i++)
-                tasks[i] = _dataLoader.LoadAsync(loader, StringHashHelper.ToStableHash(blobRef.Value.Rows[i].DataKey.ToString())); // [HEAP] BlobString.ToString()
-            tasks[rowCount]     = _dataLoader.LoadAsync(loader, ResolveLocaleHash(languageCode));
-            tasks[rowCount + 1] = _dataLoader.LoadAsync(loader, ResolveErrorLocaleHash(languageCode));
+                tasks[i] = _dataLoader.LoadAsync(loader, StringHashHelper.ToStableHash(blobRef.Value.Rows[i].DataKey.ToString()), DataScope.PersistentHash); // [HEAP] BlobString.ToString()
+            tasks[rowCount]     = _dataLoader.LoadAsync(loader, ResolveLocaleHash(languageCode), DataScope.PersistentHash);
+            tasks[rowCount + 1] = _dataLoader.LoadAsync(loader, ResolveErrorLocaleHash(languageCode), DataScope.PersistentHash);
 
             await UniTask.WhenAll(tasks); // [HEAP] WhenAll 내부 배열 참조
         }

@@ -19,7 +19,7 @@ namespace Elder.Framework.GameMode.Preload.App
 
         public override UniTask InitializeAsync()
         {
-            //_factory.TryAddOrchestratorCreator(SceneConstants.PreloadSceneKey, registry => new PreloadOrchestrator(registry));
+            _factory.TryAddOrchestratorCreator(SceneConstants.PreloadSceneKey, registry => new PreloadOrchestrator(registry));
             return UniTask.CompletedTask;
         }
     }
