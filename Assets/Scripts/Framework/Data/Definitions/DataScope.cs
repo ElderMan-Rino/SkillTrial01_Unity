@@ -1,6 +1,6 @@
 using Elder.Framework.Common.Utils;
 
-namespace Elder.Framework.Data.Definitions
+namespace Elder.Framework.Blob.Definitions
 {
     public static class DataScope
     {

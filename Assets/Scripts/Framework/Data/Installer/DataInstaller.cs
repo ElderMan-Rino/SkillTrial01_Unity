@@ -1,9 +1,9 @@
 using Elder.Framework.Blob.Infra;
 using Elder.Framework.Core.Interfaces;
-using Elder.Framework.Data.App;
-using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Blob.App;
+using Elder.Framework.Blob.Interfaces;
 
-namespace Elder.Framework.Data.Installer
+namespace Elder.Framework.Blob.Installer
 {
     public readonly struct DataInstaller
     {

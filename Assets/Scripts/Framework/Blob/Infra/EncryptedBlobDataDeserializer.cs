@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Core;
 using Elder.Framework.Crypto.Interfaces;
-using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Blob.Interfaces;
 using System;
 using System.Buffers;
 using System.Runtime.InteropServices;
@@ -25,7 +25,7 @@ namespace Elder.Framework.Blob.Infra
                 throw new InvalidOperationException($"[DI] Required system not found: {nameof(IRawDataDeserializer)}");
         }
 
-        public IDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged
+        public IBlobDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged
         {
             if (data is null || data.Length == 0)
                 throw new ArgumentException("Data is empty");

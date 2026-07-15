@@ -1,13 +1,13 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Core;
-using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Localize.Interfaces;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.Signal.Interfaces;
 using System;
 using System.Threading;
 
-namespace Elder.Framework.Data.App
+namespace Elder.Framework.Blob.App
 {
     internal sealed class DataInitializer : BaseSystem, IDataInitializer
     {

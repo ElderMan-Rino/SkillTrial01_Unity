@@ -1,13 +1,14 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Core;
-using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Log.Interfaces;
 using System;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 
-namespace Elder.Framework.Data.App
+namespace Elder.Framework.Blob.App
 {
     internal sealed class DataProvider : BaseSystem, IDataProvider, IDataSheetLoader
     {
@@ -28,14 +29,19 @@ namespace Elder.Framework.Data.App
                 _logger = pub.GetLogger<DataProvider>();
         }
 
-        public IDataHandle<T> GetData<T>() where T : unmanaged
+        public bool TryGetBlobReference<T>(out BlobAssetReference<T> reference) where T : unmanaged
         {
             if (_dataHandles.TryGetValue(typeof(T), out var listObj))
             {
                 var list = (DataHandleList<T>)listObj;
-                if (list.Count > 0) return list[0]; 
+                if (list.Count > 0)
+                {
+                    reference = list[0].GetRawReference();
+                    return true;
+                }
             }
-            return null;
+            reference = default;
+            return false;
         }
 
         public async UniTask LoadSheetAsync<T>(string assetName, int scope) where T : unmanaged

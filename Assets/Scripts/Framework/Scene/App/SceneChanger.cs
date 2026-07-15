@@ -1,8 +1,8 @@
 using Cysharp.Threading.Tasks;
+using Elder.Framework.Blob.Infra.Extensions;
 using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Common.Utils;
 using Elder.Framework.Core;
-using Elder.Framework.Data.Interfaces;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.Scene.Definitions;
 using Elder.Framework.Scene.Interfaces;
@@ -98,15 +98,13 @@ namespace Elder.Framework.Scene.App
             addressableKey = null;
             loadType = default;
 
-            var handle = _dataProvider?.GetData<SceneInfoRoot>();
-            if (handle is not IBlobDataHandle<SceneInfoRoot> blobHandle || !blobHandle.IsCreated)
+            if (!_dataProvider.TryGetBlobReference<SceneInfoRoot>(out var blobRef))
             {
                 addressableKey = targetSceneKey;
                 loadType = SceneLoadType.Single;
                 return true;
             }
 
-            var blobRef = blobHandle.GetRawReference();
             ref var table = ref blobRef.Value;
 
             int targetHash = StringHashHelper.ToStableHash(targetSceneKey);

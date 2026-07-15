@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using Elder.Framework.BGM.Interfaces;
 using Elder.Framework.BGM.Messages;
 using Elder.Framework.Core;
-using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.Signal.Helpers;
 using Elder.Framework.Signal.Interfaces;

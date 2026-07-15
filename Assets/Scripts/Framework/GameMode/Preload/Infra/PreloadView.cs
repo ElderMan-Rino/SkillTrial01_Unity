@@ -9,17 +9,25 @@ namespace Elder.Framework.GameMode.Preload.Infra
         [SerializeField] private UIDocument _document;
 
         private VisualElement _progressBar;
+        private Label _label;
 
         private void Awake()
         {
             var root = _document.rootVisualElement;
             _progressBar = root.Q(className: "preload-progress-bar");
+            _label = root.Q<Label>(className: "preload-label");
         }
 
         public void Refresh(float progress)
         {
             if (_progressBar is null) return;
             _progressBar.style.width = new StyleLength(new Length(progress * 100f, LengthUnit.Percent));
+        }
+
+        public void RefreshLabel(string label)
+        {
+            if (_label is null) return;
+            _label.text = label;
         }
     }
 }

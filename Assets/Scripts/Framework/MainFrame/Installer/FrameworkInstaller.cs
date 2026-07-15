@@ -3,7 +3,7 @@ using Elder.Framework.Boot.Installer;
 using Elder.Framework.Boot.Interfaces;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Crypto.Installer;
-using Elder.Framework.Data.Installer;
+using Elder.Framework.Blob.Installer;
 using Elder.Framework.GameMode.Installer;
 using Elder.Framework.Localize.Installer;
 using Elder.Framework.Log.Installer;

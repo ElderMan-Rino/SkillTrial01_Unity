@@ -17,9 +17,10 @@ namespace Elder.Framework.Asset.Infra
         public bool TryResolve(string key, out PlatformAddressableRule rule)
         {
             // TODO: 데이터 툴(DataForge)에서 생성한 PlatformAddressableRuleTable 시트를 IDataProvider로 로드해 조회 예정
-            // if (TryGetSystem<IDataProvider>(out var dataProvider))
+            // if (TryGetSystem<IDataProvider>(out var dataProvider) &&
+            //     dataProvider.TryGetBlobReference<PlatformAddressableRuleTable>(out var tableRef))
             // {
-            //     ref var table = ref dataProvider.GetBlobData<PlatformAddressableRuleTable>();
+            //     ref var table = ref tableRef.Value;
             //     for (int i = 0; i < table.Rules.Length; i++)
             //     {
             //         if (table.Rules[i].TargetPlatform != _currentPlatform) continue;

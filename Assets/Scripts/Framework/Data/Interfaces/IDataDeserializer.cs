@@ -1,10 +1,10 @@
 using Elder.Framework.Core.Interfaces;
 
-namespace Elder.Framework.Data.Interfaces
+namespace Elder.Framework.Blob.Interfaces
 {
     public interface IDataDeserializer : ISystemComponent
     {
-        public unsafe IDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged;
+        public unsafe IBlobDataHandle<T> Deserialize<T>(byte[] data) where T : unmanaged;
        
     }
 }

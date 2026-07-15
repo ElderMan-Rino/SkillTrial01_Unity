@@ -1,4 +1,4 @@
-namespace Elder.Framework.Data.App
+namespace Elder.Framework.Blob.App
 {
     internal interface IDataHandleList
     {

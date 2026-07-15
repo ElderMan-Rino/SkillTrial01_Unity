@@ -2,8 +2,8 @@ using Cysharp.Threading.Tasks;
 using Elder.Framework.Blob.Infra.Extensions;
 using Elder.Framework.Common.Utils;
 using Elder.Framework.Core;
-using Elder.Framework.Data.Definitions;
-using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Blob.Definitions;
+using Elder.Framework.Blob.Interfaces;
 using System.Threading;
 
 namespace Elder.SkillTrial.Resources.Data

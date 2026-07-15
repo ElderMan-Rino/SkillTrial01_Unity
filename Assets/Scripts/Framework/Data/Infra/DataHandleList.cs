@@ -1,12 +1,12 @@
-using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Blob.Interfaces;
 using System.Collections.Generic;
 
-namespace Elder.Framework.Data.App
+namespace Elder.Framework.Blob.App
 {
     internal sealed class DataHandleList<T> : IDataHandleList where T : unmanaged
     {
         // [HEAP] 타입당 1회 할당
-        private readonly List<IDataHandle<T>> _handles = new();
+        private readonly List<IBlobDataHandle<T>> _handles = new();
 
         internal DataHandleList(int scope)
         {
@@ -15,9 +15,9 @@ namespace Elder.Framework.Data.App
 
         public int Scope { get; }
         internal int Count => _handles.Count;
-        internal IDataHandle<T> this[int i] => _handles[i];
+        internal IBlobDataHandle<T> this[int i] => _handles[i];
 
-        internal void Add(IDataHandle<T> handle) => _handles.Add(handle);
+        internal void Add(IBlobDataHandle<T> handle) => _handles.Add(handle);
 
         public void DisposeAll()
         {

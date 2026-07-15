@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using Elder.Framework.Core.Interfaces;
 using System.Threading;
 
-namespace Elder.Framework.Data.Interfaces
+namespace Elder.Framework.Blob.Interfaces
 {
     public interface IBootstrapDataLoader : ISystemComponent
     {

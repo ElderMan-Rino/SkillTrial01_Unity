@@ -1,5 +1,4 @@
 using Elder.Framework.Blob.Interfaces;
-using Elder.Framework.Data.Interfaces;
 using Unity.Entities;
 
 namespace Elder.Framework.Blob.Infra

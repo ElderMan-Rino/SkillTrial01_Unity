@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Blob.Interfaces;
-using Elder.Framework.Data.Interfaces;
 using Elder.Framework.GameMode.Splash.Definitions;
 using Elder.Framework.GameMode.Splash.Interfaces;
 using Elder.Framework.Log.Interfaces;
@@ -9,6 +8,7 @@ using Elder.Framework.UI.App;
 using Elder.Framework.UI.Interfaces;
 using Elder.SkillTrial.Resources.Data;
 using System;
+using Unity.Entities;
 using UnityEngine;
 
 namespace Elder.Framework.GameMode.Splash.Infra
@@ -37,20 +37,18 @@ namespace Elder.Framework.GameMode.Splash.Infra
         {
             if (TryGetSystem<IDataProvider>(out var dataProvider))
             {
-                var handle = dataProvider.GetData<SplashEntryInfoRoot>();
-                if (handle is not IBlobDataHandle<SplashEntryInfoRoot> blobHandle || !blobHandle.IsCreated)
+                if (!dataProvider.TryGetBlobReference<SplashEntryInfoRoot>(out var blobRef))
                 {
                     _logger.Error($"[Splash] Invalid or uninitialized blob handle: {nameof(SplashEntryInfoRoot)}");
                     return;
                 }
-                _viewModel.SetEntries(GetSplashEntries(blobHandle));
+                _viewModel.SetEntries(GetSplashEntries(blobRef));
             }
             await _registry.RegisterAsync<Sprite>(SplashLabel);
         }
 
-        private SplashEntry[] GetSplashEntries(IBlobDataHandle<SplashEntryInfoRoot> blobHandle)
+        private SplashEntry[] GetSplashEntries(BlobAssetReference<SplashEntryInfoRoot> blobRef)
         {
-            var blobRef = blobHandle.GetRawReference();
             ref var table = ref blobRef.Value;
             var entries = new SplashEntry[table.Rows.Length];
             for (int i = 0; i < table.Rows.Length; i++)

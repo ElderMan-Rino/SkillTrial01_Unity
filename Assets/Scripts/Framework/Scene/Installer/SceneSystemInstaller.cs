@@ -1,5 +1,5 @@
 using Elder.Framework.Core.Interfaces;
-using Elder.Framework.Data.Interfaces;
+using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.GameMode.Interfaces;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.Scene.App;
