@@ -1,5 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using Elder.Framework.Blob.Interfaces;
+using Elder.Framework.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -21,6 +21,7 @@ namespace Elder.SkillTrial.Resources.Data
 			[SheetKey.BootHash] = static (l, scope) => l.LoadSheetAsync<BootRoot>(SheetKey.Boot, scope),
 			[SheetKey.AssetInfoEntryBootHash] = static (l, scope) => l.LoadSheetAsync<AssetInfoEntryBootRoot>(SheetKey.AssetInfoEntryBoot, scope),
 			[SheetKey.BgmInfoHash] = static (l, scope) => l.LoadSheetAsync<BgmInfoRoot>(SheetKey.BgmInfo, scope),
+			[SheetKey.AssetInfoEntryPreloadHash] = static (l, scope) => l.LoadSheetAsync<AssetInfoEntryPreloadRoot>(SheetKey.AssetInfoEntryPreload, scope),
 			[SheetKey.BootstrapLocale_KoHash] = static (l, scope) => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.BootstrapLocale_Ko, scope),
 			[SheetKey.BootstrapLocale_JpHash] = static (l, scope) => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.BootstrapLocale_Jp, scope),
 			[SheetKey.BootstrapLocale_EnHash] = static (l, scope) => l.LoadSheetAsync<LocaleEntryRoot>(SheetKey.BootstrapLocale_En, scope),

@@ -1,3 +1,4 @@
+using Elder.Framework.Boot.Definitions;
 using Elder.Framework.Boot.Interfaces;
 using Elder.Framework.Core;
 using Elder.Framework.Scene.Definitions;
@@ -17,8 +18,9 @@ namespace Elder.Framework.Boot.App
                 throw new InvalidOperationException($"[DI] Required system not found: {nameof(ISignalRouter)}");
         }
 
-        public void Run()
+        public void Run(SceneBootMode bootMode)
         {
+            if (bootMode == SceneBootMode.SystemsOnly) return;
             _router.Publish(new SceneTransitionSignal(SceneConstants.SplashSceneKey));
         }
     }

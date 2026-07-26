@@ -12,6 +12,7 @@ using Elder.Framework.MainFrame.Installer;
 using Elder.SkillTrial.Data.Installer;
 using System;
 using UnityEngine;
+using Elder.Framework.Boot.Definitions;
 
 namespace Elder.Framework.MainFrame.Infra
 {
@@ -91,11 +92,11 @@ namespace Elder.Framework.MainFrame.Infra
     {
         private IGameSystemProvider _provider;
 
-        public void Initialize(FrameworkSettings settings)
+        public void Initialize(FrameworkSettings settings, SceneBootMode bootMode)
         {
             DontDestroyOnLoad(gameObject);
             _provider = BuildRegistry(settings).Build();
-            BootProvider(_provider);
+            BootProvider(_provider, bootMode);
         }
 
         private SystemRegistry BuildRegistry(FrameworkSettings settings)
@@ -106,12 +107,12 @@ namespace Elder.Framework.MainFrame.Infra
             return registry;
         }
 
-        private void BootProvider(IGameSystemProvider provider)
+        private void BootProvider(IGameSystemProvider provider, SceneBootMode bootMode)
         {
-            BootAsync(provider).Forget();
+            BootAsync(provider, bootMode).Forget();
         }
-        
-        private async UniTask BootAsync(IGameSystemProvider provider)
+
+        private async UniTask BootAsync(IGameSystemProvider provider, SceneBootMode bootMode)
         {
             if (provider.TryGetSystem<ILoggerPublisher>(out var publisher))
                 LogFacade.InjectProvider(publisher);
@@ -121,7 +122,7 @@ namespace Elder.Framework.MainFrame.Infra
             await provider.PostInitializeAllAsync();
 
             if (provider.TryGetSystem<IGameBootEntryPoint>(out var startService))
-                startService.Run();
+                startService.Run(bootMode);
         }
 
         private void OnDestroy()

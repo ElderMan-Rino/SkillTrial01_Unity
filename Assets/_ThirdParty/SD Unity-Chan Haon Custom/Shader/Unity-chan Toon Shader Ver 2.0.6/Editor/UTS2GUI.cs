@@ -212,7 +212,7 @@ namespace UnityChan
             ar_OffsetV = FindProperty("_AR_OffsetV", props, false);
             emissive_Tex = FindProperty("_Emissive_Tex", props);
             emissive_Color = FindProperty("_Emissive_Color", props);
-            base_Speed = FindProperty("_Base_Speed", props);
+            base_Speed = FindProperty("_Base_Speed", props, false);
             scroll_EmissiveU = FindProperty("_Scroll_EmissiveU", props);
             scroll_EmissiveV = FindProperty("_Scroll_EmissiveV",props);
             rotate_EmissiveUV = FindProperty("_Rotate_EmissiveUV", props);

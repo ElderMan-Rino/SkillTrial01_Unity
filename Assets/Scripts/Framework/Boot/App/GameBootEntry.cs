@@ -1,3 +1,5 @@
+using Elder.Framework.Boot.Definitions;
+using Elder.Framework.Boot.Infra;
 using Elder.Framework.MainFrame.Infra;
 using Elder.Framework.MainFrame.Infra.Configs;
 using UnityEngine;
@@ -12,6 +14,9 @@ namespace Elder.Framework.Boot.App
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void OnBeforeSceneLoad()
         {
+            var bootMode = GetSceneBootMode();
+            if (bootMode == SceneBootMode.None) return;
+
             var handle = Addressables.LoadAssetAsync<FrameworkSettings>(FrameworkSettingsKey);
             var settings = handle.WaitForCompletion();
 
@@ -25,7 +30,13 @@ namespace Elder.Framework.Boot.App
             var go = new GameObject(nameof(FrameworkRoot));
             var root = go.AddComponent<FrameworkRoot>();
             Addressables.Release(handle);
-            root.Initialize(settings);
+            root.Initialize(settings, bootMode);
+        }
+
+        private static SceneBootMode GetSceneBootMode()
+        {
+            var marker = Object.FindAnyObjectByType<SceneBootModeMarker>();
+            return marker is null ? SceneBootMode.None : marker.Mode;
         }
     }
 }
