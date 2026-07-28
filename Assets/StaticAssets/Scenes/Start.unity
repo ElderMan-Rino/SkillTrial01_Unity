@@ -257,6 +257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1972124009}
   - component: {fileID: 1972124010}
+  - component: {fileID: 1972124011}
   m_Layer: 0
   m_Name: StartView
   m_TagString: Untagged
@@ -302,6 +303,19 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!114 &1972124011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972124008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 397f7d5a3f4f07a48813c0e4337c82fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Elder.Framework.Boot.Infra.SceneBootModeMarker
+  _mode: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

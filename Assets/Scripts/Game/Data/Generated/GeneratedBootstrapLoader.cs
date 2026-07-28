@@ -24,13 +24,13 @@ namespace Elder.SkillTrial.Resources.Data
             await _dataLoader.LoadAsync(loader, SheetKey.BootstrapDataHash, DataScope.PersistentHash);
 
             ct.ThrowIfCancellationRequested();
-            var blobRef = provider.GetBlobReference<BootstrapDataRoot>();
-            int rowCount = blobRef.Value.Rows.Length;
+            if (!provider.TryGetBlobData<BootstrapDataRoot>(out var bootstrapData))
+                throw new System.InvalidOperationException($"[Bootstrap] Required blob not found: {nameof(BootstrapDataRoot)}");
+            int rowCount = bootstrapData.Rows.Length;
 
             var tasks = new UniTask[rowCount + 2]; // [HEAP] 1회 할당
-            for (int i = 0; i < rowCount; i++)
-                tasks[i] = _dataLoader.LoadAsync(loader, StringHashHelper.ToStableHash(blobRef.Value.Rows[i].DataKey.ToString()), DataScope.PersistentHash); // [HEAP] BlobString.ToString()
-            tasks[rowCount]     = _dataLoader.LoadAsync(loader, ResolveLocaleHash(languageCode), DataScope.PersistentHash);
+            for (int i = 0; i < rowCount; i++) tasks[i] = _dataLoader.LoadAsync(loader, StringHashHelper.ToStableHash(bootstrapData.Rows[i].DataKey.ToString()), DataScope.PersistentHash); // [HEAP] BlobString.ToString()
+            tasks[rowCount] = _dataLoader.LoadAsync(loader, ResolveLocaleHash(languageCode), DataScope.PersistentHash);
             tasks[rowCount + 1] = _dataLoader.LoadAsync(loader, ResolveErrorLocaleHash(languageCode), DataScope.PersistentHash);
 
             await UniTask.WhenAll(tasks); // [HEAP] WhenAll 내부 배열 참조
@@ -40,14 +40,14 @@ namespace Elder.SkillTrial.Resources.Data
         {
             "Ko" => SheetKey.BootstrapLocale_KoHash,
             "Jp" => SheetKey.BootstrapLocale_JpHash,
-            _    => SheetKey.BootstrapLocale_EnHash,
+            _ => SheetKey.BootstrapLocale_EnHash,
         };
 
         private static int ResolveErrorLocaleHash(string languageCode) => languageCode switch
         {
             "Ko" => SheetKey.ErrorMsgLocale_KoHash,
             "Jp" => SheetKey.ErrorMsgLocale_JpHash,
-            _    => SheetKey.ErrorMsgLocale_EnHash,
+            _ => SheetKey.ErrorMsgLocale_EnHash,
         };
     }
 }

@@ -15,10 +15,10 @@ namespace Elder.Framework.Asset.Infra
             await handle.ToUniTask();
             return handle;
         }
-
-        public async UniTask<AsyncOperationHandle<IList<T>>> LoadAllAsync<T>(string label) where T : UnityEngine.Object
+        
+        public async UniTask<AsyncOperationHandle<IList<UnityEngine.Object>>> LoadAllAsync(string label)
         {
-            var handle = Addressables.LoadAssetsAsync<T>(label, null);
+            var handle = Addressables.LoadAssetsAsync<UnityEngine.Object>(label, null);
             await handle.ToUniTask();
             return handle;
         }

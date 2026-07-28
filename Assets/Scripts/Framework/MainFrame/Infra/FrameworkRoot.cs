@@ -1,18 +1,24 @@
 using Cysharp.Threading.Tasks;
+using Elder.Framework.Asset.Interfaces;
+using Elder.Framework.Blob.Definitions;
+using Elder.Framework.Blob.Infra.Extensions;
+using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Boot.App;
+using Elder.Framework.Boot.Definitions;
 using Elder.Framework.Boot.Interfaces;
+using Elder.Framework.Common.Utils;
+using Elder.Framework.Composition;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.GameSystem.App;
-using Elder.Framework.Composition;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Installer;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.MainFrame.Infra.Configs;
 using Elder.Framework.MainFrame.Installer;
 using Elder.SkillTrial.Data.Installer;
+using Elder.SkillTrial.Resources.Data;
 using System;
 using UnityEngine;
-using Elder.Framework.Boot.Definitions;
 
 namespace Elder.Framework.MainFrame.Infra
 {
@@ -34,10 +40,10 @@ namespace Elder.Framework.MainFrame.Infra
     // │       - GameBootEntryPoint.Run()이 "Splash" SceneKey로 SceneTransitionSignal 발행
     // │         (현재는 "Initialize"로 바로 전환 — Splash 씬 없으면 생략 가능)
     // │
-    // ├─ 2. Initialize (프레임워크 데이터 초기화)
+    // ├─ 2. Initialize(Preload) (프레임워크 데이터 초기화)
     // │     역할: 마스터 데이터(Blob), 암호화 키, 로케일, 설정 로드
     // │     필요 구현:
-    // │       - InitializeGameModeOrchestrator : GameModeOrchestrator
+    // │       - PreloadOrchestrator : GameModeOrchestrator
     // │           → TryPrepareAsync():
     // │               1) IAssetSystem으로 마스터 데이터 에셋 로드
     // │               2) IBlobIndexRegistry로 Blob 등록
@@ -91,6 +97,7 @@ namespace Elder.Framework.MainFrame.Infra
     public sealed class FrameworkRoot : MonoBehaviour
     {
         private IGameSystemProvider _provider;
+        private ILoggerEx _logger;
 
         public void Initialize(FrameworkSettings settings, SceneBootMode bootMode)
         {
@@ -116,13 +123,48 @@ namespace Elder.Framework.MainFrame.Infra
         {
             if (provider.TryGetSystem<ILoggerPublisher>(out var publisher))
                 LogFacade.InjectProvider(publisher);
+            _logger = LogFacade.GetLoggerFor<FrameworkRoot>();
 
             provider.InjectAll();
             await provider.InitializeAllAsync();
             await provider.PostInitializeAllAsync();
 
+            var preloadResult = await PreloadBootAssetsAsync(provider);
+            if (!preloadResult)
+            {
+                _logger.Error($"{nameof(PreloadBootAssetsAsync)} failed — boot aborted.");
+                return;
+            }
+
             if (provider.TryGetSystem<IGameBootEntryPoint>(out var startService))
                 startService.Run(bootMode);
+        }
+
+        private async UniTask<bool> PreloadBootAssetsAsync(IGameSystemProvider provider)
+        {
+            if (!provider.TryGetSystem<IDataProvider>(out var dataProvider))
+            {
+                _logger.Error($"{nameof(IDataProvider)} not found.");
+                return false;
+            }
+
+            if (!dataProvider.TryGetBlobData<AssetInfoEntryBootRoot>(out var assetInfoEntrys))
+            {
+                _logger.Error($"{nameof(AssetInfoEntryBootRoot)} not found.");
+                return false;
+            }
+
+            if (!provider.TryGetSystem<IAssetRegistry>(out var registry))
+            {
+                _logger.Error($"{nameof(IAssetRegistry)} not found.");
+                return false;
+            }
+
+            int rowCount = assetInfoEntrys.Rows.Length;
+            var tasks = new UniTask[rowCount]; // [HEAP] 1회 할당
+            for (int i = 0; i < rowCount; i++) tasks[i] = registry.RegisterAsync(assetInfoEntrys.Rows[i].Label.ToString()); // [HEAP] BlobString.ToString()
+            await UniTask.WhenAll(tasks); // [HEAP] WhenAll 내부 배열 참조
+            return true;
         }
 
         private void OnDestroy()

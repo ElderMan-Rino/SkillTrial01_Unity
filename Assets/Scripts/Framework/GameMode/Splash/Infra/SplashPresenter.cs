@@ -44,10 +44,10 @@ namespace Elder.Framework.GameMode.Splash.Infra
                 }
                 _viewModel.SetEntries(GetSplashEntries(blobRef));
             }
-            await _registry.RegisterAsync<Sprite>(SplashLabel);
+            await _registry.RegisterAsync(SplashLabel);
         }
 
-        private SplashEntry[] GetSplashEntries(BlobAssetReference<SplashEntryInfoRoot> blobRef)
+        private SplashEntry[] GetSplashEntries(in BlobAssetReference<SplashEntryInfoRoot> blobRef)
         {
             ref var table = ref blobRef.Value;
             var entries = new SplashEntry[table.Rows.Length];

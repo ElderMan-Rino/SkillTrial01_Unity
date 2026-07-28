@@ -25,10 +25,10 @@ namespace Elder.Framework.Asset.App
         public override UniTask InitializeAsync() => UniTask.CompletedTask;
         public override UniTask PostInitializeAsync() => UniTask.CompletedTask;
 
-        public async UniTask RegisterAsync<T>(string label) where T : UnityEngine.Object
+        public async UniTask RegisterAsync(string label)
         {
             if (_entries.ContainsKey(label)) return;
-            await LoadLabelAsync<T>(label);
+            await LoadLabelAsync(label);
         }
 
         public void Unregister(string label)
@@ -45,17 +45,15 @@ namespace Elder.Framework.Asset.App
         public T Get<T>(string label, string assetName) where T : UnityEngine.Object
         {
             if (!_entries.TryGetValue(label, out var entry))
-                throw new InvalidOperationException(
-                    $"Label '{label}' is not registered. Call RegisterAsync first.");
+                throw new InvalidOperationException($"Label '{label}' is not registered. Call RegisterAsync first.");
 
             if (!entry.TryGetAsset(typeof(T), assetName, out var asset))
-                throw new InvalidOperationException(
-                    $"Asset '{assetName}' of type '{typeof(T).Name}' not found in label '{label}'.");
+                throw new InvalidOperationException($"Asset '{assetName}' of type '{typeof(T).Name}' not found in label '{label}'.");
 
             return (T)asset;
         }
 
-        private async UniTask LoadLabelAsync<T>(string label) where T : UnityEngine.Object
+        private async UniTask LoadLabelAsync(string label) 
         {
             if (_entries.ContainsKey(label)) return;
 
@@ -65,7 +63,7 @@ namespace Elder.Framework.Asset.App
                 return;
             }
 
-            var loadTask = ExecuteLoadAsync<T>(label);
+            var loadTask = ExecuteLoadAsync(label);
             _pendingLoads[label] = loadTask;
 
             try
@@ -81,14 +79,14 @@ namespace Elder.Framework.Asset.App
             }
         }
 
-        private async UniTask ExecuteLoadAsync<T>(string label) where T : UnityEngine.Object
+        private async UniTask ExecuteLoadAsync(string label)
         {
-            var handle = await _loader.LoadAllAsync<T>(label);
+            var handle = await _loader.LoadAllAsync(label);
             var entry = new LabelEntry { Handle = handle };
 
             var results = handle.Result;
             for (int i = 0; i < results.Count; i++)
-                entry.AddAsset(typeof(T), results[i].name, results[i]);
+                entry.AddAsset(results[i].GetType(), results[i].name, results[i]);
 
             _entries[label] = entry;
         }
@@ -104,7 +102,7 @@ namespace Elder.Framework.Asset.App
 
         protected override void DisposeManagedResources()
         {
-            foreach (var entry in _entries)  // [HEAP] Dictionary 열거자 할당
+            foreach (var entry in _entries)  
                 _releaser.Release(entry.Value.Handle);
             _entries.Clear();
             _loader = null;
