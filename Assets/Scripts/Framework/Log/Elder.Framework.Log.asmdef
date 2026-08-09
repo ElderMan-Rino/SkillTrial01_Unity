@@ -1,0 +1,19 @@
+{
+    "name": "Elder.Framework.Log",
+    "rootNamespace": "Elder.Framework.Log",
+    "references": [
+        "Elder.Framework.Common",
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Core",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

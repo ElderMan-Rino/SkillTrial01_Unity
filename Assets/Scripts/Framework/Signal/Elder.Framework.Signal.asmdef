@@ -1,0 +1,19 @@
+{
+    "name": "Elder.Framework.Signal",
+    "rootNamespace": "Elder.Framework.Signal",
+    "references": [
+        "Elder.Framework.Common",
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Signal.Interfaces",
+        "Elder.Framework.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

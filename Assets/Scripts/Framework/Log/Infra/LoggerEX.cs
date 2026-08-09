@@ -1,4 +1,4 @@
-using Elder.Framework.Common.Base;
+using Elder.Framework.Core.Interfaces.Base;
 using Elder.Framework.Log.Definitions;
 using Elder.Framework.Log.Interfaces;
 using System;

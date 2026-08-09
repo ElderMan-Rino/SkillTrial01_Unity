@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Core.Interfaces;
 
-namespace Elder.Framework.BGM.Interfaces
+namespace Elder.Framework.Bgm.Interfaces
 {
     // [설계]
     // BGMSystem의 책임: 시그널 수신 + BGMInfoRoot row lookup + 재생 상태 관리(재생/정지/루프/크로스페이드).

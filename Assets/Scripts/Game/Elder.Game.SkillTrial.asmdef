@@ -1,0 +1,23 @@
+{
+    "name": "Elder.Game.SkillTrial",
+    "rootNamespace": "Elder.Game.SkillTrial",
+    "references": [
+        "Elder.Framework.Core",
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Common",
+        "Elder.Framework.Blob",
+        "Elder.Framework.GameMode",
+        "UniTask",
+        "Unity.Entities",
+        "Unity.Collections"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

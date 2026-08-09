@@ -1,4 +1,4 @@
-using Elder.Framework.Common.Base;
+using Elder.Framework.Core.Interfaces.Base;
 using Elder.Framework.GameMode.Splash.Definitions;
 using Elder.Framework.GameMode.Splash.Interfaces;
 

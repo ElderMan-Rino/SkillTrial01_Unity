@@ -1,0 +1,28 @@
+{
+    "name": "Elder.Framework.MainFrame",
+    "rootNamespace": "Elder.Framework.MainFrame",
+    "references": [
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Common",
+        "Elder.Framework.Composition",
+        "Elder.Framework.Asset",
+        "Elder.Framework.Blob",
+        "Elder.Framework.Boot",
+        "Elder.Framework.GameSystem",
+        "Elder.Framework.Log",
+        "Elder.Framework.MainFrame.Installer",
+        "UniTask",
+        "Elder.Game.SkillTrial",
+        "Unity.Entities",
+        "Unity.Collections"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

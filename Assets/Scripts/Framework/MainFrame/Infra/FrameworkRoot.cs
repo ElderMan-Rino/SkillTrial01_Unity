@@ -3,7 +3,6 @@ using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Blob.Definitions;
 using Elder.Framework.Blob.Infra.Extensions;
 using Elder.Framework.Blob.Interfaces;
-using Elder.Framework.Boot.App;
 using Elder.Framework.Boot.Definitions;
 using Elder.Framework.Boot.Interfaces;
 using Elder.Framework.Common.Utils;

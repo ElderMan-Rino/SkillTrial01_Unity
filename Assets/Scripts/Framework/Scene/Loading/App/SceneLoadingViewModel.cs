@@ -1,4 +1,4 @@
-using Elder.Framework.Common.Base;
+using Elder.Framework.Core.Interfaces.Base;
 using Elder.Framework.Scene.Loading.Definitions;
 using Elder.Framework.Scene.Loading.Interfaces;
 

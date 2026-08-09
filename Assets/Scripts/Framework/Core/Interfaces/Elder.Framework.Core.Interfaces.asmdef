@@ -1,0 +1,16 @@
+{
+    "name": "Elder.Framework.Core.Interfaces",
+    "rootNamespace": "Elder.Framework.Core.Interfaces",
+    "references": [
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

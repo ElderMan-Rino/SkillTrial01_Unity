@@ -42,7 +42,7 @@ namespace Elder.Framework.Composition
                 foreach (var serviceType in registration.Value.ServiceTypes)
                     systemComponents[serviceType] = registration.Value.Instance;
             }
-            return new ScopedGameSystemProvider(_parent, systemComponents, orderedSystems);
+            return GameSystemProviderBase.CreateScoped(_parent, systemComponents, orderedSystems);
         }
     }
 }

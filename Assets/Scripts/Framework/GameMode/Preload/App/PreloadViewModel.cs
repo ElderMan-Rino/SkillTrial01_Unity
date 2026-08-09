@@ -1,4 +1,4 @@
-using Elder.Framework.Common.Base;
+using Elder.Framework.Core.Interfaces.Base;
 using Elder.Framework.GameMode.Preload.Definitions;
 using Elder.Framework.GameMode.Preload.Interfaces;
 

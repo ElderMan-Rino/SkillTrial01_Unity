@@ -1,0 +1,18 @@
+{
+    "name": "Elder.Framework.GameSystem",
+    "rootNamespace": "Elder.Framework.GameSystem",
+    "references": [
+        "Elder.Framework.Common",
+        "Elder.Framework.Core.Interfaces",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,6 +1,6 @@
 using Elder.Framework.Signal.Interfaces;
 
-namespace Elder.Framework.BGM.Messages
+namespace Elder.Framework.Bgm.Messages
 {
     public readonly struct BGMPlaySignal : ISignal
     {

@@ -1,0 +1,23 @@
+{
+    "name": "Elder.Framework.Bgm",
+    "rootNamespace": "Elder.Framework.Bgm",
+    "references": [
+        "Elder.Framework.Core",
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Asset",
+        "Elder.Framework.Blob",
+        "Elder.Framework.Log",
+        "Elder.Framework.Signal",
+        "Elder.Framework.Signal.Interfaces",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

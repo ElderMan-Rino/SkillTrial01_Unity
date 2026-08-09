@@ -1,0 +1,19 @@
+{
+    "name": "Elder.Framework.Common",
+    "rootNamespace": "Elder.Framework.Common",
+    "references": [
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Signal.Interfaces",
+        "Unity.Collections",
+        "Unity.Entities"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

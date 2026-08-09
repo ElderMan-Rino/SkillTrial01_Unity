@@ -1,0 +1,17 @@
+{
+    "name": "Elder.Framework.Signal.Interfaces",
+    "rootNamespace": "Elder.Framework.Signal.Interfaces",
+    "references": [
+        "Elder.Framework.Core.Interfaces",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

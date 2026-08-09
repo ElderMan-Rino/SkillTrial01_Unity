@@ -1,0 +1,26 @@
+{
+    "name": "Elder.Framework.Blob",
+    "rootNamespace": "Elder.Framework.Blob",
+    "references": [
+        "Elder.Framework.Core",
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Common",
+        "Elder.Framework.Asset",
+        "Elder.Framework.Crypto",
+        "Elder.Framework.Log",
+        "Elder.Framework.Localize",
+        "Elder.Framework.Signal.Interfaces",
+        "UniTask",
+        "Unity.Entities",
+        "Unity.Collections"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

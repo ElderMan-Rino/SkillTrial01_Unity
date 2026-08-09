@@ -1,0 +1,24 @@
+{
+    "name": "Elder.SkillTrial.Editor",
+    "rootNamespace": "Elder.SkillTrial.Editor",
+    "references": [
+        "Elder.Framework.Crypto",
+        "Elder.Framework.Core.Interfaces",
+        "Unity.Entities",
+        "Unity.Collections",
+        "Unity.Addressables",
+        "Unity.Addressables.Editor",
+        "Unity.ResourceManager"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

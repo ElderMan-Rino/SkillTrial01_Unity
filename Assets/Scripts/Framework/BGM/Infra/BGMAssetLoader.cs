@@ -1,16 +1,16 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Interfaces;
-using Elder.Framework.BGM.Interfaces;
+using Elder.Framework.Bgm.Interfaces;
 using Elder.Framework.Core;
 using System;
 using UnityEngine;
 
-namespace Elder.Framework.BGM.Infra
+namespace Elder.Framework.Bgm.Infra
 {
     // [설계]
     // AddressableSceneLoader와 동일한 위치의 Infra 어댑터.
     // IAssetProvider 의존은 이 클래스 안에서만 존재 -> BGMSystem은 여기로만 접근.
-    internal sealed class BGMAssetLoader : BaseSystem, IBGMAssetLoader
+    internal sealed class BgmAssetLoader : BaseSystem, IBGMAssetLoader
     {
         private IAssetProvider _assetProvider;
 

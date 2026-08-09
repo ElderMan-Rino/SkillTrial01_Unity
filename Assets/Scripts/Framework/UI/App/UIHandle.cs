@@ -27,6 +27,15 @@ namespace Elder.Framework.UI.App
             _isSceneBound = true;
         }
 
+        // Registry가 에셋을 소유 — Destroy는 필요하지만 AssetHandle.Release는 불필요
+        internal UIHandle(GameObject instance, bool isRegistryOwned, IUIPresenterLifecycle lifecycle = null)
+        {
+            Instance = instance;
+            AssetHandle = null;
+            Lifecycle = lifecycle;
+            _isSceneBound = !isRegistryOwned;
+        }
+
         internal void SetLifecycle(IUIPresenterLifecycle lifecycle) => Lifecycle = lifecycle;
 
         internal void Dispose()

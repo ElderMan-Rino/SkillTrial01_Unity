@@ -1,0 +1,23 @@
+{
+    "name": "Elder.Framework.Boot.App",
+    "rootNamespace": "Elder.Framework.Boot.App",
+    "references": [
+        "Elder.Framework.Core",
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Boot",
+        "Elder.Framework.Signal.Interfaces",
+        "Elder.Framework.Scene",
+        "Elder.Framework.MessageBox",
+        "Elder.Framework.UI",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

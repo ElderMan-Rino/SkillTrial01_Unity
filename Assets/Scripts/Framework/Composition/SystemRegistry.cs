@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Elder.Framework.Composition
 {
-    internal sealed class SystemRegistry : IGameSystemRegistry
+    public sealed class SystemRegistry : IGameSystemRegistry
     {
         private readonly Dictionary<Type, Registration> _registrations = new();
 
@@ -36,7 +36,7 @@ namespace Elder.Framework.Composition
                 foreach (var serviceType in registration.Value.ServiceTypes)
                     systemComponents[serviceType] = registration.Value.Instance;
             }
-            return new GameSystemProvider(systemComponents, orderedSystems);
+            return GameSystemProviderBase.Create(systemComponents, orderedSystems);
         }
     }
 }

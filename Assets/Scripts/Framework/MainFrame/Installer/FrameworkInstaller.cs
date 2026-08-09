@@ -1,5 +1,5 @@
 using Elder.Framework.Asset.Installer;
-using Elder.Framework.Boot.Installer;
+using Elder.Framework.Boot.App.Installer;
 using Elder.Framework.Boot.Interfaces;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Crypto.Installer;

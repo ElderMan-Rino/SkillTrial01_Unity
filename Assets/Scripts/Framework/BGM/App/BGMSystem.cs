@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
-using Elder.Framework.BGM.Interfaces;
-using Elder.Framework.BGM.Messages;
+using Elder.Framework.Bgm.Interfaces;
+using Elder.Framework.Bgm.Messages;
 using Elder.Framework.Core;
 using Elder.Framework.Blob.Interfaces;
 using Elder.Framework.Log.Interfaces;
@@ -9,7 +9,7 @@ using Elder.Framework.Signal.Interfaces;
 using System;
 using UnityEngine;
 
-namespace Elder.Framework.BGM.App
+namespace Elder.Framework.Bgm.App
 {
     // [설계 - BGMSystem]
     // 책임: (1) BGMPlaySignal/BGMStopSignal 구독·수신

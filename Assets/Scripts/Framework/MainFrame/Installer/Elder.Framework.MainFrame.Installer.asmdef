@@ -1,0 +1,29 @@
+{
+    "name": "Elder.Framework.MainFrame.Installer",
+    "rootNamespace": "Elder.Framework.MainFrame.Installer",
+    "references": [
+        "Elder.Framework.Core.Interfaces",
+        "Elder.Framework.Boot",
+        "Elder.Framework.Boot.App",
+        "Elder.Framework.Asset",
+        "Elder.Framework.Blob",
+        "Elder.Framework.Crypto",
+        "Elder.Framework.GameMode",
+        "Elder.Framework.Localize",
+        "Elder.Framework.Log",
+        "Elder.Framework.MonoEvent",
+        "Elder.Framework.Scene",
+        "Elder.Framework.Settings",
+        "Elder.Framework.Signal",
+        "Elder.Framework.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

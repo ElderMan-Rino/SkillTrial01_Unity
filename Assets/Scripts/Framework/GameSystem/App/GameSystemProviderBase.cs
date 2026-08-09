@@ -1,12 +1,12 @@
 using Cysharp.Threading.Tasks;
-using Elder.Framework.Common.Base;
 using Elder.Framework.Core.Interfaces;
+using Elder.Framework.Core.Interfaces.Base;
 using System;
 using System.Collections.Generic;
 
 namespace Elder.Framework.GameSystem.App
 {
-    internal abstract class GameSystemProviderBase : DisposableBase, IGameSystemProvider
+    public abstract class GameSystemProviderBase : DisposableBase, IGameSystemProvider
     {
         protected readonly Dictionary<Type, ISystemComponent> _systemComponents;
         protected readonly List<ISystemComponent> _orderedSystems;
@@ -18,6 +18,16 @@ namespace Elder.Framework.GameSystem.App
         {
             _systemComponents = systemComponents;
             _orderedSystems = orderedSystems;
+        }
+
+        public static IGameSystemProvider Create(Dictionary<Type, ISystemComponent> systemComponents, List<ISystemComponent> orderedSystems)
+        {
+            return new GameSystemProvider(systemComponents, orderedSystems);
+        }
+
+        public static IGameSystemProvider CreateScoped(IGameSystemProvider parent, Dictionary<Type, ISystemComponent> systemComponents, List<ISystemComponent> orderedSystems)
+        {
+            return new ScopedGameSystemProvider(parent, systemComponents, orderedSystems);
         }
 
         public bool TryDisposeSystem(Type systemType)

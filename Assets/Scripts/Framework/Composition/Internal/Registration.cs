@@ -1,5 +1,5 @@
-using Elder.Framework.Common.Base;
 using Elder.Framework.Core.Interfaces;
+using Elder.Framework.Core.Interfaces.Base;
 using System;
 using System.Collections.Generic;
 

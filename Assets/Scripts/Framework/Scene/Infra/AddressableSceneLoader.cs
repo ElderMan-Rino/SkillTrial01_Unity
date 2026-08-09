@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using Elder.Framework.Common.Base;
 using Elder.Framework.Scene.Interfaces;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;

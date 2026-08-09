@@ -3,7 +3,7 @@ using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Core.Interfaces;
 using UnityEngine;
 
-namespace Elder.Framework.BGM.Interfaces
+namespace Elder.Framework.Bgm.Interfaces
 {
     // [설계]
     // ISceneLoader/AddressableSceneLoader와 동일한 역할의 Infra 어댑터.

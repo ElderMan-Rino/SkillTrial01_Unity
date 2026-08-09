@@ -9,6 +9,7 @@ namespace Elder.Framework.UI.Interfaces
         public UniTask OnSceneLoadedAsync();
         public UniTask PrepareAsync<TView>() where TView : UIViewBase;
         public UniTask<TView> ShowAsync<TView>(string addressableKey = null) where TView : UIViewBase;
+        public UniTask<TView> ShowAsync<TView>(string label, string assetName) where TView : UIViewBase;
         public UniTask HideAsync<TView>() where TView : UIViewBase;
         public UniTask ReleaseAsync<TView>() where TView : UIViewBase;
         public bool TryGetView<TView>(out TView view) where TView : UIViewBase;
