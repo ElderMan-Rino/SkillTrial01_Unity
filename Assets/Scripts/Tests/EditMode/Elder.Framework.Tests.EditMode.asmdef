@@ -14,6 +14,7 @@
         "Elder.Framework.Boot",
         "Elder.Framework.Scene",
         "Elder.Framework.Signal",
+        "Elder.Framework.Blob",
         "UniTask",
         "Unity.Collections",
         "Unity.Entities",

@@ -75,6 +75,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76c7ff53523cae943bddf4f422dff89c
+    m_Address: AssetInfoEntryPreload
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c5741bab9d8f694a8d8a17b1584e15d
+    m_Address: AssetInfoEntryBoot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7c7f7a70b3afcfb4c98a1abb2647630b
     m_Address: BootstrapLocaleKey
     m_ReadOnly: 0
@@ -105,6 +115,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a047ead05044a834092c8da448a66979
+    m_Address: BgmInfo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2c0ff9daa2ef1c478911eee1ee3efff
     m_Address: ErrorCode
     m_ReadOnly: 0
@@ -117,11 +132,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bfc10992e9241c7469af555e34ab563f
     m_Address: BootstrapLocaleKey
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c117779e9cec3d04fa804cb15156c105
-    m_Address: Boot
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

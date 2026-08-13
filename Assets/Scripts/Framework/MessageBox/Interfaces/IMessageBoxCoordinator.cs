@@ -7,6 +7,6 @@ namespace Elder.Framework.MessageBox.Interfaces
 {
     public interface IMessageBoxCoordinator : IUICoordinator
     {
-        public UniTask<MessageBoxResult> RequestAsync(string message, MessageBoxButtonType buttonType, MessageBoxDismissPolicy dismissPolicy = MessageBoxDismissPolicy.Normal);
+        public UniTask<MessageBoxResult> OpenMessageBoxViewAsync(string titleKey, string descKey);
     }
 }

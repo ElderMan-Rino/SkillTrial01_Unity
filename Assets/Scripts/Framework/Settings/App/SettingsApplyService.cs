@@ -40,6 +40,14 @@ namespace Elder.Framework.Settings.App
             _applicables.Add(applicable);
         }
 
+        // [MISSING] 전역 에러 처리 흐름 (BootErrorHandler에서 이관, 전역 사용 목적)
+        //   1) LogPublisher가 LogLevel.Error 디스패치 시 LogErrorSignal(errorCode 등) 발행 예정
+        //      → LoggerEX/LogEvent에 시그널 발행용 매개변수 추가 예정 (미구현, 설계 중)
+        //   2) BootErrorHandler 등 에러 구독자는 SystemReadySignal 수신 전까지 LogErrorSignal 구독 시작 금지
+        //      → UISystem 포함 전체 시스템 초기화가 끝나야 MessageBoxCoordinator.RequestAsync가
+        //        정상 동작(PrepareAsync<MessageBoxView> 완료 보장)하기 때문
+        //   3) SystemReadySignal 수신 시점에 구독 시작 → LogErrorSignal 수신 시 정책 조회 후
+        //      MessageBoxCoordinator.RequestAsync → 결과에 따라 후속 처리(BootErrorAction) 실행
         private void HandlePreSystemReady(in PreSystemReadySignal signal)
         {
             for (int i = 0; i < _applicables.Count; i++)
