@@ -1,34 +1,8 @@
 ﻿<Solution>
-  <Project Path="Elder.Framework.Actor.csproj" />
-  <Project Path="Elder.Framework.Blob.csproj" />
-  <Project Path="NuGetForUnity.csproj" />
-  <Project Path="Elder.Framework.Localize.csproj" />
-  <Project Path="Elder.Framework.Log.csproj" />
-  <Project Path="Elder.Framework.Tests.EditMode.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
-  <Project Path="Elder.Framework.GameMode.csproj" />
-  <Project Path="Elder.Framework.MessageBox.csproj" />
+  <Project Path="NuGetForUnity.csproj" />
   <Project Path="Elder.SkillTrial.Editor.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
-  <Project Path="Elder.Framework.UI.csproj" />
-  <Project Path="Elder.Framework.GameSystem.csproj" />
-  <Project Path="Elder.Framework.Settings.csproj" />
-  <Project Path="Elder.Framework.Asset.csproj" />
-  <Project Path="Elder.Framework.Core.Interfaces.csproj" />
-  <Project Path="Elder.Framework.Composition.csproj" />
-  <Project Path="Elder.Framework.Boot.App.csproj" />
-  <Project Path="Elder.Framework.Signal.Interfaces.csproj" />
-  <Project Path="Elder.Framework.Scene.csproj" />
-  <Project Path="Elder.Framework.Boot.csproj" />
-  <Project Path="Elder.Framework.MainFrame.csproj" />
-  <Project Path="Elder.Framework.Common.csproj" />
   <Project Path="Elder.Game.SkillTrial.csproj" />
-  <Project Path="Elder.Framework.Crypto.csproj" />
-  <Project Path="Elder.Framework.MonoEvent.csproj" />
-  <Project Path="Elder.Framework.Bgm.csproj" />
   <Project Path="Unity.UniversalToonShader.Urp.Editor.csproj" />
-  <Project Path="Elder.Framework.MainFrame.Installer.csproj" />
-  <Project Path="Elder.Framework.Boot.App.Entry.csproj" />
-  <Project Path="Elder.Framework.Core.csproj" />
-  <Project Path="Elder.Framework.Signal.csproj" />
 </Solution>

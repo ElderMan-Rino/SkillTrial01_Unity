@@ -1,0 +1,187 @@
+:root {
+    --holo-sky: rgb(92, 200, 245);
+    --holo-sky-dark: rgb(47, 168, 224);
+    --holo-pink: rgb(255, 143, 184);
+    --holo-pink-dark: rgb(229, 106, 152);
+    --holo-ink: rgb(43, 58, 74);
+    --holo-gray: rgb(201, 214, 224);
+    --holo-white: rgb(255, 255, 255);
+    --ui-primary: var(--holo-sky);
+    --ui-primary-dark: var(--holo-sky-dark);
+    --ui-accent: var(--holo-pink);
+    --ui-accent-dark: var(--holo-pink-dark);
+    --ui-text: var(--holo-ink);
+    --ui-text-muted: rgba(43, 58, 74, 0.55);
+    --ui-surface: var(--holo-white);
+    --ui-disabled: var(--holo-gray);
+    --spr-panel-base: url("project://database/Assets/StaticAssets/UIDocuments/MessageBox/Sprites/Panel_Base.png?fileID=21300000&guid=4a29f56b48b246d180e4342f70b9abaa&type=3#Panel_Base");
+    --spr-panel-outline: url("project://database/Assets/StaticAssets/UIDocuments/MessageBox/Sprites/Panel_Outline.png?fileID=21300000&guid=459360f2b9b0495abe0400e0b7d1940a&type=3#Panel_Outline");
+    --spr-panel-gloss: url("project://database/Assets/StaticAssets/UIDocuments/MessageBox/Sprites/Panel_Gloss.png?fileID=21300000&guid=2c5d3c50da064de9a2934e70f5952de7&type=3#Panel_Gloss");
+    --spr-panel-shadow: url("project://database/Assets/StaticAssets/UIDocuments/MessageBox/Sprites/Panel_Shadow.png?fileID=21300000&guid=0604f47fe01c49f3b29b39012062f72f&type=3#Panel_Shadow");
+    --spr-button-base: url("project://database/Assets/StaticAssets/UIDocuments/MessageBox/Sprites/Button_Base.png?fileID=21300000&guid=2d0399b4a8514053afced30e4f2b9bdf&type=3#Button_Base");
+    --spr-button-outline: url("project://database/Assets/StaticAssets/UIDocuments/MessageBox/Sprites/Button_Outline.png?fileID=21300000&guid=f65a032aef0c40609517197fcf26b50e&type=3#Button_Outline");
+    --spr-button-gloss: url("project://database/Assets/StaticAssets/UIDocuments/MessageBox/Sprites/Button_Gloss.png?fileID=21300000&guid=fefd5e84948541b49aa43ff6ed1c7f9e&type=3#Button_Gloss");
+}
+
+.messagebox-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.35);
+    picking-mode: position;
+    align-items: center;
+    justify-content: center;
+}
+
+.messagebox-panel-wrap {
+    width: 480px;
+}
+
+.messagebox-panel__shadow {
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    top: -6px;
+    bottom: -10px;
+    background-image: var(--spr-panel-shadow);
+    -unity-background-image-tint-color: rgba(47, 168, 224, 0.28);
+    -unity-slice-left: 40;
+    -unity-slice-right: 40;
+    -unity-slice-top: 40;
+    -unity-slice-bottom: 40;
+}
+
+.messagebox-panel {
+    background-image: var(--spr-panel-base);
+    -unity-background-image-tint-color: var(--ui-surface);
+    -unity-slice-left: 32;
+    -unity-slice-right: 32;
+    -unity-slice-top: 32;
+    -unity-slice-bottom: 32;
+    padding: 28px;
+    align-items: center;
+}
+
+.messagebox-panel__outline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: var(--spr-panel-outline);
+    -unity-background-image-tint-color: var(--ui-primary);
+    -unity-slice-left: 32;
+    -unity-slice-right: 32;
+    -unity-slice-top: 32;
+    -unity-slice-bottom: 32;
+}
+
+.messagebox-panel__gloss {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: var(--spr-panel-gloss);
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.55);
+    -unity-slice-left: 32;
+    -unity-slice-right: 32;
+    -unity-slice-top: 32;
+    -unity-slice-bottom: 32;
+}
+
+.messagebox-desc {
+    color: var(--ui-text);
+    font-size: 18px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-bottom: 20px;
+}
+
+.messagebox-buttons {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.messagebox-ok-button {
+    min-width: 100px;
+    min-height: 44px;
+    margin-right: 8px;
+    padding: 0 24px;
+    border-width: 0;
+    background-color: transparent;
+    background-image: var(--spr-button-base);
+    -unity-background-image-tint-color: var(--ui-primary);
+    -unity-slice-left: 22;
+    -unity-slice-right: 22;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    color: var(--holo-white);
+    -unity-text-align: middle-center;
+    transition-property: -unity-background-image-tint-color, scale;
+    transition-duration: 0.1s;
+}
+
+.messagebox-cancel-button {
+    min-width: 100px;
+    min-height: 44px;
+    padding: 0 24px;
+    border-width: 0;
+    background-color: transparent;
+    background-image: var(--spr-button-base);
+    -unity-background-image-tint-color: var(--ui-accent);
+    -unity-slice-left: 22;
+    -unity-slice-right: 22;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    color: var(--holo-white);
+    -unity-text-align: middle-center;
+    transition-property: -unity-background-image-tint-color, scale;
+    transition-duration: 0.1s;
+}
+
+.messagebox-ok-button:hover {
+    -unity-background-image-tint-color: rgb(120, 212, 248);
+    scale: 1.03 1.03;
+}
+
+.messagebox-ok-button:hover > .messagebox-button__gloss {
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.75);
+}
+
+.messagebox-ok-button:active {
+    -unity-background-image-tint-color: var(--ui-primary-dark);
+    scale: 0.98 0.98;
+}
+
+.messagebox-cancel-button:hover {
+    -unity-background-image-tint-color: rgb(255, 168, 200);
+    scale: 1.03 1.03;
+}
+
+.messagebox-cancel-button:active {
+    -unity-background-image-tint-color: var(--ui-accent-dark);
+    scale: 0.98 0.98;
+}
+
+.messagebox-button__gloss {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: var(--spr-button-gloss);
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.5);
+    -unity-slice-left: 22;
+    -unity-slice-right: 22;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    picking-mode: ignore;
+}
+
+.messagebox-ok-button:active > .messagebox-button__gloss,
+.messagebox-cancel-button:active > .messagebox-button__gloss {
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+}

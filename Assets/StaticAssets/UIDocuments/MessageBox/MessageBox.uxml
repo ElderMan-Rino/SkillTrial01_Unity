@@ -1,0 +1,21 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/StaticAssets/UIDocuments/MessageBox/MessageBox.uss?fileID=7433441132597879392&amp;guid=e46cea12282a19b4db75e272a3d77850&amp;type=3#MessageBox"/>
+    <ui:VisualElement name="messagebox-root" class="messagebox-root" style="background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="messagebox-panel-wrap" class="messagebox-panel-wrap">
+            <ui:VisualElement name="messagebox-panel-shadow" picking-mode="Ignore" class="messagebox-panel__shadow"/>
+            <ui:VisualElement name="messagebox-panel" class="messagebox-panel">
+                <ui:VisualElement name="messagebox-panel-outline" picking-mode="Ignore" class="messagebox-panel__outline"/>
+                <ui:VisualElement name="messagebox-panel-gloss" picking-mode="Ignore" class="messagebox-panel__gloss"/>
+                <ui:Label name="messagebox-desc" class="messagebox-desc"/>
+                <ui:VisualElement name="messagebox-buttons" class="messagebox-buttons">
+                    <ui:Button name="messagebox-ok-button" text="OK" class="messagebox-ok-button">
+                        <ui:VisualElement picking-mode="Ignore" class="messagebox-button__gloss"/>
+                    </ui:Button>
+                    <ui:Button name="messagebox-cancel-button" text="Cancel" class="messagebox-cancel-button">
+                        <ui:VisualElement picking-mode="Ignore" class="messagebox-button__gloss"/>
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

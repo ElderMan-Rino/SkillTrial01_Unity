@@ -1,3 +1,4 @@
+/*
 #if UNITY_EDITOR
 using System;
 using System.Security.Cryptography;
@@ -72,3 +73,5 @@ namespace Elder.SkillTrial.Editor.Crypto
     }
 }
 #endif
+
+*/

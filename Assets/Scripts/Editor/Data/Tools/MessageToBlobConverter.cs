@@ -1,3 +1,4 @@
+/*
 #if UNITY_EDITOR
 using Elder.SkillTrial.Editor.Crypto;
 using System;
@@ -19,6 +20,9 @@ namespace Elder.Editor.Data.Tools
         private const string SourceExtension = ".bytes";
         private const string KeyConfigFilter = "t:EditorEncryptionKeyConfig";
         private const string AddressablesGroup = "GameData";
+        private const string LocalAddressablesGroup = "GameData";
+        private const string LocalOutputFolder = "Assets/AddressableAssets/Local/GameData";
+        private const string LocalInputFolderMarker = "/Local/";
 
         [MenuItem("Assets/Convert to DOTS Blob", false, 1)]
         public static void BakeSelectedBytesFiles()
@@ -52,7 +56,6 @@ namespace Elder.Editor.Data.Tools
             foreach (string assetPath in targetPaths)
             {
                 string tableName = Path.GetFileNameWithoutExtension(assetPath);
-                string savePath = assetPath.Replace(SourceExtension, BlobExtension);
 
                 // ─── 기존 직접 탐색 제거, FindBakerMethod로 통합 ──────────
                 var (bakerType, bakeMethod) = FindBakerMethod(tableName);
@@ -64,11 +67,19 @@ namespace Elder.Editor.Data.Tools
                     continue;
                 }
 
+                bool isLocal = assetPath.Replace('\\', '/').Contains(LocalInputFolderMarker, StringComparison.OrdinalIgnoreCase);
+                string savePath = isLocal
+                    ? $"{LocalOutputFolder}/{tableName}{BlobExtension}"
+                    : assetPath.Replace(SourceExtension, BlobExtension);
+
                 try
                 {
+                    if (isLocal && !Directory.Exists(LocalOutputFolder))
+                        Directory.CreateDirectory(LocalOutputFolder);
+
                     bakeMethod.Invoke(null, new object[] { assetPath, savePath, keyPartB });
                     AssetDatabase.ImportAsset(savePath);
-                    RegisterToAddressables(savePath, tableName);
+                    RegisterToAddressables(savePath, tableName, isLocal ? LocalAddressablesGroup : AddressablesGroup);
                     successCount++;
                 }
                 catch (Exception ex)
@@ -123,7 +134,7 @@ namespace Elder.Editor.Data.Tools
             return (null, null);
         }
 
-        private static void RegisterToAddressables(string assetPath, string address)
+        private static void RegisterToAddressables(string assetPath, string address, string groupName)
         {
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (settings is null)
@@ -132,8 +143,8 @@ namespace Elder.Editor.Data.Tools
                 return;
             }
 
-            var group = settings.FindGroup(AddressablesGroup)
-                        ?? settings.CreateGroup(AddressablesGroup, false, false, false, null);
+            var group = settings.FindGroup(groupName)
+                        ?? settings.CreateGroup(groupName, false, false, false, null);
 
             string guid = AssetDatabase.AssetPathToGUID(assetPath);
             if (string.IsNullOrEmpty(guid)) return;
@@ -163,3 +174,4 @@ namespace Elder.Editor.Data.Tools
     }
 }
 #endif
+*/

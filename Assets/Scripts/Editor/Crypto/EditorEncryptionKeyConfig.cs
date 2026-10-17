@@ -1,3 +1,4 @@
+/*
 #if UNITY_EDITOR
 using UnityEngine;
 
@@ -19,3 +20,5 @@ namespace Elder.SkillTrial.Editor.Crypto
     }
 }
 #endif
+
+*/

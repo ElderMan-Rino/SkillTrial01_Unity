@@ -1,0 +1,9 @@
+[ Nexon Maplestory Font License ]
+Copyright: NEXON Korea Corp. — All rights reserved
+Source: https://maplestory.nexon.com/Media/Font
+- Commercial use: Allowed (free)
+- In-game embedding / software bundling: Allowed (this copyright notice must be included)
+- Modification, editing & redistribution of modified files: Prohibited
+- Selling the font file on its own: Prohibited
+- Attribution: Recommended (e.g. "This game uses the Maplestory font provided by NEXON.")
+- Acquired: 2026-08-22

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="UISystemTestView.uss" />
+    <ui:VisualElement name="ui-system-test-root" class="ui-system-test-root">
+        <ui:VisualElement name="button-row" class="button-row">
+            <ui:Button name="open-button" text="Open" class="test-button" />
+            <ui:Button name="close-button" text="Close" class="test-button" />
+            <ui:Button name="toggle-visible-button" text="Toggle Visible" class="test-button" />
+        </ui:VisualElement>
+        <ui:Label name="status-label" text="Status: Idle" class="status-label" />
+    </ui:VisualElement>
+</ui:UXML>

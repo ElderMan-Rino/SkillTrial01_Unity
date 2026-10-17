@@ -25,11 +25,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 28017cccb358308468758977954ae978
-    m_Address: BootstrapData
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2a270c11680021d4784c49cd1b4eb9bc
     m_Address: GraphicsSettings
     m_ReadOnly: 0

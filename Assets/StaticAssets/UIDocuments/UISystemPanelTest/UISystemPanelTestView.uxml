@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="UISystemPanelTestView.uss" />
+    <ui:VisualElement name="ui-system-panel-test-root" class="ui-system-panel-test-root">
+        <ui:Button name="close-button" text="X" class="panel-close-button" />
+        <ui:Label name="status-label" text="Status: Idle" class="status-label" />
+        <ui:Button name="open-button" text="Open" class="hidden-test-button" />
+        <ui:Button name="back-key-button" text="Back Key" class="hidden-test-button" />
+    </ui:VisualElement>
+</ui:UXML>

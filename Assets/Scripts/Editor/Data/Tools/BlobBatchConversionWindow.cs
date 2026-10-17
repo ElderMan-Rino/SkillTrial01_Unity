@@ -1,6 +1,10 @@
+/*
 #if UNITY_EDITOR
 using Elder.SkillTrial.Editor.Crypto;
+using MessagePack;
+using MessagePack.Resolvers;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -15,17 +19,25 @@ namespace Elder.Editor.Data.Tools
     {
         private const string BlobExtension = ".blob.bytes";
         private const string SourceExtension = ".bytes";
+        private const string BootstrapDataTableName = "BootstrapData";
         private const string KeyConfigFilter = "t:EditorEncryptionKeyConfig";
         private const string DefaultAddressablesGroup = "GameData";
+        private const string LocalInputFolderMarker = "/Local/";
         private const string InputFolderKey = "BlobBatch_InputFolder";
         private const string OutputFolderKey = "BlobBatch_OutputFolder";
+        private const string LocalOutputFolderKey = "BlobBatch_LocalOutputFolder";
         private const string GroupNameKey = "BlobBatch_GroupName";
+        private const string LocalGroupNameKey = "BlobBatch_LocalGroupName";
 
         private string _inputFolder = "Assets/Data/Source";
         private string _outputFolder = "Assets/Data/GeneratedBlob";
+        private string _localOutputFolder = "Assets/AddressableAssets/Local/GameData";
         private string _addressablesGroup = DefaultAddressablesGroup;
+        private string _localAddressablesGroup = DefaultAddressablesGroup;
         private Vector2 _scrollPos;
         private string _lastLog = string.Empty;
+        private string _cachedLocalTablesInputFolder;
+        private HashSet<string> _cachedLocalTableNames = new(StringComparer.Ordinal);
 
         [MenuItem("Elder/Data/Blob Batch Conversion Window")]
         public static void Open()
@@ -37,7 +49,9 @@ namespace Elder.Editor.Data.Tools
         {
             _inputFolder = EditorPrefs.GetString(InputFolderKey, _inputFolder);
             _outputFolder = EditorPrefs.GetString(OutputFolderKey, _outputFolder);
+            _localOutputFolder = EditorPrefs.GetString(LocalOutputFolderKey, _localOutputFolder);
             _addressablesGroup = EditorPrefs.GetString(GroupNameKey, _addressablesGroup);
+            _localAddressablesGroup = EditorPrefs.GetString(LocalGroupNameKey, _localAddressablesGroup);
         }
 
         private void OnGUI()
@@ -47,6 +61,7 @@ namespace Elder.Editor.Data.Tools
 
             DrawFolderField("Input Folder (.bytes)", ref _inputFolder, InputFolderKey);
             DrawFolderField("Output Folder (.blob.bytes)", ref _outputFolder, OutputFolderKey);
+            DrawFolderField("Local Output Folder (.blob.bytes)", ref _localOutputFolder, LocalOutputFolderKey);
 
             EditorGUILayout.Space(4);
             EditorGUILayout.LabelField("Addressables Group", EditorStyles.boldLabel);
@@ -56,6 +71,22 @@ namespace Elder.Editor.Data.Tools
                 _addressablesGroup = newGroup;
                 EditorPrefs.SetString(GroupNameKey, _addressablesGroup);
             }
+
+            EditorGUILayout.LabelField("Local Addressables Group", EditorStyles.boldLabel);
+            string newLocalGroup = EditorGUILayout.TextField(_localAddressablesGroup);
+            if (newLocalGroup != _localAddressablesGroup)
+            {
+                _localAddressablesGroup = newLocalGroup;
+                EditorPrefs.SetString(LocalGroupNameKey, _localAddressablesGroup);
+            }
+
+            EditorGUILayout.Space(6);
+            var localTableNames = ReadBootstrapLocalTableNames();
+            EditorGUILayout.LabelField($"Local Tables (from {BootstrapDataTableName}): {localTableNames.Count}", EditorStyles.boldLabel);
+            if (localTableNames.Count > 0)
+                EditorGUILayout.HelpBox(string.Join(", ", localTableNames), MessageType.None);
+            else
+                EditorGUILayout.HelpBox($"{BootstrapDataTableName}{SourceExtension} 를 {_inputFolder} 에서 찾을 수 없습니다.", MessageType.Warning);
 
             EditorGUILayout.Space(10);
 
@@ -116,7 +147,10 @@ namespace Elder.Editor.Data.Tools
 
             if (!Directory.Exists(_outputFolder))
                 Directory.CreateDirectory(_outputFolder);
+            if (!Directory.Exists(_localOutputFolder))
+                Directory.CreateDirectory(_localOutputFolder);
 
+            var localTableNames = ReadBootstrapLocalTableNames();
             string[] srcFiles = Directory.GetFiles(_inputFolder, $"*{SourceExtension}", SearchOption.TopDirectoryOnly);
 
             int success = 0;
@@ -132,7 +166,10 @@ namespace Elder.Editor.Data.Tools
 
                 string tableName = Path.GetFileNameWithoutExtension(srcPath);
                 string outputFile = tableName + BlobExtension;
-                string savePath = $"{_outputFolder}/{outputFile}";
+                bool isLocal = tableName == BootstrapDataTableName || localTableNames.Contains(GetDataKeyPrefix(tableName));
+                string targetFolder = isLocal ? _localOutputFolder : _outputFolder;
+                string targetGroup = isLocal ? _localAddressablesGroup : _addressablesGroup;
+                string savePath = $"{targetFolder}/{outputFile}";
 
                 var (_, bakeMethod) = FindBakerMethod(tableName);
                 if (bakeMethod is null)
@@ -150,9 +187,9 @@ namespace Elder.Editor.Data.Tools
                     AssetDatabase.ImportAsset(savePath);
 
                     string address = ResolveAddress(tableName);
-                    RegisterToAddressables(savePath, address, _addressablesGroup);
+                    RegisterToAddressables(savePath, address, targetGroup);
 
-                    log.AppendLine($"[OK] {tableName} → {savePath}  (address: {address})");
+                    log.AppendLine($"[OK]{(isLocal ? "[Local]" : string.Empty)} {tableName} → {savePath}  (address: {address})");
                     success++;
                 }
                 catch (Exception ex)
@@ -166,7 +203,53 @@ namespace Elder.Editor.Data.Tools
             _lastLog = log.ToString();
 
             EditorUtility.DisplayDialog("Blob Batch Conversion",
-                $"Success: {success}  /  Fail: {fail}\nOutput: {_outputFolder}", "OK");
+                $"Success: {success}  /  Fail: {fail}\nOutput: {_outputFolder}\nLocal Output: {_localOutputFolder}", "OK");
+        }
+
+        private HashSet<string> ReadBootstrapLocalTableNames()
+        {
+            if (_cachedLocalTablesInputFolder == _inputFolder)
+                return _cachedLocalTableNames;
+
+            _cachedLocalTablesInputFolder = _inputFolder;
+            _cachedLocalTableNames = LoadBootstrapLocalTableNames(_inputFolder);
+            return _cachedLocalTableNames;
+        }
+
+        // "ErrorMsgLocale_Ko" → "ErrorMsgLocale" (언더바 앞부분이 실제 데이터 타입)
+        private static string GetDataKeyPrefix(string tableName)
+        {
+            int underscoreIndex = tableName.IndexOf('_');
+            return underscoreIndex < 0 ? tableName : tableName[..underscoreIndex];
+        }
+
+        private static HashSet<string> LoadBootstrapLocalTableNames(string inputFolder)
+        {
+            var names = new HashSet<string>(StringComparer.Ordinal);
+
+            string srcPath = $"{inputFolder}/{BootstrapDataTableName}{SourceExtension}";
+            if (!File.Exists(srcPath))
+                return names;
+
+            try
+            {
+                byte[] raw = File.ReadAllBytes(srcPath);
+                var options = MessagePackSerializerOptions.Standard.WithResolver(ContractlessStandardResolver.Instance);
+                var rows = MessagePackSerializer.Deserialize<List<object[]>>(raw, options);
+
+                foreach (object[] row in rows)
+                {
+                    // BootstrapDataBaker 스키마: row[1] = DataKey
+                    if (row.Length > 1 && row[1] is string dataKey && !string.IsNullOrEmpty(dataKey))
+                        names.Add(dataKey);
+                }
+                return names;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[BlobBatch] {BootstrapDataTableName} 읽기 실패: {ex.Message}");
+                return names;
+            }
         }
 
         private static string ResolveAddress(string tableName)
@@ -246,3 +329,5 @@ namespace Elder.Editor.Data.Tools
     }
 }
 #endif
+
+*/

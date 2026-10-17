@@ -1,3 +1,4 @@
+/*
 using MessagePack;
 
 namespace Elder.SkillTrial.Resources.Data
@@ -20,3 +21,5 @@ namespace Elder.SkillTrial.Resources.Data
         }
     }
 }
+
+*/

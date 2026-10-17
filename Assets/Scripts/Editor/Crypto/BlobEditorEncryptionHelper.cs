@@ -1,3 +1,4 @@
+/*
 #if UNITY_EDITOR
 using Elder.Framework.Crypto;
 using Elder.Framework.Crypto.Interfaces;
@@ -27,3 +28,5 @@ namespace Elder.SkillTrial.Editor.Crypto
     }
 }
 #endif
+
+*/

@@ -1,3 +1,4 @@
+/*
 ﻿#if UNITY_EDITOR
 using Elder.Framework.Crypto;
 using MessagePack;
@@ -52,3 +53,5 @@ namespace Elder.SkillTrial.Resources.Data
 	}
 }
 #endif
+
+*/

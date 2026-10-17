@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="AssetLoadTestView.uss" />
+    <ui:VisualElement name="asset-load-test-root" class="asset-load-test-root">
+        <ui:VisualElement name="button-row" class="button-row">
+            <ui:Button name="load-asset-button" text="Load Asset" class="test-button" />
+            <ui:Button name="list-cache-button" text="List Cached Keys" class="test-button" />
+            <ui:Button name="release-all-button" text="Release All" class="test-button" />
+            <ui:Button name="memory-status-button" text="Memory Status" class="test-button" />
+            <ui:Button name="clear-log-button" text="Clear Log" class="test-button" />
+        </ui:VisualElement>
+        <ui:ScrollView name="log-scroll-view" class="log-scroll-view">
+            <ui:VisualElement name="log-container" class="log-container" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

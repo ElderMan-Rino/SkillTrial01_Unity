@@ -1,3 +1,4 @@
+/*
 #if UNITY_EDITOR
 using MessagePack;
 
@@ -18,3 +19,5 @@ namespace Elder.SkillTrial.Resources.Data
     }
 }
 #endif
+
+*/

@@ -1,3 +1,4 @@
+/*
 ﻿using System;
 using System.Collections.Generic;
 using MessagePack;
@@ -22,3 +23,5 @@ namespace Elder.SkillTrial.Resources.Data
 		}
 	}
 }
+
+*/

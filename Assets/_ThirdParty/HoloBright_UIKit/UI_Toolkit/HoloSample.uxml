@@ -1,0 +1,44 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+  <Style src="HoloTheme.uss" />
+  <ui:VisualElement class="holo-root holo-bg-dots" style="flex-grow:1; padding:40px;">
+    <ui:VisualElement class="holo-bg-glow" picking-mode="Ignore" />
+
+    <ui:VisualElement style="width:520px;">
+      <ui:VisualElement class="holo-panel__shadow" picking-mode="Ignore" />
+      <ui:VisualElement class="holo-panel">
+        <ui:VisualElement class="holo-panel__outline" picking-mode="Ignore" />
+        <ui:VisualElement class="holo-panel__gloss" picking-mode="Ignore" />
+
+        <ui:Label text="SETTINGS" style="font-size:18px; margin-bottom:12px;" />
+
+        <ui:VisualElement style="flex-direction:row;">
+          <ui:Button text="Audio" class="holo-tab holo-tab--active" />
+          <ui:Button text="Video" class="holo-tab" style="margin-left:8px;" />
+          <ui:Button text="Game"  class="holo-tab" style="margin-left:8px;" />
+        </ui:VisualElement>
+        <ui:VisualElement class="holo-tab-bar__indicator" style="margin-bottom:20px;" />
+
+        <ui:VisualElement style="flex-direction:row;">
+          <ui:Button text="Normal" class="holo-button">
+            <ui:VisualElement class="holo-button__gloss" />
+          </ui:Button>
+          <ui:Button text="Accent" class="holo-button holo-button--accent" style="margin-left:12px;">
+            <ui:VisualElement class="holo-button__gloss" />
+          </ui:Button>
+          <ui:Button text="Pill" class="holo-button holo-button--pill" style="margin-left:12px;">
+            <ui:VisualElement class="holo-button__gloss" />
+          </ui:Button>
+        </ui:VisualElement>
+
+        <ui:Toggle label="Music" class="holo-toggle" style="margin-top:20px;" />
+        <ui:Toggle label="Subtitles" class="holo-checkbox" />
+        <ui:Slider label="Volume" low-value="0" high-value="100" value="60" class="holo-slider" />
+        <ui:ProgressBar value="70" title="Loading" class="holo-progress" />
+        <ui:TextField label="Name" value="" class="holo-input" />
+        <ui:DropdownField label="Language" class="holo-dropdown" />
+        <ui:VisualElement class="holo-divider" style="margin-top:16px;" />
+        <ui:Label text="NEW" class="holo-badge" style="align-self:flex-start; margin-top:12px;" />
+      </ui:VisualElement>
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,295 @@
+/* =========================================================
+   Hololive-style bright theme  —  Unity UI Toolkit (USS)
+   모든 스프라이트는 흰색 베이스. 색은 전부 여기서 tint로 결정.
+   경로는 프로젝트 구조에 맞게 수정하세요.
+   ========================================================= */
+
+:root {
+    /* --- Palette (브랜드 컬러, 필요 시 이 블록만 교체) --- */
+    --holo-sky:        #5CC8F5;
+    --holo-sky-dark:   #2FA8E0;
+    --holo-sky-light:  #B9E8FB;
+    --holo-pink:       #FF8FB8;
+    --holo-mint:       #7EDBC2;
+    --holo-yellow:     #FFD76B;
+    --holo-ink:        #2B3A4A;
+    --holo-gray:       #C9D6E0;
+    --holo-bg:         #EAF7FD;
+    --holo-white:      #FFFFFF;
+
+    /* --- 역할별 컬러 --- */
+    --ui-primary:      var(--holo-sky);
+    --ui-primary-dark: var(--holo-sky-dark);
+    --ui-accent:       var(--holo-pink);
+    --ui-success:      var(--holo-mint);
+    --ui-warn:         var(--holo-yellow);
+    --ui-text:         var(--holo-ink);
+    --ui-text-muted:   rgba(43,58,74,0.55);
+    --ui-surface:      var(--holo-white);
+    --ui-disabled:     var(--holo-gray);
+
+    /* --- Sprites --- */
+    --spr-panel-base:      resource('UI/Sprites/Panel_Base');
+    --spr-panel-outline:   resource('UI/Sprites/Panel_Outline');
+    --spr-panel-gloss:     resource('UI/Sprites/Panel_Gloss');
+    --spr-panel-shadow:    resource('UI/Sprites/Panel_Shadow');
+    --spr-card-base:       resource('UI/Sprites/Card_Base');
+    --spr-card-gloss:      resource('UI/Sprites/Card_Gloss');
+    --spr-button-base:     resource('UI/Sprites/Button_Base');
+    --spr-button-outline:  resource('UI/Sprites/Button_Outline');
+    --spr-button-gloss:    resource('UI/Sprites/Button_Gloss');
+    --spr-button-shadow:   resource('UI/Sprites/Button_Shadow');
+    --spr-button-pressed:  resource('UI/Sprites/Button_Pressed_Inner');
+    --spr-pill-base:       resource('UI/Sprites/Button_Pill');
+    --spr-pill-gloss:      resource('UI/Sprites/Button_Pill_Gloss');
+    --spr-toggle-track:    resource('UI/Sprites/Toggle_Track');
+    --spr-toggle-knob:     resource('UI/Sprites/Toggle_Knob');
+    --spr-check-box:       resource('UI/Sprites/Checkbox_Box');
+    --spr-check-outline:   resource('UI/Sprites/Checkbox_Outline');
+    --spr-check-mark:      resource('UI/Sprites/Checkbox_Check');
+    --spr-slider-track:    resource('UI/Sprites/Slider_Track');
+    --spr-slider-fill:     resource('UI/Sprites/Slider_Fill');
+    --spr-slider-handle:   resource('UI/Sprites/Slider_Handle');
+    --spr-slider-ring:     resource('UI/Sprites/Slider_Handle_Ring');
+    --spr-progress-track:  resource('UI/Sprites/Progress_Track');
+    --spr-progress-fill:   resource('UI/Sprites/Progress_Fill');
+    --spr-input-base:      resource('UI/Sprites/Input_Base');
+    --spr-input-outline:   resource('UI/Sprites/Input_Outline');
+    --spr-chevron:         resource('UI/Sprites/Icon_Chevron_Down');
+    --spr-scroll-track:    resource('UI/Sprites/Scroll_Track');
+    --spr-scroll-thumb:    resource('UI/Sprites/Scroll_Thumb');
+    --spr-tab:             resource('UI/Sprites/Tab_Base');
+    --spr-tab-indicator:   resource('UI/Sprites/Tab_Indicator');
+    --spr-tooltip:         resource('UI/Sprites/Tooltip_Bubble');
+    --spr-divider:         resource('UI/Sprites/Divider');
+    --spr-badge:           resource('UI/Sprites/Badge_Pill');
+    --spr-bg-glow:         resource('UI/Sprites/BG_Radial_Glow');
+    --spr-bg-dots:         resource('UI/Sprites/BG_Dots_Tile');
+}
+
+/* ---------- 공통 ---------- */
+.holo-root {
+    background-color: var(--holo-bg);
+    color: var(--ui-text);
+    -unity-font-style: bold;
+}
+.holo-bg-dots {
+    background-image: var(--spr-bg-dots);
+    -unity-background-image-tint-color: rgba(92,200,245,0.16);
+    background-repeat: repeat;
+    background-size: 64px 64px;
+}
+.holo-bg-glow {
+    position: absolute; left: 0; right: 0; top: -20%; height: 80%;
+    background-image: var(--spr-bg-glow);
+    -unity-background-image-tint-color: rgba(255,255,255,0.8);
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+/* ---------- Panel (Base + Outline + Gloss 3레이어) ---------- */
+.holo-panel {
+    background-image: var(--spr-panel-base);
+    -unity-background-image-tint-color: var(--ui-surface);
+    -unity-slice-left: 32; -unity-slice-right: 32;
+    -unity-slice-top: 32;  -unity-slice-bottom: 32;
+    -unity-slice-scale: 1;
+    padding: 28px;
+}
+.holo-panel__outline {  /* 패널의 자식으로 position:absolute, inset 0 */
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    background-image: var(--spr-panel-outline);
+    -unity-background-image-tint-color: var(--ui-primary);
+    -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32;
+}
+.holo-panel__gloss {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    background-image: var(--spr-panel-gloss);
+    -unity-background-image-tint-color: rgba(255,255,255,0.45);
+    -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32;
+}
+.holo-panel__shadow {   /* 패널 뒤 형제 요소, 패널보다 8px 크게 */
+    position: absolute; left: -8px; right: -8px; top: -6px; bottom: -10px;
+    background-image: var(--spr-panel-shadow);
+    -unity-background-image-tint-color: rgba(47,168,224,0.28);
+    -unity-slice-left: 40; -unity-slice-right: 40; -unity-slice-top: 40; -unity-slice-bottom: 40;
+}
+
+/* ---------- Button ---------- */
+.holo-button {
+    background-image: var(--spr-button-base);
+    -unity-background-image-tint-color: var(--ui-primary);
+    -unity-slice-left: 22; -unity-slice-right: 22; -unity-slice-top: 22; -unity-slice-bottom: 22;
+    border-width: 0; background-color: transparent;
+    min-height: 44px; padding: 0 24px;
+    color: var(--holo-white);
+    -unity-text-align: middle-center;
+    transition-property: -unity-background-image-tint-color, scale;
+    transition-duration: 0.1s;
+}
+.holo-button:hover  { -unity-background-image-tint-color: #78D4F8; scale: 1.03 1.03; }
+.holo-button:active { -unity-background-image-tint-color: var(--ui-primary-dark); scale: 0.98 0.98; }
+.holo-button:disabled { -unity-background-image-tint-color: var(--ui-disabled); color: var(--ui-text-muted); opacity: 0.8; }
+.holo-button--accent  { -unity-background-image-tint-color: var(--ui-accent); }
+.holo-button--success { -unity-background-image-tint-color: var(--ui-success); }
+.holo-button--accent:hover  { -unity-background-image-tint-color: #FFA9C9; }
+.holo-button--success:hover { -unity-background-image-tint-color: #9AE6D2; }
+.holo-button__gloss {  /* 버튼 내부 absolute 자식 */
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    background-image: var(--spr-button-gloss);
+    -unity-background-image-tint-color: rgba(255,255,255,0.5);
+    -unity-slice-left: 22; -unity-slice-right: 22; -unity-slice-top: 22; -unity-slice-bottom: 22;
+    picking-mode: ignore;
+}
+.holo-button:active > .holo-button__gloss { -unity-background-image-tint-color: rgba(255,255,255,0.0); }
+.holo-button--pill {
+    background-image: var(--spr-pill-base);
+    -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32;
+    min-height: 40px;
+}
+
+/* ---------- Toggle (Toggle 요소 커스텀) ---------- */
+.holo-toggle .unity-toggle__input  { background-color: transparent; }
+.holo-toggle .unity-toggle__checkmark {
+    width: 64px; height: 32px; border-width: 0;
+    background-image: var(--spr-toggle-track);
+    -unity-background-image-tint-color: var(--ui-disabled);
+    -unity-slice-left: 16; -unity-slice-right: 16; -unity-slice-top: 16; -unity-slice-bottom: 16;
+    transition-property: -unity-background-image-tint-color; transition-duration: 0.15s;
+}
+.holo-toggle:checked .unity-toggle__checkmark { -unity-background-image-tint-color: var(--ui-primary); }
+/* 노브는 별도 VisualElement를 checkmark 위에 올리고 C#에서 translate 애니메이션 */
+.holo-toggle__knob {
+    position: absolute; width: 32px; height: 32px;
+    background-image: var(--spr-toggle-knob);
+    -unity-background-image-tint-color: var(--holo-white);
+    transition-property: translate; transition-duration: 0.15s;
+}
+.holo-toggle:checked .holo-toggle__knob { translate: 32px 0; }
+
+/* ---------- Checkbox ---------- */
+.holo-checkbox .unity-toggle__checkmark {
+    width: 28px; height: 28px; border-width: 0;
+    background-image: var(--spr-check-outline);
+    -unity-background-image-tint-color: var(--ui-primary);
+    -unity-slice-left: 10; -unity-slice-right: 10; -unity-slice-top: 10; -unity-slice-bottom: 10;
+}
+.holo-checkbox:checked .unity-toggle__checkmark {
+    background-image: var(--spr-check-box);
+}
+/* 체크 마크는 checkmark 안에 absolute 자식으로 Checkbox_Check 흰색 tint */
+
+/* ---------- Slider ---------- */
+.holo-slider .unity-base-slider__tracker {
+    height: 14px; border-width: 0; border-radius: 0;
+    background-image: var(--spr-slider-track);
+    -unity-background-image-tint-color: var(--holo-sky-light);
+    -unity-slice-left: 8; -unity-slice-right: 8; -unity-slice-top: 8; -unity-slice-bottom: 8;
+}
+.holo-slider .unity-base-slider__dragger {
+    width: 28px; height: 28px; border-width: 0; border-radius: 0; margin-top: -7px;
+    background-color: transparent;
+    background-image: var(--spr-slider-handle);
+    -unity-background-image-tint-color: var(--holo-white);
+}
+.holo-slider__fill {   /* tracker 위에 올리는 채움 요소, width는 C#에서 % 갱신 */
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background-image: var(--spr-slider-fill);
+    -unity-background-image-tint-color: var(--ui-primary);
+    -unity-slice-left: 8; -unity-slice-right: 8; -unity-slice-top: 8; -unity-slice-bottom: 8;
+    picking-mode: ignore;
+}
+
+/* ---------- ProgressBar ---------- */
+.holo-progress .unity-progress-bar__background {
+    border-width: 0; border-radius: 0; background-color: transparent;
+    background-image: var(--spr-progress-track);
+    -unity-background-image-tint-color: var(--holo-white);
+    -unity-slice-left: 8; -unity-slice-right: 8; -unity-slice-top: 8; -unity-slice-bottom: 8;
+}
+.holo-progress .unity-progress-bar__progress {
+    border-radius: 0; background-color: transparent;
+    background-image: var(--spr-progress-fill);
+    -unity-background-image-tint-color: var(--ui-warn);
+    -unity-slice-left: 8; -unity-slice-right: 8; -unity-slice-top: 8; -unity-slice-bottom: 8;
+}
+
+/* ---------- TextField / Dropdown ---------- */
+.holo-input .unity-base-text-field__input,
+.holo-dropdown .unity-base-popup-field__input {
+    border-width: 0; border-radius: 0; background-color: transparent;
+    background-image: var(--spr-input-base);
+    -unity-background-image-tint-color: var(--holo-white);
+    -unity-slice-left: 16; -unity-slice-right: 16; -unity-slice-top: 16; -unity-slice-bottom: 16;
+    min-height: 40px; padding: 0 14px; color: var(--ui-text);
+}
+.holo-input__outline {   /* absolute 오버레이, focus 시 색 변경 */
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    background-image: var(--spr-input-outline);
+    -unity-background-image-tint-color: var(--ui-disabled);
+    -unity-slice-left: 16; -unity-slice-right: 16; -unity-slice-top: 16; -unity-slice-bottom: 16;
+    picking-mode: ignore;
+}
+.holo-input:focus .holo-input__outline { -unity-background-image-tint-color: var(--ui-primary); }
+.holo-dropdown .unity-base-popup-field__arrow {
+    background-image: var(--spr-chevron);
+    -unity-background-image-tint-color: var(--ui-primary);
+    width: 20px; height: 20px;
+}
+
+/* ---------- ScrollView ---------- */
+.holo-scroll .unity-scroller--vertical { width: 12px; }
+.holo-scroll .unity-scroller--vertical .unity-base-slider__tracker {
+    background-image: var(--spr-scroll-track);
+    -unity-background-image-tint-color: rgba(201,214,224,0.5);
+    -unity-slice-left: 8; -unity-slice-right: 8; -unity-slice-top: 8; -unity-slice-bottom: 8;
+    border-width: 0;
+}
+.holo-scroll .unity-scroller--vertical .unity-base-slider__dragger {
+    background-image: var(--spr-scroll-thumb);
+    -unity-background-image-tint-color: var(--ui-primary);
+    -unity-slice-left: 8; -unity-slice-right: 8; -unity-slice-top: 8; -unity-slice-bottom: 8;
+    border-width: 0; border-radius: 0; width: 12px;
+}
+.holo-scroll .unity-scroller__low-button, .holo-scroll .unity-scroller__high-button { display: none; }
+
+/* ---------- Tabs ---------- */
+.holo-tab {
+    background-image: var(--spr-tab);
+    -unity-background-image-tint-color: var(--ui-disabled);
+    -unity-slice-left: 20; -unity-slice-right: 20; -unity-slice-top: 20; -unity-slice-bottom: 0;
+    min-height: 40px; padding: 0 24px; color: var(--ui-text);
+    border-width: 0; background-color: transparent;
+}
+.holo-tab--active { -unity-background-image-tint-color: var(--ui-primary); color: var(--holo-white); }
+.holo-tab-bar__indicator {
+    height: 4px;
+    background-image: var(--spr-tab-indicator);
+    -unity-background-image-tint-color: var(--holo-sky-light);
+    -unity-slice-left: 4; -unity-slice-right: 4; -unity-slice-top: 4; -unity-slice-bottom: 4;
+}
+
+/* ---------- Tooltip / Badge / Divider ---------- */
+.holo-tooltip {
+    background-image: var(--spr-tooltip);
+    -unity-background-image-tint-color: var(--holo-white);
+    -unity-slice-left: 20; -unity-slice-right: 20; -unity-slice-top: 20; -unity-slice-bottom: 16;
+    padding: 10px 14px 26px 14px; color: var(--ui-text);
+}
+.holo-badge {
+    background-image: var(--spr-badge);
+    -unity-background-image-tint-color: var(--ui-accent);
+    -unity-slice-left: 12; -unity-slice-right: 12; -unity-slice-top: 12; -unity-slice-bottom: 12;
+    height: 24px; padding: 0 10px; color: var(--holo-white); font-size: 11px;
+    -unity-text-align: middle-center;
+}
+.holo-divider {
+    height: 4px;
+    background-image: var(--spr-divider);
+    -unity-background-image-tint-color: var(--holo-sky-light);
+    -unity-slice-left: 2; -unity-slice-right: 2; -unity-slice-top: 2; -unity-slice-bottom: 2;
+}
+
+/* ---------- 테마 스왑 예시: 클래스 하나로 전체 컬러 변경 ---------- */
+.theme-pink   { --ui-primary: #FF8FB8; --ui-primary-dark: #E66A98; --holo-sky-light: #FFD0E1; --holo-bg: #FFF0F6; }
+.theme-mint   { --ui-primary: #7EDBC2; --ui-primary-dark: #4FC0A3; --holo-sky-light: #CDF3E8; --holo-bg: #EEFBF7; }
+.theme-violet { --ui-primary: #8B7CF6; --ui-primary-dark: #6A5BD9; --holo-sky-light: #D7D0FC; --holo-bg: #F3F1FE; }

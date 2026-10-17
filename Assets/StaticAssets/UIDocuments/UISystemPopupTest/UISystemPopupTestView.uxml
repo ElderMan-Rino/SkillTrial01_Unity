@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="UISystemPopupTestView.uss" />
+    <ui:VisualElement name="ui-system-popup-test-root" class="ui-system-popup-test-root">
+        <ui:VisualElement name="popup-box" class="popup-box">
+            <ui:Button name="close-button" text="X" class="popup-close-button" />
+            <ui:Label name="status-label" text="Status: Idle" class="popup-message-label" />
+            <ui:Button name="open-button" text="확인" class="popup-confirm-button" />
+        </ui:VisualElement>
+        <ui:Button name="back-key-button" text="Back Key" class="hidden-test-button" />
+    </ui:VisualElement>
+</ui:UXML>

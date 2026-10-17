@@ -78,15 +78,3 @@ Limits: ≤2 generic params, ≤2 nesting levels (`A<B<T>>` max), reflection →
 ## 13. DDD
 - `Entity<TId>`: identity by Id. `ValueObject`: equality by value (`GetEqualityComponents` allocates enumerator — low-frequency domain logic only).
 - `AggregateRoot<TId>`: collect `DomainEvents` via `RaiseDomainEvent`; ApplicationService calls `DispatchAndClearEvents` then persists.
-
-## 14. Forbidden Patterns
-| Forbidden | Alternative |
-|---|---|
-| `async void` | `async UniTaskVoid` + `.Forget()` |
-| Ignoring `Subscribe` token | Store + Dispose `SubscriptionToken` |
-| Impl class as field type / bare `public` impl | Interface type / `internal sealed` + interface |
-| `string.Format`, `+` concat | `$""` |
-| Hot-path closures / LINQ / `new` class | local capture·static lambda / `for` loop / `ObjectPool<T>` |
-| `dynamic`, `MakeGenericType` | generics + interfaces, pre-defined types |
-| Implicit access modifiers, brace-less multi-statement if | explicit modifiers, `{ }` + newline |
-| Untagged heap/AOT-risk code | `[HEAP]`/`[BOXING]`/`[GC PRESSURE]`/`[AOT RISK]` |

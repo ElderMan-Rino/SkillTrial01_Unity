@@ -1,0 +1,9 @@
+[ Gmarket Sans License ]
+Copyright: Gmarket Inc.
+License: SIL Open Font License 1.1 (OFL)
+Source: https://corp.gmarket.com/fonts/
+- Commercial use: Allowed (free)
+- In-game embedding / software bundling: Allowed
+- Modification & redistribution: Allowed (OFL must be retained; modified versions may not use the original name)
+- Selling the font file on its own: Prohibited
+- Acquired: 2026-08-22
