@@ -1,7 +1,10 @@
+using Cysharp.Threading.Tasks;
+using System.Threading;
+
 namespace Elder.Framework.Core.Interfaces
 {
     public interface IInitializable
     {
-        public bool TryInitialize();
+        public UniTask InitializeAsync(CancellationToken cancellationToken);
     }
 }

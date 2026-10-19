@@ -1,14 +1,19 @@
+using Cysharp.Threading.Tasks;
+using Elder.Framework.Core.Helpers;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.Root.Infra;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Elder.Framework.Core.Infra
 {
     public sealed class ComponentRegistry : IComponentProvider, IComponentRegistry
     {
+        private const int MaxChunkSize = 4;
+
         private ILoggerEx _logger = LogFacade.GetLogger<ComponentRegistry>();
 
         // key는 실제 class의 타입이 되어야함
@@ -59,6 +64,40 @@ namespace Elder.Framework.Core.Infra
                 if (entry.Instance is IDependencyInjectable injectable)
                     injectable.InjectDependency(this);
             }
+        }
+
+        public async UniTask InitializeComponentsAsync(CancellationToken cancellationToken)
+        {
+            var instances = new List<IFrameworkComponent>(_componentEntrys.Count); // [HEAP]
+            foreach (var entry in _componentEntrys.Values)
+                instances.Add(entry.Instance);
+
+            await UniTaskChunkHelper.RunInChunksAsync(instances, MaxChunkSize, InitializeOneAsync, cancellationToken);
+        }
+
+        public async UniTask PostInitializeComponentsAsync(CancellationToken cancellationToken)
+        {
+            var instances = new List<IFrameworkComponent>(_componentEntrys.Count); // [HEAP]
+            foreach (var entry in _componentEntrys.Values)
+                instances.Add(entry.Instance);
+
+            await UniTaskChunkHelper.RunInChunksAsync(instances, MaxChunkSize, PostInitializeOneAsync, cancellationToken);
+        }
+
+        private static UniTask InitializeOneAsync(IFrameworkComponent instance, CancellationToken cancellationToken)
+        {
+            if (instance is IInitializable initializable)
+                return initializable.InitializeAsync(cancellationToken);
+
+            return UniTask.CompletedTask;
+        }
+
+        private static UniTask PostInitializeOneAsync(IFrameworkComponent instance, CancellationToken cancellationToken)
+        {
+            if (instance is IPostInitializable postInitializable)
+                return postInitializable.PostInitializeAsync(cancellationToken);
+
+            return UniTask.CompletedTask;
         }
 
         public void ClearAliasTypes()

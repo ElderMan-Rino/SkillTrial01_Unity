@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Elder.Framework.Core.Infra;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Log.Helper;
@@ -5,26 +6,40 @@ using Elder.Framework.Log.Infra;
 using Elder.Framework.Log.Installers;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.Root.Interfaces;
+using Elder.Framework.Signal.Interfaces;
+using Elder.Framework.Signal.Messages;
+using Elder.Framework.Singal.Installers;
 using System;
+using System.Threading;
 
 namespace Elder.TestModule.Common.Boot
 {
     internal sealed class TestModuleRoot : IMainFrameworkRoot, IComponentProvider
     {
         private readonly ComponentRegistry _registry = new();
-        private readonly Action<IComponentRegistry> _installAction;
         private ILoggerEx _logger;
 
-        public TestModuleRoot(Action<IComponentRegistry> installAction)
+     
+        public bool TryGetComponent<T>(out T target) where T : IFrameworkComponent
         {
-            _installAction = installAction;
+            return _registry.TryGetComponent(out target);
         }
 
-        public void Initialize()
+        public async UniTask BootModuleAsync(Action<IComponentRegistry> installAction, Type startCoordinatorType, CancellationToken cancellationToken)
         {
             BootstrapLogger();
-            _installAction(_registry);
+            installAction?.Invoke(_registry);
             _registry.InjectDependencies();
+            await _registry.InitializeComponentsAsync(cancellationToken);
+            await _registry.PostInitializeComponentsAsync(cancellationToken);
+
+            if (!TryGetComponent<ISignalPublisher>(out var publisher))
+            {
+                _logger.Error($"Failed to resolve {nameof(ISignalPublisher)} after {nameof(SignalInstaller)} installation."); // [HEAP]
+                throw new InvalidOperationException($"Failed to resolve {nameof(ISignalPublisher)} after {nameof(SignalInstaller)} installation."); // [HEAP]
+            }
+
+            publisher.Publish(new FxModuleStartSignal(startCoordinatorType));
         }
 
         private void BootstrapLogger()
@@ -36,15 +51,7 @@ namespace Elder.TestModule.Common.Boot
             _logger = LogFacade.GetLogger<TestModuleRoot>();
         }
 
-        public bool TryGetComponent<T>(out T target) where T : IFrameworkComponent
-        {
-            return _registry.TryGetComponent(out target);
-        }
 
-        public void MapAlias(Type aliasType, Type classType)
-        {
-            _registry.MapAlias(aliasType, classType);
-        }
 
         public void ShutDown()
         {

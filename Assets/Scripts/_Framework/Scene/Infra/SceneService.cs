@@ -25,6 +25,11 @@ namespace Elder.Framework.Scene.Infra
     //    구독자가 각자 컴포넌트를 resolve하도록 둔다. Coordinator 기동을 Registry 책임으로 당길지는 추후 결정.
     //  - currentScope를 SceneService가 어떻게 추적할지(이전 EnterSceneAsync 호출의 scope 값을 내부 필드로
     //    들고 있을지, 호출자가 매번 명시할지)는 아직 미정.
+    //
+    // 앱 진입(최초 부팅) 경로 확정: IMainFrameworkRoot.BootModuleAsync로 분리(SceneService 오버로드 기각).
+    //  - 이유(SRP/DDD): SceneService는 "씬 전환" 단일 책임만 유지. 부팅은 Root(이미 Initialize를 보유)
+    //    경계에 속하는 별개 유스케이스이며 TestBootEntry.Run이 쓰던 패턴과 합류시킴.
+    //  - 상세는 IMainFrameworkRoot.BootModuleAsync 선언부 주석 참조.
     internal sealed class SceneService : ISceneService, IDependencyInjectable
     {
         public Type ClassType => typeof(SceneService);
@@ -57,8 +62,9 @@ namespace Elder.Framework.Scene.Infra
     //      그 씬이 곧 시작점인 경우. TestBootEntry.Run이 이미 이 패턴)
     //      - 이전 scope가 없음 -> UnloadScope 불필요.
     //      - 씬 로드 불필요(이미 해당 씬 위에서 실행 중).
-    //      - 창구(후보): IMainFrameworkRoot 쪽에 EnterSceneAsync와 대칭되는 BootModuleAsync(가칭)를
-    //        추가하거나, SceneService에 scope/sceneLoad 생략 오버로드를 두는 방식 중 택 1 필요(미결정).
+    //      - 창구(확정): IMainFrameworkRoot.BootModuleAsync(installAction, startCoordinatorType).
+    //        SceneService 오버로드 방식은 기각 - SceneService에 "씬 없는 부팅" 책임이 섞여 SRP 위반,
+    //        TestBootEntry와 책임 중복됨.
     //
     // 공통 3단계(두 경로가 공유):
     //  1. installAction(_registry)         : 모듈 전용 컴포넌트 Regist<T>() 체인
@@ -93,6 +99,6 @@ namespace Elder.Framework.Scene.Infra
     //    "새로 등록된 것만" 주입하도록 ComponentRegistry를 보강해야 함.
     //  - currentScope를 SceneService가 어떻게 추적할지(내부 필드로 들고 있을지, 호출자가 매번 명시할지)
     //    미정.
-    //  - (B) 앱 진입 경로의 실제 창구 타입/시그니처 미정(IMainFrameworkRoot 확장 vs SceneService 오버로드).
+    //  - (B) 앱 진입 경로 창구 확정: IMainFrameworkRoot.BootModuleAsync(installAction, startCoordinatorType).
     // ----------------------------------------------------------------------------------------
 }

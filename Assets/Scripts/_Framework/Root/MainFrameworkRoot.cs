@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Elder.Framework.Core.Infra;
 using Elder.Framework.Core.Installers;
 using Elder.Framework.Core.Interfaces;
@@ -6,7 +7,10 @@ using Elder.Framework.Log.Installers;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.Root.Interfaces;
 using Elder.Framework.Log.Infra;
+using Elder.Framework.Signal.Interfaces;
+using Elder.Framework.Signal.Messages;
 using System;
+using System.Threading;
 
 namespace Elder.Framework.Root
 {
@@ -36,11 +40,6 @@ namespace Elder.Framework.Root
             return _registry.TryGetComponent(out target);
         }
 
-        public void MapAlias(Type aliasType, Type classType)
-        {
-            _registry.MapAlias(aliasType, classType);
-        }
-
         public void ShutDown()
         {
             _registry.ClearAliasTypes();
@@ -48,6 +47,19 @@ namespace Elder.Framework.Root
             _registry.DisposeComponents();
             LogFacade.CleanUp();
             _registry.PostDisposeComponents();
+        }
+
+        // 샘플 스케치 - TestBootEntry.Run과 동일한 install -> inject -> signal 순서.
+        // 미해결: InjectDependencies()가 전체 _componentEntrys를 순회하므로 재주입 위험(ComponentRegistry 보강 필요).
+        public UniTask BootModuleAsync(Action<IComponentRegistry> installAction, Type startCoordinatorType, CancellationToken cancellationToken)
+        {
+            installAction(_registry);
+            _registry.InjectDependencies();
+
+            if (TryGetComponent<ISignalPublisher>(out var publisher))
+                publisher.Publish(new FxModuleStartSignal(startCoordinatorType));
+
+            return UniTask.CompletedTask;
         }
     }
 

@@ -10,12 +10,6 @@ using System.Collections.Generic;
 
 namespace Elder.Framework.MessageBox.App
 {
-    // [TODO] Pool 설계 (동시 다중 표시 지원)
-    // 현재 UISystem/UIPresenterFactory는 Type당 인스턴스 1개 고정(Dictionary<Type,...>) 구조라
-    // MessageBox를 동시에 여러 개 띄우는 요구사항을 처리할 수 없음. 아래 구조로 이 Coordinator 내부에서
-    // 별도 풀을 직접 관리하고, UISystem.ShowAsync<MessageBoxView>() 경로는 MessageBox에 한해 사용하지 않는다.
-    //
-    // 1. Coordinator가 IMessageBoxPresenter 풀을 직접 소유:
     //    private readonly ObjectPool<IMessageBoxPresenter> _presenterPool;
     //    - Factory 델리게이트: () => new MessageBoxPresenter() 로 생성 (UIPresenterFactory 미경유 — 그건 싱글턴 전용)
     //    - View도 동일하게 Coordinator가 직접 Instantiate/Pool 관리 (Addressables 인스턴스 N개 유지)

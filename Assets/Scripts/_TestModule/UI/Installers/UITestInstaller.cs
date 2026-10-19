@@ -6,7 +6,7 @@ using Elder.TestModule.UI.Infra;
 
 namespace Elder.TestModule.UI.Interfaces
 {
-    public static class UITestInstaller 
+    public static class UITestInstaller
     {
         public static void Install(IComponentRegistry registry)
         {
@@ -15,6 +15,7 @@ namespace Elder.TestModule.UI.Interfaces
             AssetSystemInstaller.Install(registry);
 
             registry.Regist<UITestCoordinator>().As<IUITestCoordinator>();
+            registry.Regist<UITestFlowHandler>();
         }
     }
 }
