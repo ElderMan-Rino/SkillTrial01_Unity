@@ -2,11 +2,7 @@
     "name": "Elder.Game.SkillTrial",
     "rootNamespace": "Elder.Game.SkillTrial",
     "references": [
-        "Elder.Framework.Core",
-        "Elder.Framework.Core.Interfaces",
-        "Elder.Framework.Common",
-        "Elder.Framework.Blob",
-        "Elder.Framework.GameMode",
+        "Elder.Framework",
         "UniTask",
         "Unity.Entities",
         "Unity.Collections"

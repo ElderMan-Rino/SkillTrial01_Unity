@@ -1,6 +1,6 @@
 using Elder.Framework.Boot.Definitions;
 using Elder.Framework.Boot.Infra;
-using Elder.Framework.Core.UI.Infra;
+using Elder.Framework.UI.Infra;
 using Elder.Framework.Root;
 using Elder.Framework.Root.Infra;
 using Elder.Framework.Signal.Interfaces;

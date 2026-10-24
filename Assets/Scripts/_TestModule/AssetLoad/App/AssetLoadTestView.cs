@@ -1,4 +1,4 @@
-using Elder.Framework.Core.UI.App;
+using Elder.Framework.UI.App;
 using Elder.Framework.Log.Definitions.Enums;
 using R3;
 using System.Collections.Generic;

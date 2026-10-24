@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Elder.Framework.Log.Infra
 {
-    internal sealed class UnityLogAdapter : IFrameworkComponent, IDependencyInjectable, IPreDisposable
+    internal sealed class UnityLogAdapter : IFrameworkComponent, IDependencyInjectable, IPostDisposable
     {
         private ILogEventSource _logEventSource;
 
@@ -41,7 +41,7 @@ namespace Elder.Framework.Log.Infra
             _ => LogType.Log,
         };
 
-        public void PreDispose()
+        public void PostDispose()
         {
             if (_logEventSource is null)
                 return;

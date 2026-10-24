@@ -46,7 +46,7 @@ namespace Elder.TestModule.Common.Boot
         {
             LoggerInstaller.Install(_registry);
             if (!TryGetComponent<ILoggerPublisher>(out var logPublisher))
-                throw new InvalidOperationException($"Failed to resolve {nameof(LogPublisher)} after {nameof(LoggerInstaller)} installation.");
+                throw new InvalidOperationException($"Failed to resolve {nameof(ILoggerPublisher)} after {nameof(LoggerInstaller)} installation.");
             LogFacade.InjectProvider(logPublisher);
             _logger = LogFacade.GetLogger<TestModuleRoot>();
         }

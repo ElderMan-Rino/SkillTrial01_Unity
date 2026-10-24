@@ -1,7 +1,7 @@
 using Elder.Framework.Asset.Infra;
 using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Core.Interfaces;
-using Elder.Framework.Core.UI.Installers;
+using Elder.Framework.UI.Installers;
 using Elder.Framework.Singal.Installers;
 using Elder.TestModule.AssetLoad.Infra;
 using Elder.TestModule.AssetLoad.Interfaces;

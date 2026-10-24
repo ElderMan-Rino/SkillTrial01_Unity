@@ -449,7 +449,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2187496027}
-  - component: {fileID: 2187496026}
   - component: {fileID: 2187496028}
   m_Layer: 0
   m_Name: UITestContext
@@ -458,18 +457,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2187496026
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2187496025}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e880fe781cec61e44a0157d531990828, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Elder.TestModule.UISystem.Boot.UISystemTestSceneContext
 --- !u!4 &2187496027
 Transform:
   m_ObjectHideFlags: 0

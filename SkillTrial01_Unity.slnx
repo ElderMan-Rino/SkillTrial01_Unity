@@ -1,8 +1,10 @@
 ﻿<Solution>
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Elder.Framework.csproj" />
   <Project Path="NuGetForUnity.csproj" />
   <Project Path="Elder.SkillTrial.Editor.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Elder.TestModule.csproj" />
   <Project Path="Elder.Game.SkillTrial.csproj" />
   <Project Path="Unity.UniversalToonShader.Urp.Editor.csproj" />
 </Solution>

@@ -45,6 +45,7 @@ namespace Elder.Framework.Log.Infra
         public void Dispose()
         {
             _logHandler = null;
+            _ownerType = null;
         }
     }
 }

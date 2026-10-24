@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Core.Interfaces;
-using Elder.Framework.Core.UI.Interfaces;
+using Elder.Framework.UI.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Interfaces;
 using Elder.Framework.Signal.Helpers;
@@ -17,8 +17,6 @@ namespace Elder.TestModule.AssetLoad.Infra
     {
         private const string AssetLoadTestKey = "AssetLoadTest";
         private ILoggerEx _logger = LogFacade.GetLogger<AssetLoadTestCoordinator>();
-        private IUIViewFactory _viewFactory;
-        private IUIPresenterFactory _presenterFactory;
         private SignalToken _token;
         private IUIPresenter _assetLoadTestPresenter;
         private IUIViewHandle _assetLoadTestViewHandle;
@@ -98,22 +96,19 @@ namespace Elder.TestModule.AssetLoad.Infra
 
         public void PreDispose()
         {
+            _token.Dispose();
+
             _assetLoadTestPresenter?.Dispose();
             _assetLoadTestPresenter = null;
 
             _assetLoadTestViewHandle?.Dispose();
             _assetLoadTestViewHandle = null;
-
-            _token.Dispose();
         }
 
         public void Dispose()
         {
             //UnregistPresenterCreator();
             //UnregistViewCreator();
-
-            _viewFactory = null;
-            _presenterFactory = null;
             _logger = null;
         }
 

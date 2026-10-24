@@ -45,8 +45,8 @@ namespace Elder.Framework.Root
             _registry.ClearAliasTypes();
             _registry.PreDisposeComponents();
             _registry.DisposeComponents();
-            LogFacade.CleanUp();
             _registry.PostDisposeComponents();
+            LogFacade.CleanUp();
         }
 
         // 샘플 스케치 - TestBootEntry.Run과 동일한 install -> inject -> signal 순서.
