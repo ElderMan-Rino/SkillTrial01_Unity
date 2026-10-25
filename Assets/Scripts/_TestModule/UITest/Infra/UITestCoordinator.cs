@@ -3,6 +3,7 @@ using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Interfaces;
+using Elder.Framework.UI.Infra;
 using Elder.Framework.UI.Interfaces;
 using Elder.TestModule.AssetLoad.Infra;
 using Elder.TestModule.Common.Definitions;
@@ -24,7 +25,7 @@ namespace Elder.TestModule.UITest.Infra
 
         public int Scope => TestScope.Id;
 
-    
+
         public void InjectDependency(IComponentProvider provider)
         {
             if (!provider.TryGetComponent<IUISystem>(out _uiSystem))
@@ -42,7 +43,7 @@ namespace Elder.TestModule.UITest.Infra
         public UniTask StartAsync()
         {
             SettingModulePanel();
-            
+
             return UniTask.CompletedTask;
         }
 
@@ -51,32 +52,18 @@ namespace Elder.TestModule.UITest.Infra
             if (!_uiSystem.TryFindUIView<UISystemTestView>(out var uiView))
                 return;
 
-            var presenter = _uiSystem.Create<UISystemTestPresenter>();
+            var presenter = _uiSystem.CreatePresenter<UISystemTestPresenter>();
             presenter.BindView(uiView);
         }
 
-        // IUISystem에 Open/Close 스택 API가 추가되기 전까지는 호출 경로만 연결해 둔다.
-        public UniTask OpenPanelAsync()
+        public async UniTask OpenTestPanelAsync()
         {
-            _logger.Info("OpenPanelAsync requested."); // [HEAP]
             return UniTask.CompletedTask;
         }
 
-        public UniTask OpenPopupAsync()
+        public UniTask OpenTestPopupAsync()
         {
             _logger.Info("OpenPopupAsync requested."); // [HEAP]
-            return UniTask.CompletedTask;
-        }
-
-        public UniTask CloseAllAsync()
-        {
-            _logger.Info("CloseAllAsync requested."); // [HEAP]
-            return UniTask.CompletedTask;
-        }
-
-        public UniTask CloseTopAsync()
-        {
-            _logger.Info("CloseTopAsync requested."); // [HEAP]
             return UniTask.CompletedTask;
         }
 

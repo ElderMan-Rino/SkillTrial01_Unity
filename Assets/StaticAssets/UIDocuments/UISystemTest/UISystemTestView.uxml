@@ -8,10 +8,11 @@
     <Style src="UISystemTestView.uss" />
     <ui:VisualElement name="ui-system-test-root" class="ui-system-test-root">
         <ui:VisualElement name="button-row" class="button-row">
-            <ui:Button name="open-button" text="Open" class="test-button" />
-            <ui:Button name="close-button" text="Close" class="test-button" />
-            <ui:Button name="toggle-visible-button" text="Toggle Visible" class="test-button" />
+            <ui:Button name="open-panel-button" text="Open Panel" class="test-button" />
+            <ui:Button name="open-popup-button" text="Open Popup" class="test-button" />
+            <ui:Button name="close-all-button" text="Close All" class="test-button" />
+            <ui:Button name="close-top-button" text="Close Top" class="test-button" />
         </ui:VisualElement>
-        <ui:Label name="status-label" text="Status: Idle" class="status-label" />
+        <ui:VisualElement name="panel-container" class="panel-container" />
     </ui:VisualElement>
 </ui:UXML>

@@ -33,20 +33,6 @@ namespace Elder.TestModule.UITest.App
             _panelRenderer.RegisterUIReloadCallback(HandlePanelReloaded);
         }
 
-        private void OnDestroy()
-        {
-            _panelRenderer.UnregisterUIReloadCallback(HandlePanelReloaded);
-            if (_openPanelButton is not null)
-            {
-                UnsubscribeButtonEvents();
-            }
-
-            _openPanelClick.Dispose();
-            _openPopupClick.Dispose();
-            _closeAllClick.Dispose();
-            _closeTopClick.Dispose();
-        }
-
         private void HandlePanelReloaded(PanelRenderer panelRenderer, VisualElement rootElement, int version)
         {
             if (_openPanelButton is not null)
@@ -101,6 +87,21 @@ namespace Elder.TestModule.UITest.App
         private void OnCloseTopClicked()
         {
             _closeTopClick.Execute(Unit.Default);
+        }
+
+
+        private void OnDestroy()
+        {
+            _panelRenderer.UnregisterUIReloadCallback(HandlePanelReloaded);
+            if (_openPanelButton is not null)
+            {
+                UnsubscribeButtonEvents();
+            }
+
+            _openPanelClick.Dispose();
+            _openPopupClick.Dispose();
+            _closeAllClick.Dispose();
+            _closeTopClick.Dispose();
         }
     }
 }

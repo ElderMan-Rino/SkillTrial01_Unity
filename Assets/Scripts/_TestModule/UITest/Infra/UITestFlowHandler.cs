@@ -16,8 +16,6 @@ namespace Elder.TestModule.UITest.Infra
         private SignalToken _moduleStartToken;
         private SignalToken _openPanelToken;
         private SignalToken _openPopupToken;
-        private SignalToken _closeAllToken;
-        private SignalToken _closeTopToken;
 
         public Type ClassType => typeof(UITestFlowHandler);
 
@@ -36,8 +34,6 @@ namespace Elder.TestModule.UITest.Infra
             _moduleStartToken = subscriber.Subscribe<FxModuleStartSignal>(HandleModuleStart);
             _openPanelToken = subscriber.Subscribe<FxOpenPanelRequestedSignal>(HandleOpenPanelRequested);
             _openPopupToken = subscriber.Subscribe<FxOpenPopupRequestedSignal>(HandleOpenPopupRequested);
-            _closeAllToken = subscriber.Subscribe<FxCloseAllRequestedSignal>(HandleCloseAllRequested);
-            _closeTopToken = subscriber.Subscribe<FxCloseTopRequestedSignal>(HandleCloseTopRequested);
         }
 
         public void Dispose()
@@ -51,8 +47,6 @@ namespace Elder.TestModule.UITest.Infra
             _moduleStartToken.Dispose();
             _openPanelToken.Dispose();
             _openPopupToken.Dispose();
-            _closeAllToken.Dispose();
-            _closeTopToken.Dispose();
         }
 
         // FlowHandler는 Signal -> Coordinator 호출만 담당, View/Presenter 구성은 모른다 (UITestCoordinator.StartAsync 플랜 참고).
@@ -65,22 +59,12 @@ namespace Elder.TestModule.UITest.Infra
 
         private void HandleOpenPanelRequested(in FxOpenPanelRequestedSignal signal)
         {
-            _coordinator.OpenPanelAsync().Forget();
+            _coordinator.OpenTestPanelAsync().Forget();
         }
 
         private void HandleOpenPopupRequested(in FxOpenPopupRequestedSignal signal)
         {
-            _coordinator.OpenPopupAsync().Forget();
-        }
-
-        private void HandleCloseAllRequested(in FxCloseAllRequestedSignal signal)
-        {
-            _coordinator.CloseAllAsync().Forget();
-        }
-
-        private void HandleCloseTopRequested(in FxCloseTopRequestedSignal signal)
-        {
-            _coordinator.CloseTopAsync().Forget();
+            _coordinator.OpenTestPopupAsync().Forget();
         }
     }
 }

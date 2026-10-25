@@ -6,9 +6,7 @@ namespace Elder.TestModule.UITest.Interfaces
     public interface IUITestCoordinator : IFrameworkComponent
     {
         public UniTask StartAsync();
-        public UniTask OpenPanelAsync();
-        public UniTask OpenPopupAsync();
-        public UniTask CloseAllAsync();
-        public UniTask CloseTopAsync();
+        public UniTask OpenTestPanelAsync();
+        public UniTask OpenTestPopupAsync();
     }
 }

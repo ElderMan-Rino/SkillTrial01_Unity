@@ -1,6 +1,6 @@
 using Elder.Framework.Signal.Interfaces;
 
-namespace Elder.TestModule.UITest.Messages
+namespace Elder.Framework.Signal.Messages
 {
     public readonly struct FxCloseAllRequestedSignal : ISignal
     {
