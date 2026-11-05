@@ -1,16 +1,14 @@
 using Cysharp.Threading.Tasks;
-using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Interfaces;
+using Elder.Framework.UI.Definitions;
 using Elder.Framework.UI.Infra;
 using Elder.Framework.UI.Interfaces;
-using Elder.TestModule.AssetLoad.Infra;
 using Elder.TestModule.Common.Definitions;
 using Elder.TestModule.UITest.App;
 using Elder.TestModule.UITest.Interfaces;
 using System;
-using UnityEngine;
 
 namespace Elder.TestModule.UITest.Infra
 {
@@ -20,6 +18,10 @@ namespace Elder.TestModule.UITest.Infra
         private ILoggerEx _logger = LogFacade.GetLogger<UITestCoordinator>();
 
         private IUISystem _uiSystem;
+        private UISystemTestView _uiSystemTestView;
+        private IUIRebindStrategy _childContainerStrategy;
+        private bool _isPanelOpening;
+        private bool _isPopupOpening;
 
         public Type ClassType => typeof(UITestCoordinator);
 
@@ -52,24 +54,78 @@ namespace Elder.TestModule.UITest.Infra
             if (!_uiSystem.TryFindUIView<UISystemTestView>(out var uiView))
                 return;
 
+            _uiSystemTestView = uiView;
+            _childContainerStrategy = new ChildContainerRebindStrategy(_uiSystemTestView.ChildContainer); // [HEAP]
+
             var presenter = _uiSystem.CreatePresenter<UISystemTestPresenter>();
             presenter.BindView(uiView);
         }
 
         public async UniTask OpenTestPanelAsync()
         {
-            return UniTask.CompletedTask;
+            if (_isPanelOpening)
+                return;
+
+            _isPanelOpening = true;
+
+            try
+            {
+                var viewHandle = await _uiSystem.CreateViewByAssetKeyAsync<UITestPanelView>("UITestPanel");
+                if (viewHandle is null)
+                {
+                    _logger.Error("Failed to create UITestPanelView."); // [HEAP]
+                    return;
+                }
+
+                viewHandle.View.BindRoot(_uiSystemTestView.ChildContainer);
+
+                var presenter = _uiSystem.CreatePresenter<UITestPanelPresenter>();
+                presenter.BindView(viewHandle.View);
+
+                var entry = _uiSystem.CreateEntry(TestScope.Id, viewHandle, presenter, _childContainerStrategy);
+                await _uiSystem.OpenSceneAsync(entry);
+            }
+            finally
+            {
+                _isPanelOpening = false;
+            }
         }
 
-        public UniTask OpenTestPopupAsync()
+        public async UniTask OpenTestPopupAsync()
         {
-            _logger.Info("OpenPopupAsync requested."); // [HEAP]
-            return UniTask.CompletedTask;
+            if (_isPopupOpening)
+                return;
+
+            _isPopupOpening = true;
+
+            try
+            {
+                var viewHandle = await _uiSystem.CreateViewByAssetKeyAsync<UITestPopupView>("UITestPopup");
+                if (viewHandle is null)
+                {
+                    _logger.Error("Failed to create UITestPopupView."); // [HEAP]
+                    return;
+                }
+
+                viewHandle.View.BindRoot(_uiSystemTestView.ChildContainer);
+
+                var presenter = _uiSystem.CreatePresenter<UITestPopupPresenter>();
+                presenter.BindView(viewHandle.View);
+
+                var entry = _uiSystem.CreateEntry(TestScope.Id, viewHandle, presenter, _childContainerStrategy);
+                await _uiSystem.OpenSceneAsync(entry);
+            }
+            finally
+            {
+                _isPopupOpening = false;
+            }
         }
 
         public void PreDispose()
         {
+            _uiSystem.ClearSceneScopeAsync(TestScope.Id).Forget();
             _uiSystem = null;
+            _uiSystemTestView = null;
         }
 
         public void Dispose()
