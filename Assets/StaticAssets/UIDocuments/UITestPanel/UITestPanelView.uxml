@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/StaticAssets/UIDocuments/UITestPanel/UITestPanelView.uss?fileID=7433441132597879392&amp;guid=59a78ae0a93144f9b7a60df65fca2934&amp;type=3#UITestPanelView"/>
+    <ui:VisualElement name="ui-test-panel-root" class="ui-test-panel-root" style="background-color: rgb(128, 128, 128);">
+        <ui:Button name="close-panel-button" text="X" class="panel-close-button"/>
+        <ui:Label name="status-label" text="Status: Idle" class="status-label"/>
+    </ui:VisualElement>
+</ui:UXML>

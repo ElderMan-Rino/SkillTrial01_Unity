@@ -1,3 +1,5 @@
+using UnityEngine.UIElements;
+
 namespace Elder.Framework.UI.Interfaces
 {
     // 개별 UI 프리팹(View)이 구현하는 생명주기 계약. MonoBehaviour 구현체가 이 인터페이스를 구현.
@@ -9,5 +11,11 @@ namespace Elder.Framework.UI.Interfaces
         // public void OnBlur();                    // 다른 UI에 가려질 때 (상위에 새 UI가 쌓일 때).
         // public void OnClose();                   // Stack에서 Pop되어 파기되기 전.
         // public bool OnBackKeyPressed();          // 백 키 입력 수신. true 반환 시 이 UI가 입력을 소비(전파 중단).
+
+        // 보유한 VisualTreeAsset을 Clone해 parent에 Add까지 수행 (uGUI child-stretch에 대응하는 UI Toolkit 패턴).
+        public void BindRoot(VisualElement parent);
+
+        // BindRoot로 Add된 root를 부모 트리에서 제거.
+        public void UnbindRoot();
     }
 }

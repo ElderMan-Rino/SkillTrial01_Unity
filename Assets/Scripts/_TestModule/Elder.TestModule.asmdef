@@ -3,7 +3,8 @@
     "rootNamespace": "Elder.TestModule",
     "references": [
         "Elder.Framework",
-        "UniTask"
+        "UniTask",
+        "Unity.ResourceManager"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -8,6 +8,15 @@
     padding: 12px;
 }
 
+.root-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+}
+
 .button-row {
     flex-direction: row;
     margin-bottom: 8px;
@@ -37,4 +46,25 @@
 
 .panel-container {
     flex-grow: 1;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.popup-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    picking-mode: ignore;
+}
+
+.stack-hierarchy-label {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    color: rgb(230, 230, 230);
+    font-size: 20px;
+    white-space: normal;
+    picking-mode: ignore;
 }

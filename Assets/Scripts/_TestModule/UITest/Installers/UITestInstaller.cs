@@ -14,6 +14,8 @@ namespace Elder.TestModule.UITest.Interfaces
             UISystemInstaller.Install(registry);
             AssetSystemInstaller.Install(registry);
 
+            registry.Regist<UISystemTest>().As<IUISystemTest>();
+
             registry.Regist<UITestCoordinator>().As<IUITestCoordinator>();
             registry.Regist<UITestFlowHandler>();
         }

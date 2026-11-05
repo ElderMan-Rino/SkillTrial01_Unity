@@ -35,6 +35,15 @@ namespace Elder.TestModule.AssetLoad.App
         public Observable<Unit> OnMemoryStatusRequested => _memoryStatusClick;
         public Observable<Unit> OnClearLogRequested => _clearLogClick;
 
+        // 독자적 PanelRenderer를 소유하는 씬 View이므로 다른 트리에 Add되지 않는다.
+        public override void BindRoot(VisualElement parent)
+        {
+        }
+
+        public override void UnbindRoot()
+        {
+        }
+
         private void Awake()
         {
             _logLabelPool = new ObjectPool<Label>(CreateLogLabel, actionOnRelease: OnLogLabelRelease); // [HEAP]

@@ -1,17 +1,19 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Definitions;
+using Elder.Framework.Asset.Infra;
 using Elder.Framework.Asset.Interfaces;
 using Elder.Framework.Core.Definitions;
 using Elder.Framework.Core.Interfaces;
 using Elder.Framework.Log.Helper;
 using Elder.Framework.Log.Interfaces;
+using Elder.TestModule.AssetLoad.Interfaces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Elder.Framework.Asset.Infra
+namespace Elder.TestModule.AssetLoad.Infra
 {
     public sealed class AssetCacheTest : IAssetCacheTest, IDependencyInjectable
     {

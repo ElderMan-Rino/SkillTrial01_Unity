@@ -19,14 +19,30 @@ namespace Elder.TestModule.UITest.App
         private Button _openPopupButton;
         private Button _closeAllButton;
         private Button _closeTopButton;
-        private VisualElement _panelContainer;
+        private VisualElement _childContainer;
+        private Label _stackHierarchyLabel;
 
         public Observable<Unit> OnOpenPanelRequested => _openPanelClick;
         public Observable<Unit> OnOpenPopupRequested => _openPopupClick;
         public Observable<Unit> OnCloseAllRequested => _closeAllClick;
         public Observable<Unit> OnCloseTopRequested => _closeTopClick;
 
-        public VisualElement PanelContainer => _panelContainer;
+        public VisualElement ChildContainer => _childContainer;
+
+        public void SetStackHierarchyText(string text)
+        {
+            if (_stackHierarchyLabel is not null)
+                _stackHierarchyLabel.text = text;
+        }
+
+        // 최상위 씬 View는 자체 PanelRenderer를 소유하므로 다른 트리에 Add되지 않는다.
+        public override void BindRoot(VisualElement parent)
+        {
+        }
+
+        public override void UnbindRoot()
+        {
+        }
 
         private void Awake()
         {
@@ -50,7 +66,8 @@ namespace Elder.TestModule.UITest.App
             _openPopupButton = root.Q<Button>("open-popup-button");
             _closeAllButton = root.Q<Button>("close-all-button");
             _closeTopButton = root.Q<Button>("close-top-button");
-            _panelContainer = root.Q<VisualElement>("panel-container");
+            _childContainer = root.Q<VisualElement>("child-container");
+            _stackHierarchyLabel = root.Q<Label>("stack-hierarchy-label");
         }
 
         private void SubscribeButtonEvents()

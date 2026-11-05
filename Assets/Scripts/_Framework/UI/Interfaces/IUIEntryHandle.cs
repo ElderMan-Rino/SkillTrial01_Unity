@@ -7,7 +7,12 @@ namespace Elder.Framework.UI.Interfaces
     // UISystem은 이 Handle만으로 Stack 관리/Sleep/Wake를 수행하며, 어떤 View/Presenter 타입인지 내부적으로 추론하지 않는다.
     public interface IUIEntryHandle
     {
+        public int Scope { get; }
+
         public IUIViewHandle ViewHandle { get; }
+
+        // 생성 시점에 부여된 동일 ViewType 내 생성 순번(1부터 시작). 진단 표시용(예: "UITestPanelView #2").
+        public int DisplayIndex { get; }
 
         public UIPresenterBase Presenter { get; }
 
@@ -15,7 +20,7 @@ namespace Elder.Framework.UI.Interfaces
 
         public void Sleep();
 
-        public void Wake(IUIViewHandle viewHandle);
+        public void Wake();
 
         // entry 자신의 Close 시도(내부 패널 우선 닫힘, 종료 확인 등)를 수행하고 실제 스택 Pop 여부를 반환.
         public UniTask<bool> RequestCloseAsync();

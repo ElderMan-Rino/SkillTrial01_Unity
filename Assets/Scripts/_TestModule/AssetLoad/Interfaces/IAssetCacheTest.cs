@@ -1,8 +1,9 @@
 using Cysharp.Threading.Tasks;
 using Elder.Framework.Asset.Definitions;
+using Elder.Framework.Asset.Interfaces;
 using System.Collections.Generic;
 
-namespace Elder.Framework.Asset.Interfaces
+namespace Elder.TestModule.AssetLoad.Interfaces
 {
     public interface IAssetCacheTest : IAssetCache
     {
